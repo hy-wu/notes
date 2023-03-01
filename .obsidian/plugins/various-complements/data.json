@@ -1,0 +1,415 @@
+{
+  "strategy": "default",
+  "matchStrategy": "prefix",
+  "maxNumberOfSuggestions": 30,
+  "maxNumberOfWordsAsPhrase": 3,
+  "minNumberOfCharactersTriggered": 0,
+  "minNumberOfWordsTriggeredPhrase": 1,
+  "complementAutomatically": true,
+  "delayMilliSeconds": 0,
+  "disableSuggestionsDuringImeOn": false,
+  "insertAfterCompletion": true,
+  "firstCharactersDisableSuggestions": ":/^",
+  "showMatchStrategy": true,
+  "showComplementAutomatically": true,
+  "showIndexingStatus": true,
+  "descriptionOnSuggestion": "Short",
+  "selectSuggestionKeys": "Enter",
+  "additionalCycleThroughSuggestionsKeys": "None",
+  "disableUpDownKeysForCycleThroughSuggestionsKeys": false,
+  "openSourceFileKey": "None",
+  "propagateEsc": false,
+  "enableCurrentFileComplement": true,
+  "currentFileMinNumberOfCharacters": 0,
+  "onlyComplementEnglishOnCurrentFileComplement": false,
+  "enableCurrentVaultComplement": false,
+  "currentVaultMinNumberOfCharacters": 0,
+  "includeCurrentVaultPathPrefixPatterns": "",
+  "excludeCurrentVaultPathPrefixPatterns": "",
+  "includeCurrentVaultOnlyFilesUnderCurrentDirectory": false,
+  "enableCustomDictionaryComplement": false,
+  "customDictionaryPaths": "https://raw.githubusercontent.com/first20hours/google-10000-english/master/google-10000-english-no-swears.txt",
+  "columnDelimiter": "Tab",
+  "customDictionaryWordRegexPattern": "",
+  "delimiterToHideSuggestion": "",
+  "delimiterToDivideSuggestionsForDisplayFromInsertion": "",
+  "caretLocationSymbolAfterComplement": "",
+  "displayedTextSuffix": " => ...",
+  "enableInternalLinkComplement": true,
+  "suggestInternalLinkWithAlias": false,
+  "excludeInternalLinkPathPrefixPatterns": "",
+  "enableFrontMatterComplement": true,
+  "frontMatterComplementMatchStrategy": "inherit",
+  "insertCommaAfterFrontMatterCompletion": false,
+  "showLogAboutPerformanceInConsole": false,
+  "selectionHistoryTree": {
+    "\\mathrm{Tr}": {
+      "\\mathrm{Tr}": {
+        "currentFile": {
+          "count": 3,
+          "lastUpdated": 1666614981796
+        }
+      }
+    },
+    "20220928145933": {
+      "20220928145933": {
+        "currentFile": {
+          "count": 3,
+          "lastUpdated": 1666610661281
+        }
+      }
+    },
+    "\\Rightarrow": {
+      "\\Rightarrow": {
+        "currentFile": {
+          "count": 2,
+          "lastUpdated": 1666941759347
+        }
+      }
+    },
+    "-kT\\ln": {
+      "-kT\\ln": {
+        "currentFile": {
+          "count": 2,
+          "lastUpdated": 1666945856339
+        }
+      }
+    },
+    "\\frac{\\hbar^{2}}{2I}l": {
+      "\\frac{\\hbar^{2}}{2I}l": {
+        "currentFile": {
+          "count": 2,
+          "lastUpdated": 1667034535782
+        }
+      }
+    },
+    "method": {
+      "method": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666612060067
+        }
+      }
+    },
+    "tensor": {
+      "tensor": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666613955785
+        }
+      }
+    },
+    "\\rho_{A}": {
+      "\\rho_{A}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666615468379
+        }
+      }
+    },
+    "p_{x}^{2}+p_{y}^{2}+p_{z}^{2}": {
+      "p_{x}^{2}+p_{y}^{2}+p_{z}^{2}": {
+        "currentFile": {
+          "count": 2,
+          "lastUpdated": 1666946335659
+        }
+      }
+    },
+    "\\frac{4}{3}\\pi": {
+      "\\frac{4}{3}\\pi": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666939544738
+        }
+      }
+    },
+    "\\sum\\limits_{i}\\omega_{i}e^{-\\alpha-\\beta\\epsilon_{i}}": {
+      "\\sum\\limits_{i}\\omega_{i}e^{-\\alpha-\\beta\\epsilon_{i}}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666940058915
+        }
+      }
+    },
+    "\\sum\\limits_{a}\\omega_{a}\\exp": {
+      "\\sum\\limits_{a}\\omega_{a}\\exp": {
+        "currentFile": {
+          "count": 4,
+          "lastUpdated": 1667033713114
+        }
+      }
+    },
+    "\\frac{N}{\\beta}\\frac{\\partial\\ln": {
+      "\\frac{N}{\\beta}\\frac{\\partial\\ln": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666940825666
+        }
+      }
+    },
+    "z-NkT": {
+      "z-NkT": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666941123698
+        }
+      }
+    },
+    "-NkT\\ln": {
+      "-NkT\\ln": {
+        "currentFile": {
+          "count": 2,
+          "lastUpdated": 1666941243089
+        }
+      }
+    },
+    "\\beta\\cdot": {
+      "\\beta\\cdot": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666941462092
+        }
+      }
+    },
+    "-\\beta\\epsilon_{t}": {
+      "-\\beta\\epsilon_{t}": {
+        "currentFile": {
+          "count": 4,
+          "lastUpdated": 1667034890661
+        }
+      }
+    },
+    "\\int_{0}^{\\infty}\\mathrm{d}\\epsilon": {
+      "\\int_{0}^{\\infty}\\mathrm{d}\\epsilon": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666941575854
+        }
+      }
+    },
+    "\\int_{0}^{\\infty}\\mathrm{d}x\\exp": {
+      "\\int_{0}^{\\infty}\\mathrm{d}x\\exp": {
+        "currentFile": {
+          "count": 2,
+          "lastUpdated": 1666947336809
+        }
+      }
+    },
+    "\\cdot": {
+      "\\cdot": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666941674868
+        }
+      }
+    },
+    "-\\alpha-\\beta\\epsilon": {
+      "-\\alpha-\\beta\\epsilon": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666946208947
+        }
+      }
+    },
+    "\\begin{array}{l}U": {
+      "\\begin{array}{l}U": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666946288654
+        }
+      }
+    },
+    "\\sqrt{\\overline{v^{2}}}": {
+      "\\sqrt{\\overline{v^{2}}}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666947226069
+        }
+      }
+    },
+    "v_{x}f": {
+      "v_{x}f": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666947402980
+        }
+      }
+    },
+    "\\epsilon_{a}": {
+      "\\epsilon_{a}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666973812347
+        }
+      }
+    },
+    "\\epsilon_{t}": {
+      "\\epsilon_{t}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666973818707
+        }
+      }
+    },
+    "\\omega_{t}\\omega_{i}": {
+      "\\omega_{t}\\omega_{i}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666973896346
+        }
+      }
+    },
+    "-\\beta\\epsilon_{a}": {
+      "-\\beta\\epsilon_{a}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666973974197
+        }
+      }
+    },
+    "E_{t}+E_{i}": {
+      "E_{t}+E_{i}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666974345181
+        }
+      }
+    },
+    "\\frac{3}{2}NkT": {
+      "\\frac{3}{2}NkT": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666974474617
+        }
+      }
+    },
+    "\\frac{3}{2}Nk": {
+      "\\frac{3}{2}Nk": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666974496948
+        }
+      }
+    },
+    "\\Delta": {
+      "\\Delta": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666974824895
+        }
+      }
+    },
+    "\\epsilon_{\\nu}": {
+      "\\epsilon_{\\nu}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1666974839303
+        }
+      }
+    },
+    "\\frac{h\\nu}{k}\\sim10^{3}\\mathrm{K}": {
+      "\\frac{h\\nu}{k}\\sim10^{3}\\mathrm{K}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1667033676530
+        }
+      }
+    },
+    "\\theta_{\\nu}\\equiv": {
+      "\\theta_{\\nu}\\equiv": {
+        "currentFile": {
+          "count": 2,
+          "lastUpdated": 1667034138849
+        }
+      }
+    },
+    "-\\beta\\epsilon_{\\nu}": {
+      "-\\beta\\epsilon_{\\nu}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1667034376596
+        }
+      }
+    },
+    "\\hbar^{2}": {
+      "\\hbar^{2}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1667034586510
+        }
+      }
+    },
+    "\\theta_{r}": {
+      "\\theta_{r}": {
+        "currentFile": {
+          "count": 5,
+          "lastUpdated": 1667035163987
+        }
+      }
+    },
+    "\\epsilon_{r}": {
+      "\\epsilon_{r}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1667034774851
+        }
+      }
+    },
+    "p_{\\theta}^{2}+": {
+      "p_{\\theta}^{2}+": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1667034787968
+        }
+      }
+    },
+    "\\frac{1}{\\sin^{2}\\theta}p_{\\phi}^{2}": {
+      "\\frac{1}{\\sin^{2}\\theta}p_{\\phi}^{2}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1667034820549
+        }
+      }
+    },
+    "0}^{\\infty}\\sum\\limits_{s}e^{-\\alpha": {
+      "0}^{\\infty}\\sum\\limits_{s}e^{-\\alpha": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1667034915686
+        }
+      }
+    },
+    "-\\beta\\epsilon_{r}": {
+      "-\\beta\\epsilon_{r}": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1667034954203
+        }
+      }
+    },
+    "Quantization": {
+      "Quantization": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1667110958058
+        }
+      }
+    },
+    "e^{ikx}\\mathrm{d}k": {
+      "e^{ikx}\\mathrm{d}k": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1667894930318
+        }
+      }
+    },
+    "algorithm": {
+      "algorithm": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1669012018430
+        }
+      }
+    }
+  }
+}

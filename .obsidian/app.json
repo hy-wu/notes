@@ -1,0 +1,11 @@
+{
+  "useMarkdownLinks": false,
+  "alwaysUpdateLinks": true,
+  "promptDelete": false,
+  "pdfExportSettings": {
+    "pageSize": "A5",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 76
+  }
+}

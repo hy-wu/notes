@@ -1,0 +1,154 @@
+{
+  "main": {
+    "id": "ec42fd5f256ef548",
+    "type": "split",
+    "children": [
+      {
+        "id": "d40d447792d91807",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "HEP/HEP/note_HEP_A215.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "cc41ecb4eee37a0c",
+    "type": "split",
+    "children": [
+      {
+        "id": "97dedca7b9c79742",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4f13f4db74604972",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "b3ea35e9472732ba",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:#稳定粒子",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "a8424deb59e432d9",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 230.5,
+    "collapsed": true
+  },
+  "right": {
+    "id": "05df562eca72bec3",
+    "type": "split",
+    "children": [
+      {
+        "id": "087911c5f8490e32",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4cabedacc581f0df",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "HEP/HEP/note_HEP_A215.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "61aa7aba62ff6bab",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "HEP/HEP/note_HEP_A215.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "2f169f6d4370bb9a",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "ec59f844df9c3f86",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "HEP/HEP/note_HEP_A215.md"
+              }
+            }
+          },
+          {
+            "id": "022c28d22f76b328",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "d40d447792d91807",
+  "lastOpenFiles": [
+    "SM/brief-note_SM1.md",
+    "EMP_C/反常霍尔效应/EHEnote.md",
+    "QPC/NOTE/note_QPC.md",
+    "HEP/helloworld/node_modules/tsutils/CHANGELOG.md",
+    "QPC/note_QPC.md",
+    "QPC/精确对角化/draft.md",
+    "EMP_C/微波电子自旋共振/X3note.md",
+    "EMP_C/微波电子自旋共振/实验3电子自旋共振和铁磁共振.pdf",
+    "HEP/HEP/粒子物理学导论-20160527-441p.md",
+    "HEP/HEP/note_HEP_A215.md"
+  ]
+}
