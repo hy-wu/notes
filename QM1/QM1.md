@@ -463,12 +463,14 @@ $$
 能量本征态的性质：
 
 1) 几率密度 $\rho(\vec{x}, t)=|\psi(\vec{x}, t)|^{2}=|\varphi(\vec{x})|^{2}=\rho(\vec{x}, 0)$ 与时间无关。
-
-几率流密度 $\vec{\jmath}(\vec{x}, t)=-\frac{i \hbar}{2 m}\left(\psi^{*}(\vec{x}, t) \vec{\nabla} \psi(\vec{x}, t)-\psi(\vec{x}, t) \vec{\nabla} \psi^{*}(\vec{x}, t)\right)$
+	几率流密度
 
 $$
-=-\frac{i \hbar}{2 m}\left(\varphi^{*}(\vec{x}) \vec{\nabla} \varphi(\vec{x})-\varphi(\vec{x}) \vec{\nabla} \varphi^{*}(\vec{x})\right)=\vec{\jmath}(\vec{x}, 0) \text { 与时间无关。 }
+\begin{array}
+\vec{\jmath}(\vec{x}, t)=-\frac{i \hbar}{2 m}\left(\psi^{*}(\vec{x}, t) \vec{\nabla} \psi(\vec{x}, t)-\psi(\vec{x}, t) \vec{\nabla} \psi^{*}(\vec{x}, t)\right)\\=-\frac{i \hbar}{2 m}\left(\varphi^{*}(\vec{x}) \vec{\nabla} \varphi(\vec{x})-\varphi(\vec{x}) \vec{\nabla} \varphi^{*}(\vec{x})\right)=\vec{\jmath}(\vec{x}, 0)
+\end{array}
 $$
+与时间无关。
 
 任意不显含时间 $t$ 的力学量 $O(\vec{x}, \vec{p})$ 的平均值
 
@@ -479,7 +481,7 @@ $$
 \end{aligned}
 $$
 
-与时间无关。说明哈密顿量不显含时间时, 任意力学量在能量本征态的性质不随时 间改变, 故能量本征方程称为定态 Schroedinger 方程, 能量本征态称为定态。
+与时间无关。==说明哈密顿量不显含时间时, 任意力学量在能量本征态的性质不随时间改变, 故能量本征方程称为定态 Schroedinger 方程, 能量本征态称为定态。==
 
 2) 若势 $V(\vec{x})$ 具有空间反演不变形 $V(-\vec{x})=V(\vec{x})$ ，则
 
@@ -490,28 +492,26 @@ $$
 \end{gathered}
 $$
 
-说明 $\varphi(\vec{x})$ 和 $\varphi(-\vec{x})$ 是定态方程属于同一能量 $E$ 的两个解。若定态不简并 (即本征值与 本征态一一对应, 简并是指一个本征值对应几个本征态),
+说明 $\varphi(\vec{x})$ 和 $\varphi(-\vec{x})$ 是定态方程属于同一能量 $E$ 的两个解。若定态不简并 (即本征值与本征态一一对应, 简并是指一个本征值对应几个本征态),
 
 $$
 \varphi(-\vec{x})=C \varphi(\vec{x})
 $$
 
 即
-
 $$
 \varphi(\vec{x})=C \varphi(-\vec{x})=C^{2} \varphi(\vec{x}), \quad C^{2}=1, \quad C=\pm 1
 $$
 
 即定态满足
-
 $$
 \begin{array}{rlrl}
-\varphi(-\vec{x}) & =\varphi(\vec{x}) & & \text { 称为偶宇称态 } \\
+\varphi(-\vec{x}) & =\varphi(\vec{x}) & \text { 称为偶宇称态 } \\
 \varphi(-\vec{x}) & =-\varphi(\vec{x}) & \text { 称为奇宇称态 }
 \end{array}
 $$
 
-当哈米顿量具有空间反演对称性时，无简并定态或为偶宇称态, 或为奇宇称态。
+==当哈米顿量具有空间反演对称性时，无简并定态或为偶宇称态, 或为奇宇称态。==
 
 ### 1.8 束缚态
 
@@ -545,26 +545,20 @@ $$
 $$
 
 常数 $C$ 与坐标 $x$ 无关。对于束缚态,
-
 $$
 \varphi_{i}(x \rightarrow \infty) \rightarrow 0, \quad C=0
 $$
-
 有
-
 $$
 \varphi_{1} \varphi_{2}^{\prime}-\varphi_{2} \varphi_{1}^{\prime}=0
 $$
-
 在 $\varphi_{i}(x) \neq 0$ 的区间（感兴趣的区间）, 有
-
 $$
 \begin{gathered}
 \frac{\varphi_{1}^{\prime}}{\varphi_{1}}=\frac{\varphi_{2}^{\prime}}{\varphi_{2}} \\
 \left(\ln \frac{\varphi_{1}}{\varphi_{2}}\right)^{\prime}=0, \quad \ln \frac{\varphi_{1}}{\varphi_{2}}=\ln C^{\prime}, \quad \varphi_{1}=C^{\prime} \varphi_{2}
 \end{gathered}
 $$
-
 说明 $\varphi_{1}, \varphi_{2}$ 为同一个态, 一维束缚态无简并。由此, 当哈密顿量具有空间反演对称 性, 即 $V(-x)=V(x)$, 一维束缚态有确定宇称, $C^{\prime}=\pm 1$ 。
 
 #### 1.8.2 一维几率波的连续性
@@ -572,11 +566,9 @@ $$
 $$
 \varphi^{\prime \prime}=-\frac{2 m}{\hbar^{2}}(E-V(x)) \varphi
 $$
-
 若 $V(x)$ 连续, 则 $\varphi^{\prime \prime}, \varphi^{\prime}, \varphi$ 均连续。
 
 若 $V(x)$ 在 $x=a$ 不连续, 有突变 $\Delta V$, 则 $\varphi$ "不连续。在不连续点附近的邻域积分,
-
 $$
 \varphi^{\prime}(a+\epsilon)-\varphi^{\prime}(a-\epsilon)=-\frac{2 m}{\hbar^{2}} \int_{a-\epsilon}^{a+\epsilon}(E-V(x)) \varphi(x) d x
 $$
@@ -584,7 +576,6 @@ $$
 若突变 $\Delta V$ 有限, 则积分 $\rightarrow 0, \varphi^{\prime}, \varphi$ 均连续。
 
 若 $\Delta V \rightarrow \infty$, 积分
-
 $$
 \int_{a-\epsilon}^{a+\epsilon}(E-V(x)) \varphi(x) d x=\left\{\begin{array}{cc}
 \infty, & \varphi^{\prime}, \varphi \text { 均不连续 } \\
@@ -593,55 +584,42 @@ $$
 \end{array}\right.
 $$
 
-例 1: $\delta$ 势阱的束缚态
-
+*例 1*: $\delta$ 势阱的束缚态
 $$
 V(x)=-\gamma \delta(x)
 $$
-
 在 $x \neq 0$ ， 定态方程
-
 $$
 \varphi^{\prime \prime}+\frac{2 m}{\hbar^{2}} E \varphi=0
 $$
-
 考虑 $E<0$ 的情形, 令 $k^{2}=-\frac{2 m E}{\hbar^{2}}$, 有
-
 $$
 \varphi(x)= \begin{cases}A e^{k x}+A^{\prime} e^{-k x} & x<0 \\ C e^{k x}+C^{\prime} e^{-k x} & x>0\end{cases}
 $$
-
 由于 $x<0$ 与 $x>0$ 两个区间被 $x=0$ 处的 $\delta$ 势阱分开, 几率波不一定相同, 故一般情 况下常数 $A, A^{\prime}$ 不同于 $C, C^{\prime}$ 。
 
 要求束缚态条件 $\varphi(\pm \infty)=0$, 有
-
 $$
 A^{\prime}=C=0, \quad \varphi(x)=\left\{\begin{array}{cc}
 A e^{k x} & x<0 \\
 C^{\prime} e^{-k} & x>0
 \end{array}\right.
 $$
-
 注意: 若取 $E>0$, 为振荡解, 不满足束缚态条件。
 
-由于 $V(-x)=V(x)$, 具有空间反演对称性, 故一维束缚态有确定宇称, 即偶宇 称态
-
+由于 $V(-x)=V(x)$, 具有空间反演对称性, 故一维束缚态有确定宇称, 即偶宇称态
 $$
 \varphi_{s}(x)=\varphi_{s}(-x)= \begin{cases}A e^{k x} & x<0 \\ A^{e^{-k}} & x>0\end{cases}
 $$
-
 或奇宇称态
-
 $$
 \varphi_{a}(x)=-\varphi_{a}(-x)= \begin{cases}A e^{k x} & x<0 \\ -A^{e^{-k}} & x>0\end{cases}
 $$
-
 由于 $\varphi_{s}(x)$ 在 $x=0$ 处连续, $\varphi_{s}\left(0^{+}\right)=\varphi_{s}\left(0^{-}\right)=A$, 满足几率单值的条件, 但 $\varphi_{a}(x)$ 在 $x=0$ 处不连续, $\varphi_{a}\left(0^{+}\right)=-A, \varphi_{a}\left(0^{-}\right)=A$, 不满足几率单值的条件。故不 存在 $\varphi_{a}(x)$, 只有 $\varphi_{s}(x)$ 。
 
 常数 $A$ 由归一化决定。
 
 现在由 $\varphi_{s}^{\prime}(x)$ 的不连续性确定束缚态能量 $E<0$ 。将 $\varphi_{s}(x)$ 在 $x=0$ 处的定态方程 积分，有
-
 $$
 \begin{gathered}
 \varphi_{s}^{\prime}\left(0^{+}\right)-\varphi_{s}^{\prime}\left(0^{-}\right)=-\frac{2 m}{\hbar^{2}} \int_{0^{-}}^{0^{+}}(E+\gamma \delta(x)) \varphi_{s}(x) d x=-\frac{2 m}{\hbar^{2}} \gamma \varphi_{s}(0) \\
@@ -649,25 +627,21 @@ $$
 -2 k A=-\frac{2 m}{\hbar^{2}} \gamma A
 \end{gathered}
 $$
-
 则
-
 $$
 k=\frac{m}{\hbar^{2}} \gamma, \quad E=-\frac{\hbar^{2} k^{2}}{2 m}=-\frac{m \gamma^{2}}{2 \hbar^{2}}
 $$
+说明 $\delta$ 势阱中只有一个束缚态。 
 
-说明 $\delta$ 势阱中只有一个束缚态。 例 2：方势阱的束缚态
+*例 2*：方势阱的束缚态
 
 ![](https://cdn.mathpix.com/cropped/2023_03_03_9fa09cf3c2310a66d23fg-2.jpg?height=211&width=274&top_left_y=89&top_left_x=411)
 
 定态方程
-
 $$
 \begin{cases}\varphi^{\prime \prime}+\frac{2 m}{\hbar^{2}} E \varphi=0 & |x|>a \\ \varphi^{\prime \prime}+\frac{2 m}{\hbar^{2}}\left(E+V_{0}\right) \varphi=0 & |x|<a\end{cases}
 $$
-
 取 $-V_{0}<E<0$ (束缚态能量)，令
-
 $$
 \begin{gathered}
 k^{2}=-\frac{2 m E}{\hbar^{2}}, \quad k^{\prime 2}=\frac{2 m\left(E+V_{0}\right)}{\hbar^{2}} \\
@@ -682,9 +656,7 @@ C e^{k x}+C^{\prime} e^{-k x} & x>a
 \end{array}\right.
 \end{gathered}
 $$
-
 要求束缚态条件 $\varphi(\pm \infty)=0$, 有
-
 $$
 \varphi(x)=\left\{\begin{array}{lr}
 A e^{k x} & x<-a \\
@@ -692,10 +664,8 @@ B e^{i k^{\prime} x}+B^{\prime} e^{-i k^{\prime} x} & |x|<a \\
 C^{\prime} e^{-k x} & x>a
 \end{array}\right.
 $$
-
 由于 $V(-x)=V(x)$, 一维束缚态有确定宇称, 即偶宇称态和奇宇称态
-
-$\varphi_{s}(x)=\varphi_{s}(-x)=\left\{\begin{array}{lr}A e^{k x} & x<-a \\ B e^{i k^{\prime} x}+B e^{-i k^{\prime} x}=2 B \cos \left(k^{\prime} x\right) & |x|< a \\ A e^{-k x} & x>a\end{array}\right.$
+$$\varphi_{s}(x)=\varphi_{s}(-x)=\left\{\begin{array}{lr}A e^{k x} & x<-a \\ B e^{i k^{\prime} x}+B e^{-i k^{\prime} x}=2 B \cos \left(k^{\prime} x\right) & |x|< a \\ A e^{-k x} & x>a\end{array}\right.$$
 
 $$
 \varphi_{a}(x)=-\varphi_{a}(-x)=\left\{\begin{array}{lc}
@@ -704,18 +674,14 @@ B e^{i k^{\prime} x}-B e^{-i k^{\prime} x}=2 i B \sin \left(k^{\prime} x\right) 
 -A e^{-k x} & x>a
 \end{array}\right.
 $$
-
 由于在 $x=-a, a$ 处势的突变 $\Delta V$ 有限, $\varphi, \varphi^{\prime}$ 连续。先考虑偶宇称态。由 $x=-a$ 处 $\varphi_{s}, \varphi_{s}^{\prime}$ 的连续性, 有
-
 $$
 A e^{-k a}=2 B \cos \left(k^{\prime} a\right)
 $$
 $$
 A k e^{-k a}=2 B k^{\prime} \sin \left(k^{\prime} a\right)
 $$
-
 $x=a$ 处的连续性条件给出相同的方程。故有
-
 $$
 \begin{gathered}
 k^{\prime} \operatorname{tg}\left(k^{\prime} a\right)=k \rightarrow \text { 分离能谱 } E_{n} \\
@@ -729,15 +695,11 @@ e^{-k a} \sec \left(k^{\prime} a\right) \cos \left(k^{\prime} x\right) & |x|<a \
 e^{-k x} & x>a
 \end{array}\right.
 $$
-
 归一化条件决定常数 $A$,
-
 $$
 \int_{-\infty}^{\infty}\left|\varphi_{s}(x)\right|^{2} d x=1
 $$
-
 类似, 对于奇宇称态有
-
 $$
 \begin{gathered}
 k^{\prime} \operatorname{ctg}\left(k^{\prime} a\right)=-k \rightarrow \text { 分离能谱 } E_{n} \\
