@@ -9,11 +9,11 @@ parallelization
   - guess is too high: $A[i'-1]>B[j']$
   - guess is too low: $B[j''-1]>A[i'']$
 
-![Finding Input Segments](image-8.png)
+![Finding Input Segments](images/image-8.png)
 
 memory accesses are not coalesced, optimization
 - load the block's segment to shared memory
 - do the per-thread co-rank and merge in shared memory
 - already applied thread coarsening
 
-![Shared Memory Tiling](image-9.png)
+![Shared Memory Tiling](images/image-9.png)

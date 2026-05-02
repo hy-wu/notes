@@ -6,7 +6,7 @@ ELLPACK Format (ELL)
 SpMV/ELL
 - assign one thread to loop over each input row sequentially
 
-![SpMV ELL](image-12.png)
+![SpMV ELL](images/image-12.png)
 
 ELL tradeoffs
 - advantages
@@ -20,7 +20,7 @@ ELL tradeoffs
 
 Hybrid ELL + COO: use COO for very long rows
 
-![Hybrid ELL COO](image-13.png)
+![Hybrid ELL COO](images/image-13.png)
 
 - benefits
   - space efficient: less padding
@@ -35,7 +35,7 @@ Jagged Diagonal Storage (JDS)
 SpMV/JDS
 - assign one thread to loop over each input row sequentially and update corresponding output element
 
-![SpMV JDS Kernel](image-14.png)
+![SpMV JDS Kernel](images/image-14.png)
 
 JDS tradeoffs
 - advantages

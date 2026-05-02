@@ -18,8 +18,8 @@
   - L2 cache
   - registers: $\approx 1$ cycle
 
-![alt text](<截屏2026-04-28 下午2.16.06.png>)
-![alt text](<截屏2026-04-28 下午2.20.55.png>)
+![alt text](<images/截屏2026-04-28 下午2.16.06.png>)
+![alt text](<images/截屏2026-04-28 下午2.20.55.png>)
 The data gets evicted from the L1 cache before another thread tries to load it, more likely than CPU because of the large number of threads and the small size of the L1 cache.
 
 Dynamic shared memory

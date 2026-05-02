@@ -28,7 +28,7 @@ parallel reduction
     - price paid for parallelism: are synchronization and control divergence
     - each thread responsible for more data
 
-![thread coarsening](reduction_coarsening.png)
+![thread coarsening](images/reduction_coarsening.png)
 - Coarsening Benefits
   - If blocks are all executed in parallel:
     - $\log(N)$ steps, $\log(N)$ synchronizations

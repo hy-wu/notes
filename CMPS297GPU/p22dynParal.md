@@ -11,7 +11,7 @@ applications
   - e.g. tree traversal algorithms (e.g., quadtrees and octrees)
   - e.g. divide and conquer algorithms (e.g., quicksort)
 
-![Applications of Dynamic Parallism](image-22.png)
+![Applications of Dynamic Parallism](images/image-22.png)
 
 - the device code for calling a kernel to launch a grid is the same as the host code
 - memory is needed for buffering grid launches that have not started executing

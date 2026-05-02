@@ -21,8 +21,8 @@ By default, local memory arrays are placed in the global memory
   - with loop unrolling, variable indices are converted to constant indices which allows the compiler to promote the arrays to registers
   - e.g. `__forceinline__` with `#pragma unroll`
 
-![Use Large Tiles](image-24.png)
-![Computing Thread Tile](image-23.png)
+![Use Large Tiles](images/image-24.png)
+![Computing Thread Tile](images/image-23.png)
 
 additional optimizations
 - vector loads/stores: improve global memory bandwidth utilization
@@ -54,7 +54,7 @@ additional optimizations
   - tensor cores: perform small matrix multiplications
     - typically use in cuBLAS and CUTLASS
 
-![Register Tiling](image-25.png)
-![Rearranging Tiles to Coalesce Stores](image-26.png)
-![Motivation for Software Pipelining](image-27.png)
+![Register Tiling](images/image-25.png)
+![Rearranging Tiles to Coalesce Stores](images/image-26.png)
+![Motivation for Software Pipelining](images/image-27.png)
 

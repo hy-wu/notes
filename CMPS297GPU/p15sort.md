@@ -13,12 +13,12 @@ radix sort
     - use exclusive scan
   - extract bit -> exclusive scan -> destination index -> take and store
 
-![paralleling radix sort](image-4.png)
+![paralleling radix sort](images/image-4.png)
 
 stores are not coalesced
 - sort locally in shared memory, then write each bucket to global memory in a coalesced manner
 
-![optimizing memory coalescing](image-5.png)
+![optimizing memory coalescing](images/image-5.png)
 
 choice of radix value
 - larger radix
@@ -27,11 +27,11 @@ choice of radix value
 
 thread coarsening  
 
-![Radix Sort with Thread Coarsening](image-6.png)
+![Radix Sort with Thread Coarsening](images/image-6.png)
 
 merge sort
 - divide the list into sublists, sorts the sublists, then merges them (divide and conquer algorithm)
 
-![Merge Sort](image-7.png)
+![Merge Sort](images/image-7.png)
 - early steps rely more on parallelism across merge operations
 - later steps rely more on parallelism within merge operations

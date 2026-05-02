@@ -1,7 +1,7 @@
 
 Brent-Kung Parallel (Inclusive) Scan
 
-![Brent-Kung Parallel (Inclusive) Scan](image-2.png)
+![Brent-Kung Parallel (Inclusive) Scan](images/image-2.png)
 
 - using shared memory also enables coalescing (already coalesced in Kogge-Stone)
 - no need double-buffering
@@ -16,7 +16,7 @@ exclusive scan
 - shift elements, or
 - different post-reduction step: Brent-Kung Parallel (Exclusive) Scan
 
-![Brent-Kung Parallel (Exclusive) Scan](image-3.png)
+![Brent-Kung Parallel (Exclusive) Scan](images/image-3.png)
 
 Thread Coarsening for scan
 - each thread scans a segment sequentially

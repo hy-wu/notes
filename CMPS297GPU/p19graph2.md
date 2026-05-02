@@ -7,7 +7,7 @@ Reduce Redundancy
   - vertices enqueued at each level form that level's frontier
 - overhead: synchronization across threads to add to a shared queue
 
-![Vertex-Centric Frontier-Based BFS](image-19.png)
+![Vertex-Centric Frontier-Based BFS](images/image-19.png)
 
 Queue Privatization
 - all threads atomically increment the same global counter to insert elements into the queue, high latency due to global memory access and serialization due to high contention.
@@ -21,6 +21,6 @@ Minimizing Launch Overhead
   - execute multiple levels in one single-block grid and synchronize between levels using __syncthreads()
   - reduce total number of grid launches
 
-![Minimizing Launch Overhead](image-20.png)
+![Minimizing Launch Overhead](images/image-20.png)
 
 

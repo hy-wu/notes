@@ -31,7 +31,7 @@ SpMV/COO
 - multiple threads writing to the same output, need atomic operations
 - already coalesced
 
-![SpMV/COO](image-11.png)
+![SpMV/COO](images/image-11.png)
 
 COO tradeoffs
 - advantages
@@ -48,7 +48,7 @@ Compressed Sparse Row (CSR)
 SpMV/CSR
 - assign one thread per row
 
-![SpMV/CSR](image-10.png)
+![SpMV/CSR](images/image-10.png)
 
 CSR tradeoffs
 - advantages

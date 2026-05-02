@@ -39,7 +39,7 @@ pipelining vector addition
 - divide arrays into segments
 - overlap copy and computation of different segments
 
-![Pipelining Vector Addition](image-21.png)
+![Pipelining Vector Addition](images/image-21.png)
 
 streams and asynchronous copies
 - parallelism between grids and memory copies is achieved by using **streams**

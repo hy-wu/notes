@@ -30,9 +30,9 @@ Breadth First Search (BFS)
 - edge-centric
   - for every edge, if its source was in the previous level, add its destination to the current level
 
-![Vertex-Centric BFS (Top-Down)](image-16.png)
-![Vertex-Centric BFS (Bottom-Up)](image-15.png)
-![Edge-Centric BFS](image-17.png)
+![Vertex-Centric BFS (Top-Down)](images/image-16.png)
+![Vertex-Centric BFS (Bottom-Up)](images/image-15.png)
+![Edge-Centric BFS](images/image-17.png)
 
 Notice: there should be 2 threads per edge in the image because the graph is undirected, but only show one for simplicity.
 
@@ -45,7 +45,7 @@ Dataset Implications
   - e.g. map of roads in a geographical area
   - can be improved by launching more threads to process neighbors of high-degree vertices
 
-![Similarity between BFS and SpMV](image-18.png)
+![Similarity between BFS and SpMV](images/image-18.png)
 
 Linear Algebraic Formulation of Graph Problems
 - with a few tweaks, BFS can be formulated as SpMV

@@ -11,11 +11,11 @@ scan operation
 
 segmented scan (also called hierarchical scan)
 
-![segmented scan](image.png)
+![segmented scan](images/image.png)
 
 Kogge-Stone parallel (inclusive) scan
 
-![Kogge-Stone parallel (inclusive) scan](image-1.png)
+![Kogge-Stone parallel (inclusive) scan](images/image-1.png)
 
 - careful with data races
 - `__syncthreads()` in branch: undefined behavior
