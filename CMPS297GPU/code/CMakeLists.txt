@@ -10,6 +10,13 @@ find_package(CUDAToolkit REQUIRED)
 
 enable_testing()
 
+# 启用 CUDA 语言支持
+enable_language(CUDA)
+
+# 告诉 CMake 导出编译命令文件给 clangd 使用
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
 set(CUDA_SOURCES
     colorhist.cu
     conv.cu
@@ -23,6 +30,7 @@ set(CUDA_SOURCES
     spmv.cu
     stencil.cu
     vecadd.cu
+    bamps_gpu_thrust.cu
 )
 
 foreach(src ${CUDA_SOURCES})

@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "CUDA",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/local/cuda-13.1/targets/x86_64-linux/include",
+                "/usr/local/cuda-13.1/targets/x86_64-linux/include/cccl",
+                "/usr/include/c++/15",
+                "/usr/include/x86_64-linux-gnu/c++/15",
+                "/usr/include/c++/15/backward",
+                "/usr/include/x86_64-linux-gnu",
+                "/usr/include"
+            ],
+            "defines": [
+                "__CUDACC__",
+                "__HIPCC__"
+            ],
+            "compilerPath": "/usr/local/cuda-13.1/bin/nvcc",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
