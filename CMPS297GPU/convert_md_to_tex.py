@@ -121,7 +121,8 @@ def convert_md_to_tex():
         with open(filename, 'r', encoding='utf-8') as f:
             lines = f.readlines()
             
-        state = {'in_list': False, 'in_table': False, 'list_type': None}
+        # state['list_stack'] stores (indent_size, list_type)
+        state = {'list_stack': [], 'in_table': False}
         
         for line in lines:
             line = line.rstrip('\n')
@@ -134,13 +135,63 @@ def convert_md_to_tex():
             h_match = re.match(r'^(#+)\s+(.*)', line)
             img_match = re.search(r'!\[(.*?)\]\((.*?)\)', line)
             list_match = re.match(r'^(\s*)([\*\-]|\d+\.)\s+(.*)', line)
-            table_match = '|' in line and not line.strip().startswith('---') # Basic table check
+            table_match = '|' in line and not line.strip().startswith('---')
 
-            # Close list if necessary
-            if state['in_list'] and not list_match and line.strip() != "":
-                output.append(f"\\end{{{state['list_type']}}}\n")
-                state['in_list'] = False
+            # List Handling with Nesting
+            if list_match:
+                indent_str, marker, content = list_match.groups()
+                indent_size = len(indent_str)
+                ltype = 'itemize' if marker in ['*', '-'] else 'enumerate'
+                
+                # If we are deeper than current stack
+                if not state['list_stack'] or indent_size > state['list_stack'][-1][0]:
+                    state['list_stack'].append((indent_size, ltype))
+                    output.append(f"\\begin{{{ltype}}}\n")
+                # If we are shallower
+                elif indent_size < state['list_stack'][-1][0]:
+                    while state['list_stack'] and indent_size < state['list_stack'][-1][0]:
+                        old_indent, old_ltype = state['list_stack'].pop()
+                        output.append(f"\\end{{{old_ltype}}}\n")
+                    
+                    if not state['list_stack'] or indent_size > state['list_stack'][-1][0]:
+                        state['list_stack'].append((indent_size, ltype))
+                        output.append(f"\\begin{{{ltype}}}\n")
+                    elif state['list_stack'][-1][1] != ltype:
+                        # Same indent but different type
+                        old_indent, old_ltype = state['list_stack'].pop()
+                        output.append(f"\\end{{{old_ltype}}}\n")
+                        state['list_stack'].append((indent_size, ltype))
+                        output.append(f"\\begin{{{ltype}}}\n")
+                # Same level
+                elif state['list_stack'][-1][1] != ltype:
+                    old_indent, old_ltype = state['list_stack'].pop()
+                    output.append(f"\\end{{{old_ltype}}}\n")
+                    state['list_stack'].append((indent_size, ltype))
+                    output.append(f"\\begin{{{ltype}}}\n")
+                
+                output.append(f"\\item {process_inline(content)}\n")
+                continue
             
+            # If not a list match, but we are in a list
+            if state['list_stack'] and line.strip() != "":
+                # Check if it's an image or something that should stay inside or close
+                if img_match or h_match:
+                    # Close all lists
+                    while state['list_stack']:
+                        old_indent, old_ltype = state['list_stack'].pop()
+                        output.append(f"\\end{{{old_ltype}}}\n")
+                elif not table_match:
+                    # It might be a continuation of a list item if it's indented
+                    first_char_indent = len(line) - len(line.lstrip())
+                    if first_char_indent > state['list_stack'][-1][0]:
+                        output.append(process_inline(line.strip()) + "\n")
+                        continue
+                    else:
+                        # Close lists
+                        while state['list_stack']:
+                            old_indent, old_ltype = state['list_stack'].pop()
+                            output.append(f"\\end{{{old_ltype}}}\n")
+
             # Close table if necessary
             if state['in_table'] and not table_match:
                 output.append("\\end{longtable}\n")
@@ -156,20 +207,6 @@ def convert_md_to_tex():
                 alt, path = img_match.groups()
                 path = path.strip('<>')
                 output.append(f"\\begin{{figure}}[h]\n\\centering\n\\includegraphics[width=0.8\\textwidth]{{{path}}}\n\\caption{{{process_inline(alt)}}}\n\\end{{figure}}\n")
-                continue
-
-            if list_match:
-                indent, marker, content = list_match.groups()
-                ltype = 'itemize' if marker in ['*', '-'] else 'enumerate'
-                if not state['in_list']:
-                    state['in_list'] = True
-                    state['list_type'] = ltype
-                    output.append(f"\\begin{{{ltype}}}\n")
-                elif state['list_type'] != ltype:
-                    output.append(f"\\end{{{state['list_type']}}}\n")
-                    state['list_type'] = ltype
-                    output.append(f"\\begin{{{ltype}}}\n")
-                output.append(f"\\item {process_inline(content)}\n")
                 continue
 
             if table_match:
@@ -192,12 +229,14 @@ def convert_md_to_tex():
                 output.append("\n")
 
         # Clean up states at end of file
-        if state['in_list']:
-            output.append(f"\\end{{{state['list_type']}}}\n")
+        while state['list_stack']:
+            old_indent, old_ltype = state['list_stack'].pop()
+            output.append(f"\\end{{{old_ltype}}}\n")
         if state['in_table']:
             output.append("\\end{longtable}\n")
             
         output.append("\n\\newpage\n")
+
 
 
     output.append(LATEX_POSTAMBLE)

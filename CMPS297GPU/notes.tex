@@ -87,16 +87,24 @@ Shared memory per SM & 48KB & 96KB & 64KB & 96KB & 164KB & 128KB & 128KB & 228KB
 
 \end{itemize}
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/截屏2026-04-28 下午2.16.06.png}
-\caption{alt text}
+\caption{Memory in the CUDA Programming Model}
 \end{figure}
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\textwidth]{images/截屏2026-04-28 下午2.20.55.png}
-\caption{alt text}
-\end{figure}
+\begin{table}
+    \centering
+\begin{tabular}{rccc}
+\hline
+Variable declaration & Memory & Scope & Lifetime \\ \hline
+\texttt{\_\_device\_\_ int globalVar;\ \ } & global & grid & application \\
+\texttt{\_\_device\_\_ \_\_constant\_\_ int constantVar;} & constant & grid & application \\
+\texttt{\_\_device\_\_ \_\_shared\_\_ int sharedVar;\ \ } & shared & block & block \\
+\texttt{int localVar;\ \ \ } & register & thread & thread \\
+\texttt{int localArr[N];} & global & thread & thread \\ \hline
+\end{tabular}
+\caption{CUDA Type Qualifiers}
+\end{table}
 The data gets evicted from the L1 cache before another thread tries to load it, more likely than CPU because of the large number of threads and the small size of the L1 cache.
 
 
@@ -129,8 +137,7 @@ DRAM cell: consists of a capacitance that stores a charge and a three-state devi
 DRAM array, DRAM bank.
 
 
-Row Address -> [Row Decoder] -> [DRAM Array] -> [Sense Amplifier] -> [Column Latches] -(burst)> [with Column Address -> Mux] -> Data
-
+Row Address $\to$ [Row Decoder] $\to$ [DRAM Array] $\to$ [Sense Amplifier] $\to$ [Column Latches] $\xrightarrow{\text{burst}}$ [with Column Address $\to$ Mux] $\to$ Data
 
 Accessing data in the same burst: no need to access the DRAM array again, just the multiplexer.
 
@@ -265,13 +272,12 @@ store in constant memory
 tiling (M*M mask)
 
 \begin{itemize}
-\item without tiling, ratio of computation to global loads: (2M\textasciicircum{}2 OP) / (4M\textasciicircum{}2 B) = 0.5 OP/B
-\item with tiling, dimensions: input = T, output = T-M+1
+\item without tiling, ratio of computation to global loads: $(2M^2 \text{ OP}) / (4M^2 \text{ B}) = 0.5$ OP/B
+\item with tiling, dimensions: input = $T$, output = $T-M+1$
 \begin{itemize}
-\item operations per block: (T-M+1)\textasciicircum{}2 * 2M\textasciicircum{}2 OP
-\item global loads per block: T\textasciicircum{}2 * 4 B
-\item ratio: 0.5M\textasciicircum{}2 * (1 - (M-1)/T)\textasciicircum{}2 OP/B
-
+\item operations per block: $(T-M+1)^2 \cdot 2M^2$ OP
+\item global loads per block: $T^2 \cdot 4$ B
+\item ratio: $0.5M^2 \cdot (1 - (M-1)/T)^2$ OP/B
 \end{itemize}
 \end{itemize}
 
@@ -351,7 +357,7 @@ parallel reduction
 \end{itemize}
 \end{itemize}
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/reduction_coarsening.png}
 \caption{thread coarsening}
@@ -401,7 +407,7 @@ scan operation
 segmented scan (also called hierarchical scan)
 
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image.png}
 \caption{segmented scan}
@@ -410,7 +416,7 @@ segmented scan (also called hierarchical scan)
 Kogge-Stone parallel (inclusive) scan
 
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-1.png}
 \caption{Kogge-Stone parallel (inclusive) scan}
@@ -457,7 +463,7 @@ scan work efficiency
 Brent-Kung Parallel (Inclusive) Scan
 
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-2.png}
 \caption{Brent-Kung Parallel (Inclusive) Scan}
@@ -485,7 +491,7 @@ exclusive scan
 \item different post-reduction step: Brent-Kung Parallel (Exclusive) Scan
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-3.png}
 \caption{Brent-Kung Parallel (Exclusive) Scan}
@@ -554,7 +560,7 @@ parallelization
 
 \end{itemize}
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-8.png}
 \caption{Finding Input Segments}
@@ -568,7 +574,7 @@ memory accesses are not coalesced, optimization
 \item already applied thread coarsening
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-9.png}
 \caption{Shared Memory Tiling}
@@ -600,7 +606,7 @@ radix sort
 
 \end{itemize}
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-4.png}
 \caption{paralleling radix sort}
@@ -612,7 +618,7 @@ stores are not coalesced
 \item sort locally in shared memory, then write each bucket to global memory in a coalesced manner
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-5.png}
 \caption{optimizing memory coalescing}
@@ -631,7 +637,7 @@ choice of radix value
 thread coarsening  
 
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-6.png}
 \caption{Radix Sort with Thread Coarsening}
@@ -643,7 +649,7 @@ merge sort
 \item divide the list into sublists, sorts the sublists, then merges them (divide and conquer algorithm)
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-7.png}
 \caption{Merge Sort}
@@ -707,7 +713,7 @@ SpMV/COO
 \item already coalesced
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-11.png}
 \caption{SpMV/COO}
@@ -741,7 +747,7 @@ SpMV/CSR
 \item assign one thread per row
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-10.png}
 \caption{SpMV/CSR}
@@ -783,7 +789,7 @@ SpMV/ELL
 \item assign one thread to loop over each input row sequentially
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-12.png}
 \caption{SpMV ELL}
@@ -809,7 +815,7 @@ ELL tradeoffs
 Hybrid ELL + COO: use COO for very long rows
 
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-13.png}
 \caption{Hybrid ELL COO}
@@ -838,7 +844,7 @@ SpMV/JDS
 \item assign one thread to loop over each input row sequentially and update corresponding output element
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-14.png}
 \caption{SpMV JDS Kernel}
@@ -924,17 +930,17 @@ Breadth First Search (BFS)
 
 \end{itemize}
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-16.png}
 \caption{Vertex-Centric BFS (Top-Down)}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-15.png}
 \caption{Vertex-Centric BFS (Bottom-Up)}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-17.png}
 \caption{Edge-Centric BFS}
@@ -959,7 +965,7 @@ Dataset Implications
 
 \end{itemize}
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-18.png}
 \caption{Similarity between BFS and SpMV}
@@ -1009,7 +1015,7 @@ Reduce Redundancy
 \item overhead: synchronization across threads to add to a shared queue
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-19.png}
 \caption{Vertex-Centric Frontier-Based BFS}
@@ -1037,7 +1043,7 @@ Minimizing Launch Overhead
 
 \end{itemize}
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-20.png}
 \caption{Minimizing Launch Overhead}
@@ -1048,7 +1054,7 @@ Minimizing Launch Overhead
 \newpage
 \section{Warp Synchronization}
 
-\subsubsection{intra-warp synchronization}
+\subsection{intra-warp synchronization}
 
 take advantage of the special relationship between threads in the same warp to synchronize quickly
 
@@ -1060,7 +1066,7 @@ CUDA has several built-in functions to synchronize between warps
 \item voting across threads
 
 \end{itemize}
-\subsubsection{shuffle}
+\subsection{shuffle}
 
 built-in warp shuffle functions enable threads to share data with other threads in the same warp
 
@@ -1083,7 +1089,7 @@ example: reduction/scan
 \item When one warp remains, use \texttt{\_\_shfl\_down\_sync()} to share data from registers
 
 \end{itemize}
-\subsubsection{voting}
+\subsection{voting}
 
 built-in warp vote functions enable threads to vote on which threads in the warp satisfy some condition
 
@@ -1133,7 +1139,7 @@ Gemini's suggestions:
 \newpage
 \section{Pinned Memory and Streams}
 
-\subsubsection{Pinned Memory}
+\subsection{Pinned Memory}
 
 Direct Memory Access (DMA) allows some hardware to access memory without involving the CPU
 
@@ -1162,7 +1168,7 @@ faster copies: allocate host arrays directly in pinned memory
 \item allocating too much pinned memory degrades overall system performance by reducing the virtual pages available for swapping
 
 \end{itemize}
-\subsubsection{Stream}
+\subsection{Stream}
 
 Typical system is simultaneously capable of
 
@@ -1197,7 +1203,7 @@ pipelining vector addition
 \item overlap copy and computation of different segments
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-21.png}
 \caption{Pipelining Vector Addition}
@@ -1245,7 +1251,7 @@ applications
 
 \end{itemize}
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-22.png}
 \caption{Applications of Dynamic Parallism}
@@ -1322,7 +1328,7 @@ Nesting Depth: how deeply dynamically launched grids may launch other grids
 \newpage
 \section{CUDA Potpourri}
 
-\subsubsection{Multi-GPU programming}
+\subsection{Multi-GPU programming}
 
 multiple GPUs on the same node
 
@@ -1339,14 +1345,14 @@ multiple GPUs on multiple different nodes
 \item important consideration: overlapping MPI communication with kernel execution
 
 \end{itemize}
-\subsubsection{Interconnect}
+\subsection{Interconnect}
 
 \begin{itemize}
 \item PCIe: general, widely supported
 \item NVLink: faster between multi-GPUs, but only supported on some GPUs and some CPUs
 
 \end{itemize}
-\subsubsection{Memory management}
+\subsection{Memory management}
 
 Unified Virtual Addressing (UVA)
 
@@ -1371,7 +1377,7 @@ Zero-copy memory: enables devices to directly access host memory
 
 \end{itemize}
 \end{itemize}
-\subsubsection{Events}
+\subsection{Events}
 
 \begin{itemize}
 \item synchronizing after every copy or kernel call interferes with execution and slows things down
@@ -1386,7 +1392,7 @@ Zero-copy memory: enables devices to directly access host memory
 \item profilers can also be used
 
 \end{itemize}
-\subsubsection{Tensor cores}
+\subsection{Tensor cores}
 
 programmable matrix multiplication and accumulation units
 
@@ -1395,7 +1401,7 @@ programmable matrix multiplication and accumulation units
 \item in Volta v100, 640 cores (8 per SM), each core is capable of a 4x4 matrix multiply-accumulate operation D = A * B + C
 
 \end{itemize}
-\subsubsection{Libraries}
+\subsection{Libraries}
 
 examples of libraries for common parallel primitives
 
@@ -1416,7 +1422,7 @@ examples of libraries for common parallel primitives
 \item NPP: signal, image, and video processing
 
 \end{itemize}
-\subsubsection{Other programming interfaces}
+\subsection{Other programming interfaces}
 
 \begin{itemize}
 \item OpenCL: similar to CUDA, but open source and more portable across non-NVIDIA GPUs
@@ -1427,7 +1433,7 @@ examples of libraries for common parallel primitives
 \item C++AMP: implementing GPU programs directly in C++
 
 \end{itemize}
-\subsubsection{Other hardware}
+\subsection{Other hardware}
 
 other GPUs
 
@@ -1443,7 +1449,7 @@ integrated GPUs
 FPGA
 
 
-\subsubsection{Comparison with CPU}
+\subsection{Comparison with CPU}
 
 more fair to compare with parallel and vectorized CPU code
 
@@ -1490,12 +1496,12 @@ By default, local memory arrays are placed in the global memory
 \item e.g. \texttt{\_\_forceinline\_\_} with \texttt{\#pragma unroll}
 
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-24.png}
 \caption{Use Large Tiles}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-23.png}
 \caption{Computing Thread Tile}
@@ -1552,17 +1558,17 @@ additional optimizations
 \end{itemize}
 \end{itemize}
 \end{itemize}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-25.png}
 \caption{Register Tiling}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-26.png}
 \caption{Rearranging Tiles to Coalesce Stores}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/image-27.png}
 \caption{Motivation for Software Pipelining}
