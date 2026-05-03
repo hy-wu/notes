@@ -45,7 +45,7 @@ Zero-copy memory: enables devices to directly access host memory
 
 programmable matrix multiplication and accumulation units
 - accelerate DNN workloads
-- in Volta v100， 640 cores (8 per SM), each core is capable of a 4x4 matrix multiply-accumulate operation D = A * B + C
+- in Volta v100, 640 cores (8 per SM), each core is capable of a 4x4 matrix multiply-accumulate operation D = A * B + C
 
 ##### Libraries
 
