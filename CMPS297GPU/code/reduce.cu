@@ -7,6 +7,8 @@
 #define COARSE_FACTOR 8
 #define WARP_SIZE 32
 
+#define RUN_ALL_SIZES false
+
 __global__ void reduce_kernel(float *input, float *partialSums,
                               unsigned int N) {
   unsigned int segment = blockIdx.x * blockDim.x * 2;
@@ -182,7 +184,9 @@ int main() {
                              1 << 24, 1 << 25, 1 << 26, 1 << 27,
                              1 << 28, 1 << 29, 1 << 30};
   int num_sizes = sizeof(N_values) / sizeof(unsigned int);
-
+    if (!RUN_ALL_SIZES) {
+      num_sizes = 4; // 只测试前4个大小，快速验证
+    }
   for (int i = 0; i < num_sizes; i++) {
     unsigned int N = N_values[i];
     printf("\n================================================\n");

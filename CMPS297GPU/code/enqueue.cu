@@ -9,6 +9,8 @@
 
 #define WARP_SIZE 32
 
+#define N_REPEATS 1
+
 __host__ __device__ bool cond(unsigned int value) {
   // Replace with your actual condition
   return (value % 2) == 0;
@@ -132,7 +134,7 @@ int main() {
          queueSize);
   std::sort(queue, queue + queueSize); // Sort CPU result for easier comparison
 
-  for (unsigned int iter = 0; iter < 5; iter++) {
+  for (unsigned int iter = 0; iter < N_REPEATS; iter++) {
     t_start = std::chrono::high_resolution_clock::now();
     unsigned int queueSizeStd = enqueue_cpu_std(input, queue0, N);
     t_end = std::chrono::high_resolution_clock::now();
@@ -170,7 +172,7 @@ int main() {
     }
   }
 
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < N_REPEATS; i++) {
     t_start = std::chrono::high_resolution_clock::now();
     unsigned int queueSizeSimple = enqueue_gpu(input, queue1, N, false);
     t_end = std::chrono::high_resolution_clock::now();

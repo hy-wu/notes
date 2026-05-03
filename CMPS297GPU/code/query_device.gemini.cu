@@ -26,7 +26,7 @@ int main() {
 
     if (deviceCount == 0) {
         printf("没有找到支持 CUDA 的设备。\n");
-        return 0;
+        return 1;
     }
 
     for (int i = 0; i < deviceCount; ++i) {
