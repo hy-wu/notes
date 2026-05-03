@@ -8,19 +8,30 @@
 \usepackage{listings}
 \usepackage{booktabs}
 \usepackage{longtable}
+\usepackage{array}
 % \usepackage{xeCJK}
 \usepackage[space]{grffile}
 \usepackage{geometry}
 \geometry{a4paper, margin=1in}
+\usepackage{enumitem}
+\setlist{nosep}
+\usepackage[font=small,labelfont=bf,skip=2pt]{caption}
+
+% 优化浮动参数，允许更多图片与文字共存
+\renewcommand{\topfraction}{.85}
+\renewcommand{\bottomfraction}{.7}
+\renewcommand{\textfraction}{.15}
+\renewcommand{\floatpagefraction}{.66}
+\setcounter{totalnumber}{10}
 
 \title{CUDA Programming Notes (CMPS 297 GPU)}
-\author{Combined Notes}
-\date{\today}
+\author{}
+\date{}
 
 \begin{document}
 \maketitle
 \tableofcontents
-\newpage
+%\newpage
 \section{GPU Architecture}
 
 \begin{itemize}
@@ -38,23 +49,28 @@
 \end{itemize}
 \item Occupancy constraints
 
-\begin{longtable}{l|l|l|l|l|l|l|l|l|l}
+% {
+% \footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{lccccccccc}
 \hline
-GPU Name & K40 & M40 & P100 & V100 & A100? & RTX 3090? & RTX 4090? & H100? & RTX 5090? \\ \hline
-Microarchitecture & Kepler & Maxwell & Pascal & Volta & Ampere & Ampere & Ada Lovelace & Hopper & Blackwell \\ \hline
-Compute Capability & 3.5 & 5.2 & 6.0 & 7.0 & 8.0 & 8.6 & 8.9 & 9.0 & 12.0 \\ \hline
-Number of SMs & 15 & 24 & 56 & 80 & 108 & 82 & 128 & 144 & 192 \\ \hline
-Cores per SM & 192 & 128 & 64 & 64 & 64 & 64 & 128 & 128 & 128 \\ \hline
-Max threads per SM & 2048 & 2048 & 2048 & 2048 & 2048 & 2048 & 2048 & 2048 & 1536 (48 warps) \\ \hline
-Max blocks per SM & 16 & 32 & 32 & 32 & 32 & 16 & 32 & 32 & 32 \\ \hline
-Max threads per block & 1024 & 1024 & 1024 & 1024 & 1024 & 1024 & 1024 & 1024 & 1024 \\ \hline
-Registers per SM & 64K & 64K & 64K & 64K & 64K & 64K & 64K & 64K & 64K \\ \hline
-Shared memory per SM & 48KB & 96KB & 64KB & 96KB & 164KB & 128KB & 128KB & 228KB & 256KB \\ \hline
+\textbf{GPU Name} & \textbf{K40} & \textbf{M40} & \textbf{P100} & \textbf{V100} & \textbf{A100} & \textbf{3090} & \textbf{4090} & \textbf{H100} & \textbf{5090} \\ \hline
+Arch. & Kepler & Maxw. & Pasc. & Volta & Amp. & Amp. & Ada & Hopp. & Black. \\ \hline
+CC & 3.5 & 5.2 & 6.0 & 7.0 & 8.0 & 8.6 & 8.9 & 9.0 & 10.0 \\ \hline
+SMs & 15 & 24 & 56 & 80 & 108 & 82 & 128 & 132 & 170 \\ \hline
+Cores/SM & 192 & 128 & 64 & 64 & 64 & 128 & 128 & 128 & 128 \\ \hline
+Threads/SM & 2048 & 2048 & 2048 & 2048 & 2048 & 1536 & 1536 & 2048 & 2048 \\ \hline
+Blocks/SM & 16 & 32 & 32 & 32 & 32 & 16 & 32 & 32 & 32 \\ \hline
+Threads/Blk & 1024 & 1024 & 1024 & 1024 & 1024 & 1024 & 1024 & 1024 & 1024 \\ \hline
+Regs/SM & 64K & 64K & 64K & 64K & 64K & 64K & 64K & 64K & 64K \\ \hline
+SMem/SM & 48KB & 96KB & 64KB & 96KB & 164KB & 100KB & 100KB & 228KB & 228KB \\ \hline
+\caption{There may be mistakes in the table}
 \end{longtable}
+% }
 
 \end{itemize}
 
-\newpage
+%\newpage
 \section{GPU Memory}
 
 (v100 era)
@@ -89,7 +105,7 @@ Shared memory per SM & 48KB & 96KB & 64KB & 96KB & 164KB & 128KB & 128KB & 228KB
 \end{itemize}
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/截屏2026-04-28 下午2.16.06.png}
+\includegraphics[width=0.8\textwidth]{images/image-mem.pdf}
 \caption{Memory in the CUDA Programming Model}
 \end{figure}
 \begin{table}
@@ -115,7 +131,7 @@ Dynamic shared memory
 \item configuration: \texttt{kernel <<< numBlocks, numThreadsPerBlock, smemPerBlock >>> (...)}
 \end{itemize}
 
-\newpage
+%\newpage
 \section{Performance Metrics}
 some Performance Optimizations
 
@@ -142,7 +158,7 @@ Row Address $\to$ [Row Decoder] $\to$ [DRAM Array] $\to$ [Sense Amplifier] $\to$
 Accessing data in the same burst: no need to access the DRAM array again, just the multiplexer.
 
 
-Memory Coalescing
+\subsection{Memory Coalescing}
 
 \begin{itemize}
 \item When threads in the same warp access consecutive memory locations in the same burst, the accesses can be combined and served by one burst
@@ -189,7 +205,9 @@ Thread Granularity
 \item Suboptimal if threads are getting serialized by hardware
 \end{itemize}
 \end{itemize}
-\item Thread coarsening: assign multiple units of parallelism per thread
+\end{itemize}
+\subsection{Thread coarsening}
+assign multiple units of parallelism per thread
 \begin{itemize}
 \item Advantages: reduce the price paid for parallelization
 \begin{itemize}
@@ -204,16 +222,17 @@ Thread Granularity
 \item interfere with the transparent scalability
 \end{itemize}
 \item more resources per thread may limit occupancy
-
 \end{itemize}
 \end{itemize}
-\end{itemize}
-Checklist of Common Optimizations
+\subsection{Checklist of Common Optimizations}
 
-
-\begin{longtable}{l|l|l|l}
+{
+% \small
+\setlength{\tabcolsep}{3pt}
+\setlength{\extrarowheight}{2pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.29\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}>{\raggedright\arraybackslash}p{0.23\textwidth}}
 \hline
-Optimization & Improves & Impact on Cores & Impact on Memory \\ \hline
+\textbf{Optimization} & \textbf{Improves} & \textbf{Impact on Cores} & \textbf{Impact on Memory} \\ \hline
 Tuning resources to maximize occupancy & Latency hiding & More work to hide pipeline latency & More accesses to hide DRAM latency \\ \hline
 Minimizing control divergence & SIMD efficiency & Fewer idle cores during SIMD execution & - \\ \hline
 Uniform memory access pattern & Memory coalescing & Fewer pipeline stalls waiting for memory & Better utilization of bursts / cache lines \\ \hline
@@ -221,8 +240,10 @@ Shared memory tiling & Data reuse & Fewer pipeline stalls waiting for memory & L
 Thread coarsening & Price of parallelization & Less redundant work or synchronization & Less global memory traffic \\ \hline
 Privatization \textit{(covered later)} & Contention on common output & Fewer pipeline stalls waiting for memory & Less global memory traffic and serialization \\ \hline
 \end{longtable}
+}
 
-Tensions Between Optimizations
+
+\subsection{Tensions Between Optimizations}
 
 \begin{itemize}
 \item Maximizing occupancy
@@ -249,28 +270,22 @@ Know Your Bottlenecks
 \item Make sure to properly diagnose the bottleneck before applying optimizations
 \end{itemize}
 
-\newpage
+%\newpage
 \section{Convolution}
 
 usage: signal/image/video processing, e.g., Gaussian blur, sharpening, edge detection, etc.
-
-
-a straightforward implementation: a thread per output element
-
-
-observation: the mask is small, constant, and accessed by all threads,
-
-store in constant memory
-
+\begin{itemize}
+\item a straightforward implementation: a thread per output element
+\end{itemize}
+observation: the mask is small, constant, and accessed by all threads,\\
+$\implies$ store in constant memory
 \begin{itemize}
 \item \texttt{\_\_constant\_\_ float mask\_c[MASK\_DIM][MASK\_DIM];}
 \item \texttt{cudaMemcpyToSymbol(mask\_c, mask, MASK\_DIM * MASK\_DIM * sizeof(float));}
 \item can only allocate up to 64KB
 \item cache coherency
-
 \end{itemize}
 tiling (M*M mask)
-
 \begin{itemize}
 \item without tiling, ratio of computation to global loads: $(2M^2 \text{ OP}) / (4M^2 \text{ B}) = 0.5$ OP/B
 \item with tiling, dimensions: input = $T$, output = $T-M+1$
@@ -281,7 +296,7 @@ tiling (M*M mask)
 \end{itemize}
 \end{itemize}
 
-\newpage
+%\newpage
 \section{Stencil Computation}
 
 \begin{itemize}
@@ -305,7 +320,7 @@ tiling (M*M mask)
 \end{itemize}
 \end{itemize}
 
-\newpage
+%\newpage
 \section{Reduction}
 
 
@@ -329,7 +344,7 @@ parallel reduction
 \end{itemize}
 \item segmented reduction
 \begin{itemize}
-\item tree reduction on each segment -> partial sums
+\item tree reduction on each segment $\to$ partial sums
 \begin{itemize}
 \item using stride as loop variable
 \end{itemize}
@@ -359,8 +374,8 @@ parallel reduction
 \end{itemize}
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/reduction_coarsening.png}
-\caption{thread coarsening}
+\includegraphics[width=0.6\textwidth]{images/reduction_coarsening.pdf}
+\caption{thread coarsening for reduction}
 \end{figure}
 \begin{itemize}
 \item Coarsening Benefits
@@ -371,75 +386,51 @@ parallel reduction
 \end{itemize}
 \item If blocks serialized by the hardware by a factor of C:
 \begin{itemize}
-\item $C*\log(N)$ steps, $C*\log(N)$ synchronizations
+\item $C\log(N)$ steps, $C\log(N)$ synchronizations
 \end{itemize}
 \item If blocks are coarsened by a factor of C:
 \begin{itemize}
-\item $2*(C - 1) + \log(N)$ steps, $\log(N)$ synchronizations
+\item $2(C - 1) + \log(N)$ steps, $\log(N)$ synchronizations
 
 \end{itemize}
 \end{itemize}
 \end{itemize}
 
-\newpage
-\section{Scan (Kogge-Stone)}
-scan
-
-
+%\newpage
+\section{Scan (Kogge-Stone, Brent-Kung)}
 scan operation
-
-\begin{itemize}
-\item takes
+takes
 \begin{itemize}
 \item an input array $[x_0, x_1, \ldots, x_{n-1}]$
 \item an associative operation $\oplus$, e.g. $+$, $\times$, $\max$, $\min$
 \end{itemize}
-\item returns
+returns
 \begin{itemize}
 \item an output array $[y_0, y_1, \ldots, y_{n-1}]$
 \begin{itemize}
 \item inclusive scan: $y_i = x_0 \oplus x_1 \oplus \ldots \oplus x_i$
 \item exclusive scan: $y_i = x_0 \oplus x_1 \oplus \ldots \oplus x_{i-1}$
-
 \end{itemize}
 \end{itemize}
-\end{itemize}
-segmented scan (also called hierarchical scan)
-
-
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/image.png}
-\caption{segmented scan}
+\includegraphics[width=0.6\textwidth]{images/image.pdf}
+\caption{segmented scan (also called hierarchical scan)}
 \end{figure}
-
 Kogge-Stone parallel (inclusive) scan
-
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/image-1.png}
-\caption{Kogge-Stone parallel (inclusive) scan}
-\end{figure}
-
 \begin{itemize}
 \item careful with data races
 \item \texttt{\_\_syncthreads()} in branch: undefined behavior
 \item shared memory: buffer
 \item double buffering: don't have to synchronize between read and write
-
 \end{itemize}
 exclusive scan: shift by one, insert identity element at the beginning
 
-
 work efficiency
-
 \begin{itemize}
 \item A parallel algorithm is work efficient if it performs the same amount of work as the corresponding sequential algorithm
-
 \end{itemize}
 scan work efficiency
-
 \begin{itemize}
 \item sequential scan: $N$ additions
 \item Kogge-Stone parallel scan
@@ -457,18 +448,23 @@ scan work efficiency
 \end{itemize}
 \end{itemize}
 
-\newpage
-\section{Scan (Brent-Kung)}
-
-Brent-Kung Parallel (Inclusive) Scan
-
-
 \begin{figure}
+\begin{minipage}{0.43\textwidth}
 \centering
-\includegraphics[width=0.8\textwidth]{images/image-2.png}
+\includegraphics[width=\linewidth]{images/image-1.png}
+\caption{Kogge-Stone parallel (inclusive) scan}
+\end{minipage}\hfill
+\begin{minipage}{0.56\textwidth}
+\centering
+\includegraphics[width=\linewidth]{images/image-2.png}
 \caption{Brent-Kung Parallel (Inclusive) Scan}
+\end{minipage}
 \end{figure}
 
+%\newpage
+% \section{Scan (Brent-Kung)}
+\noindent
+Brent-Kung Parallel (Inclusive) Scan
 \begin{itemize}
 \item using shared memory also enables coalescing (already coalesced in Kogge-Stone)
 \item no need double-buffering
@@ -496,16 +492,14 @@ exclusive scan
 \includegraphics[width=0.8\textwidth]{images/image-3.png}
 \caption{Brent-Kung Parallel (Exclusive) Scan}
 \end{figure}
-
 Thread Coarsening for scan
-
 \begin{itemize}
 \item each thread scans a segment sequentially
 \item only scan the partial sums of each segment in parallel
 
 \end{itemize}
 
-\newpage
+%\newpage
 \section{Histogram}
 
 Data races may result in unpredictable program output.
@@ -541,14 +535,9 @@ atomic operations on global memory have high latency
 
 \end{itemize}
 
-\newpage
+%\newpage
 \section{Merge}
-
-ordered merge
-
-
-parallelization
-
+parallelization of ordered merge
 \begin{itemize}
 \item each thread for a segment of output array
 \item finding input segments, binary search co-rank $i$ ($j=k-i$)
@@ -557,7 +546,6 @@ parallelization
 \item guess is correct: $A[i-1]\leq B[j]$ and $B[j-1]\leq A[i]$
 \item guess is too high: $A[i'-1]>B[j']$
 \item guess is too low: $B[j''-1]>A[i'']$
-
 \end{itemize}
 \end{itemize}
 \begin{figure}
@@ -565,9 +553,7 @@ parallelization
 \includegraphics[width=0.8\textwidth]{images/image-8.png}
 \caption{Finding Input Segments}
 \end{figure}
-
 memory accesses are not coalesced, optimization
-
 \begin{itemize}
 \item load the block's segment to shared memory
 \item do the per-thread co-rank and merge in shared memory
@@ -580,10 +566,10 @@ memory accesses are not coalesced, optimization
 \caption{Shared Memory Tiling}
 \end{figure}
 
-\newpage
+%\newpage
 \section{Sort}
 
-radix sort
+\subsection{radix sort}
 
 \begin{itemize}
 \item distribute keys into buckets based on a radix (or base)
@@ -602,48 +588,43 @@ radix sort
 \item destination of a one = input size - \#ones in total + \#ones to the left
 \item use exclusive scan
 \end{itemize}
-\item extract bit -> exclusive scan -> destination index -> take and store
+\item extract bit $\to$ exclusive scan $\to$ destination index $\to$ take and store
 
 \end{itemize}
 \end{itemize}
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/image-4.png}
+\includegraphics[width=0.8\textwidth]{images/image-4.pdf}
 \caption{paralleling radix sort}
 \end{figure}
-
 stores are not coalesced
-
 \begin{itemize}
 \item sort locally in shared memory, then write each bucket to global memory in a coalesced manner
-
 \end{itemize}
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/image-5.png}
-\caption{optimizing memory coalescing}
-\end{figure}
-
 choice of radix value
-
 \begin{itemize}
 \item larger radix
 \begin{itemize}
 \item advantage: fewer iterations
 \item disadvantage: more buckets, results in poorer coalescing
-
 \end{itemize}
 \end{itemize}
-thread coarsening  
-
-
+thread coarsening
 \begin{figure}
+    \begin{minipage}{0.49\textwidth}
+        \centering
+\includegraphics[width=\linewidth]{images/image-5.png}
+\caption{optimizing memory coalescing}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.49\textwidth}
 \centering
-\includegraphics[width=0.8\textwidth]{images/image-6.png}
+\includegraphics[width=\linewidth]{images/image-6.png}
 \caption{Radix Sort with Thread Coarsening}
+\end{minipage}
 \end{figure}
 
-merge sort
+\subsection{merge sort}
 
 \begin{itemize}
 \item divide the list into sublists, sorts the sublists, then merges them (divide and conquer algorithm)
@@ -659,8 +640,8 @@ merge sort
 \item later steps rely more on parallelism within merge operations
 \end{itemize}
 
-\newpage
-\section{Sparse Matrix (COO, CSR)}
+%\newpage
+\section{Sparse Matrix (COO, CSR, ELL, JDS)}
 
 sparse matrices: many elements are zero
 
@@ -711,16 +692,8 @@ SpMV/COO
 \item assign one thread per nonzero
 \item multiple threads writing to the same output, need atomic operations
 \item already coalesced
-
 \end{itemize}
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/image-11.png}
-\caption{SpMV/COO}
-\end{figure}
-
 COO tradeoffs
-
 \begin{itemize}
 \item advantages
 \begin{itemize}
@@ -735,26 +708,27 @@ COO tradeoffs
 
 \end{itemize}
 \end{itemize}
+\begin{figure}
+    \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/image-11.png}
+    \caption{SpMV/COO}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/image-10.png}
+    \caption{SpMV/CSR}
+    \end{minipage}
+\end{figure}
 Compressed Sparse Row (CSR)
-
 \begin{itemize}
 \item stores nonzeros of the same row adjacently and an index to the first element of each row
-
 \end{itemize}
 SpMV/CSR
-
 \begin{itemize}
 \item assign one thread per row
-
 \end{itemize}
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/image-10.png}
-\caption{SpMV/CSR}
-\end{figure}
-
 CSR tradeoffs
-
 \begin{itemize}
 \item advantages
 \begin{itemize}
@@ -770,13 +744,14 @@ CSR tradeoffs
 
 \end{itemize}
 \end{itemize}
+
 Compressed Sparse Column (CSC): like CSR but groups nonzeros by column
 
 
-\newpage
-\section{Sparse Matrix (ELL, JDS)}
+%\newpage
+% \section{Sparse Matrix (ELL, JDS)}
 
-ELLPACK Format (ELL)
+\noindent ELLPACK Format (ELL)
 
 \begin{itemize}
 \item pad each row to the same size
@@ -791,12 +766,10 @@ SpMV/ELL
 \end{itemize}
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/image-12.png}
+\includegraphics[width=0.6\textwidth]{images/image-12.png}
 \caption{SpMV ELL}
 \end{figure}
-
 ELL tradeoffs
-
 \begin{itemize}
 \item advantages
 \begin{itemize}
@@ -867,8 +840,8 @@ JDS tradeoffs
 \end{itemize}
 \end{itemize}
 
-\newpage
-\section{Graph Algorithms I}
+%\newpage
+\section{Graph Algorithms}
 
 representing graphs: adjacency matrices
 
@@ -932,12 +905,12 @@ Breadth First Search (BFS)
 \end{itemize}
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/image-16.png}
+\includegraphics[width=0.8\textwidth]{images/image-16.pdf}
 \caption{Vertex-Centric BFS (Top-Down)}
 \end{figure}
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/image-15.png}
+\includegraphics[width=0.8\textwidth]{images/image-15.pdf}
 \caption{Vertex-Centric BFS (Bottom-Up)}
 \end{figure}
 \begin{figure}
@@ -970,9 +943,7 @@ Dataset Implications
 \includegraphics[width=0.8\textwidth]{images/image-18.png}
 \caption{Similarity between BFS and SpMV}
 \end{figure}
-
 Linear Algebraic Formulation of Graph Problems
-
 \begin{itemize}
 \item with a few tweaks, BFS can be formulated as SpMV
 \begin{itemize}
@@ -998,8 +969,8 @@ Redundant Work
 \end{itemize}
 \end{itemize}
 
-\newpage
-\section{Graph Algorithms II}
+%\newpage
+% \section{Graph Algorithms II}
 
 Remark: if not symmetric, top-down BFS need CSR representation, while bottom-up BFS need CSC representation, (treating rows as source) dir-opt BFS need both CSR and CSC.
 
@@ -1020,9 +991,7 @@ Reduce Redundancy
 \includegraphics[width=0.8\textwidth]{images/image-19.png}
 \caption{Vertex-Centric Frontier-Based BFS}
 \end{figure}
-
 Queue Privatization
-
 \begin{itemize}
 \item all threads atomically increment the same global counter to insert elements into the queue, high latency due to global memory access and serialization due to high contention.
 \item optimization: each thread block maintains a private queue (in shared memory, with the counter) and commits entries to the global queue on completion
@@ -1036,9 +1005,10 @@ Minimizing Launch Overhead
 \begin{itemize}
 \item overhead of launching new grid and copying counter
 \end{itemize}
-\item optimization: if consecutive levels have few enough vertices that can be executed by one thread block:
+\item optimization: if consecutive levels have few enough vertices that can be executed by a thread block:
 \begin{itemize}
-\item execute multiple levels in one single-block grid and synchronize between levels using \_\_syncthreads()
+\item execute multiple levels in one single-block grid
+\item and synchronize between levels using \texttt{\_\_syncthreads()}
 \item reduce total number of grid launches
 
 \end{itemize}
@@ -1051,7 +1021,7 @@ Minimizing Launch Overhead
 
 
 
-\newpage
+%\newpage
 \section{Warp Synchronization}
 
 \subsection{intra-warp synchronization}
@@ -1136,7 +1106,7 @@ Gemini's suggestions:
 \item Changed \texttt{1 << ...} to \texttt{1u << ...}: This avoids undefined behavior from signed integer overflow when the thread index is 31.
 \end{enumerate}
 
-\newpage
+%\newpage
 \section{Pinned Memory and Streams}
 
 \subsection{Pinned Memory}
@@ -1220,24 +1190,24 @@ streams and asynchronous copies
 \end{itemize}
 \item to overlap memory copies with host execution, use \textbf{asynchronous memory copies}
 \item \texttt{cudaError\_t cudaStreamCreate(cudaStream\_t *pStream)}
-\item \texttt{cudaError\_t cudaMemcpyAsync(void *dst, const void *src, size\_t count, cudaMemcpyKind kind, cudaStream\_t stream=0)}
+\item \texttt{cudaError\_t cudaMemcpyAsync(void *dst, const void *src, size\_t count,}\\
+\hspace*{14.5em} \texttt{cudaMemcpyKind kind, cudaStream\_t stream=0)}
 \item \texttt{kernel<<<blocks, threads, smem, stream>>>(...)}
 \item cudaEvent\_t can be used to measure the time taken in different streams
 
 
 \end{itemize}
 
-\newpage
+%\newpage
 \section{Dynamic Parallelism}
 
+\begin{figure}[ht]
+\begin{minipage}{0.79\textwidth}
 Dynamic Parallism: CUDA dynamic parallelism refers to the ability of threads executing on the GPU to launch new grids
 
+\vspace{1em}\hspace{1em} Nested Parallelism: Dynamic parallelism is useful for programming applications with nested parallelism, where each thread discovers more work that can be parallelized; particularly useful when the amount of nested work is unknown, so enough threads cannot be launched up front.
 
-Nested Parallelism: Dynamic parallelism is useful for programming applications with nested parallelism, where each thread discovers more work that can be parallelized; particularly useful when the amount of nested work is unknown, so enough threads cannot be launched up front.
-
-
-applications
-
+\vspace{1em} Applications of Dynamic Parallism
 \begin{itemize}
 \item nested parallel work is \textbf{irregular} (varies cross threads)
 \begin{itemize}
@@ -1248,22 +1218,24 @@ applications
 \begin{itemize}
 \item e.g. tree traversal algorithms (e.g., quadtrees and octrees)
 \item e.g. divide and conquer algorithms (e.g., quicksort)
-
 \end{itemize}
 \end{itemize}
-\begin{figure}
+\end{minipage}\hfill
+\begin{minipage}{0.2\textwidth}
 \centering
-\includegraphics[width=0.8\textwidth]{images/image-22.png}
-\caption{Applications of Dynamic Parallism}
+\includegraphics[width=\linewidth]{images/image-22.png}
+% \caption{applications}
+\end{minipage}
 \end{figure}
-
+usage
 \begin{itemize}
 \item the device code for calling a kernel to launch a grid is the same as the host code
 \item memory is needed for buffering grid launches that have not started executing
 \begin{itemize}
 \item The limit on the number of dynamic launches is referred to as the \textbf{pending launch count}
 \item By default, the runtime supports 2048 launches, and exceeding this limit will cause an error
-\item The limit can be increased by setting \texttt{cudaDeviceSetLimit(cudaLimitDevRuntimePendingLaunchCount, <new limit>)}
+\item The limit can be increased by setting\\
+\texttt{cudaDeviceSetLimit(cudaLimitDevRuntimePendingLaunchCount, <new limit>)}
 
 \end{itemize}
 \end{itemize}
@@ -1274,7 +1246,6 @@ example: graph frontier BFS
 \end{itemize}
 \begin{enumerate}
 \item for device launches, threads in the same block share the same default stream (serialized)
-\end{enumerate}
 \begin{itemize}
 \item improve by creating a different stream per thread
 \begin{itemize}
@@ -1282,7 +1253,6 @@ example: graph frontier BFS
 \item use compiler flag \texttt{--default-stream per-thread}
 \end{itemize}
 \end{itemize}
-\begin{enumerate}
 \item Pitfalls
 \begin{itemize}
 \item launching very small grids may not be worth the overhead (more efficient to serialize)
@@ -1325,7 +1295,7 @@ Nesting Depth: how deeply dynamically launched grids may launch other grids
 
 \end{itemize}
 
-\newpage
+%\newpage
 \section{CUDA Potpourri}
 
 \subsection{Multi-GPU programming}
@@ -1435,26 +1405,20 @@ examples of libraries for common parallel primitives
 \end{itemize}
 \subsection{Other hardware}
 
-other GPUs
 
 \begin{itemize}
-\item AMD (Radeon)
-\item ARM (Mali)
-\item Intel
-
+\item other GPUs: AMD (Radeon), ARM (Mali), Intel, ...
+\item integrated GPUs
+\item FPGA
+\item ...
 \end{itemize}
-integrated GPUs
-
-
-FPGA
-
 
 \subsection{Comparison with CPU}
 
 more fair to compare with parallel and vectorized CPU code
 
 
-\newpage
+%\newpage
 \section{Matrix Multiplication Optimization}
 
 the simple matrix multiplication kernel is memory bound
@@ -1575,6 +1539,6 @@ additional optimizations
 \end{figure}
 
 
-\newpage
+%\newpage
 
 \end{document}
