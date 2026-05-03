@@ -20,9 +20,9 @@
     xleftmargin=2em
 }
 
-\title{Tile IR 规范（中文翻译）}
+\title{Tile IR 规范（DeepSeek翻译）}
 \author{}
-\date{2025年12月}
+\date{Dec 2025}
 
 \begin{document}
 \maketitle
@@ -660,7 +660,7 @@ store_ptr_tko weak %c_tile_ptr, %C_tile :
 正如我们在之前的例子中所见，当内核接收到一个张量时，它是一个指向全局内存的标量基指针。
 
 
-\begin{figure}[h]\centering
+\begin{figure}[!ht]\centering
 \includesvg[width=0.8\textwidth]{images/files/global_memory.svg}
 \caption{全局内存视图}
 \end{figure}
@@ -680,7 +680,7 @@ store_ptr_tko weak %c_tile_ptr, %C_tile :
 在构建张量视图时，我们使用静态或动态的形状和步幅信息将原始指针转换为张量，这是通过 \href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-cuda-tile-make-tensor-view}{cuda\_tile.make\_tensor\_view} 完成的。此操作将形状和步幅信息附加到指针上，有效地将类型化指针转换为张量。
 
 
-\begin{figure}[h]\centering
+\begin{figure}[!ht]\centering
 \includesvg[width=0.8\textwidth]{images/files/tensor_view.svg}
 \caption{全局内存视图}
 \end{figure}
@@ -697,7 +697,7 @@ store_ptr_tko weak %c_tile_ptr, %C_tile :
 一旦你构建了张量视图，我们就可以利用 \href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-cuda-tile-make-partition-view}{cuda\_tile.make\_partition\_view} 来对底层张量进行分块处理。
 
 
-\begin{figure}[h]\centering
+\begin{figure}[!ht]\centering
 \includesvg[width=0.8\textwidth]{images/files/tiled.svg}
 \caption{A view of global memory}
 \end{figure}
@@ -3694,7 +3694,7 @@ No parameters.
 \texttt{iota} 操作生成一个包含整数序列的一维切片。起始值为 \texttt{0}，步长为 \texttt{1}。如果结果切片的形状为 \texttt{(n)}，则生成的值为 \texttt{[0, n - 1]}。
 
 
-iota(n)i=ifor i∈[0,n-1]
+iota(n)i=ifor i\$\textbackslash{}in\$[0,n-1]
 
 结果值应解释为无符号整数。
 
@@ -3745,7 +3745,7 @@ cuda_tile.mmaf %lhs %rhs %acc
 它对浮点瓦片 \texttt{lhs} 和 \texttt{rhs} 执行矩阵乘法，然后将瓦片 \texttt{acc} 加到结果上。\texttt{lhs}、\texttt{rhs} 和 \texttt{acc} 必须是二维瓦片或三维瓦片。后一种情况表示批处理矩阵乘法。
 
 
-mmaf(A,B,C)ij=∑k=0K-1Aik×Bkj+Cij
+mmaf(A,B,C)ij=\$\textbackslash{}sum\$k=0K-1Aik×Bkj+Cij
 
 所有操作数的类型必须是受支持的组合（参见 \href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#table-cuda-tile-mmaf-0}{mmaf 支持的数据类型}）。
 
@@ -3837,7 +3837,7 @@ cuda_tile.mmai %lhs %rhs %acc %signedness_lhs %signedness_rhs
 它对整数瓦片 \texttt{lhs} 和 \texttt{rhs} 执行矩阵乘法，然后将瓦片 \texttt{acc} 加到结果上。\texttt{lhs}、\texttt{rhs} 和 \texttt{acc} 必须是二维瓦片或三维瓦片。后一种情况表示批量矩阵乘法。
 
 
-mmai(A,B,C)ij=∑k=0K-1Aik×Bkj+Cij
+mmai(A,B,C)ij=\$\textbackslash{}sum\$k=0K-1Aik×Bkj+Cij
 
 输入瓦片 \texttt{lhs} 和 \texttt{rhs} 必须是整数类型 \texttt{i8}。\texttt{lhs} 和 \texttt{rhs} 的有符号性分别由属性 \texttt{signedness\_lhs} 和 \texttt{signedness\_rhs} 单独指定。累加器瓦片 \texttt{acc} 必须是 \texttt{i32} 类型，且始终解释为有符号数。输出瓦片 \texttt{result} 为 \texttt{i32} 类型，且始终解释为有符号数。
 
@@ -4313,7 +4313,7 @@ result[0]=f(identity,X[…,0,…])
 
 result[1]=f(result[0],X[…,1,…])  
 
-⋮  
+\$\textbackslash{}vdots\$  
 
 result[j]=f(result[j-1],X[…,j,…])
 
@@ -5221,7 +5221,7 @@ cuda_tile.for %lowerBound %upperBound %step %initValues %unsignedCmp
 迭代空间由区间 [lowerBound, upperBound) 定义，其中每个值以 \texttt{step} 为间隔分隔。
 
 
-range(Lb,Ub,S)=\{Lb+i⋅S∣i∈Z,Lb+i⋅S<Ub\}
+range(Lb,Ub,S)=\{Lb+i\$\textbackslash{}cdot\$S\$|\$i\$\textbackslash{}in\$Z,Lb+i\$\textbackslash{}cdot\$S<Ub\}
 
 \texttt{lowerBound}、\texttt{upperBound} 和 \texttt{step} 必须为相同类型。\texttt{lowerBound} 和 \texttt{upperBound} 指定一个半开（或排除）区间：该区间包含 \texttt{lowerBound}，但不包含 \texttt{upperBound}。\texttt{step} 必须为正数，但边界值可以为负数或零。
 
@@ -6343,7 +6343,7 @@ cuda_tile.ceil %source
 
 
 
-ceil(x)i=min\{n∈Z∣n≥xi\}
+ceil(x)i=min\{n\$\textbackslash{}in\$Z\$|\$n\$\textbackslash{}geq\$xi\}
 
 
 
@@ -6420,7 +6420,7 @@ cuda_tile.cosh %source
 
 
 
-cosh(x)i=cosh⁡xi
+cosh(x)i=coshxi
 
 
 此操作在半精度输入（\texttt{:code:}f16`\texttt{ 和 }:code:\texttt{bf16}\texttt{）上执行时，会在 }:code:\texttt{f32}` 中进行模拟。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-floating-point}{浮点运算}。
@@ -6484,7 +6484,7 @@ cuda_tile.cos %source
 
 
 
-cos(x)i=cos⁡(xi)
+cos(x)i=cos(xi)
 
 
 此操作在半精度输入（\texttt{:code:}f16`\texttt{ 和 }:code:\texttt{bf16}\texttt{）上执行时，会在 }:code:\texttt{f32}` 中进行模拟。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-floating-point}{浮点运算}。
@@ -6879,7 +6879,7 @@ cuda_tile.floor %source
 
 
 
-floori(xi)=max\{n∈Z∣n≤xi\}
+floori(xi)=max\{n\$\textbackslash{}in\$Z\$|\$n\$\textbackslash{}leq\$xi\}
 
 
 逐元素浮点算术运算由目标架构的原生浮点指令执行。若指定了 \texttt{rounding} 修饰符，则特定的舍入模式将应用于结果的每个元素。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-floating-point}{浮点运算}。
@@ -7071,7 +7071,7 @@ cuda_tile.log2 %source
 
 
 
-log2(x)i=log2⁡(xi)
+log2(x)i=log2(xi)
 
 
 此操作在半精度输入（\texttt{:code:}f16`\texttt{ 和 }:code:\texttt{bf16}\texttt{）上执行时，会在 }:code:\texttt{f32}` 中进行模拟。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-floating-point}{浮点运算}。
@@ -7154,7 +7154,7 @@ cuda_tile.log %source
 
 
 
-log(x)i=ln⁡(xi)
+log(x)i=ln(xi)
 
 
 此操作在半精度输入（\texttt{:code:}f16`\texttt{ 和 }:code:\texttt{bf16}\texttt{）上执行时，会在 }:code:\texttt{f32}` 中进行模拟。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-floating-point}{浮点运算}。
@@ -7236,7 +7236,7 @@ cuda_tile.maxf %lhs %rhs %propagate_nan %flush_to_zero
 
 
 
-maxi(x,y)i=\{xiif xi≥yiyiif xi<yi
+maxi(x,y)i=\{xiif xi\$\textbackslash{}geq\$yiyiif xi<yi
 
 
 
@@ -7359,7 +7359,7 @@ cuda_tile.minf %lhs %rhs %propagate_nan %flush_to_zero
 
 
 
-minf(x,y)i=\{xiif xi≤yiyiif xi>yi
+minf(x,y)i=\{xiif xi\$\textbackslash{}leq\$yiyiif xi>yi
 
 
 
@@ -7945,7 +7945,7 @@ cuda_tile.sinh %source
 
 
 
-sinh(x)i=sinh⁡(xi)
+sinh(x)i=sinh(xi)
 
 
 此操作在输入为半精度（\texttt{:code:}f16`\texttt{ 和 }:code:\texttt{bf16}\texttt{）时，会在 }:code:\texttt{f32}` 中进行模拟执行。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-floating-point}{浮点运算}。
@@ -8009,7 +8009,7 @@ cuda_tile.sin %source
 
 
 
-sin(x)i=sin⁡(xi)
+sin(x)i=sin(xi)
 
 
 此操作在半精度输入（\texttt{:code:}f16`\texttt{ 和 }:code:\texttt{bf16}\texttt{）上执行时，会在 }:code:\texttt{f32}` 中进行模拟。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-floating-point}{浮点运算}。
@@ -8327,7 +8327,7 @@ cuda_tile.tanh %source %rounding_mode
 
 
 
-tanh(x)i=tanh⁡(xi)
+tanh(x)i=tanh(xi)
 
 
 此操作在半精度输入（\texttt{:code:}f16`\texttt{ 和 }:code:\texttt{bf16}\texttt{）上执行时，会在 }:code:\texttt{f32}` 中进行模拟。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-floating-point}{浮点运算}。
@@ -8450,7 +8450,7 @@ cuda_tile.tan %source
 
 
 
-tan(x)i=tan⁡(xi)
+tan(x)i=tan(xi)
 
 
 此操作在半精度输入（\texttt{:code:}f16`\texttt{ 和 }:code:\texttt{bf16}\texttt{）上执行时，会在 }:code:\texttt{f32}` 中进行模拟。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-floating-point}{浮点运算}。
@@ -8809,7 +8809,7 @@ cuda_tile.maxi %lhs %rhs %signedness
 
 
 
-maxi(x,y)i=\{xiif xi≥yiyiif xi<yi
+maxi(x,y)i=\{xiif xi\$\textbackslash{}geq\$yiyiif xi<yi
 
 
 逐元素整数算术运算由目标架构的原生整数指令执行。默认语义是在溢出或下溢时采用环绕语义。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-integer}{整数}。
@@ -8924,7 +8924,7 @@ cuda_tile.mini %lhs %rhs %signedness
 
 
 
-mini(x,y)i=\{xiif xi≤yiyiif xi>yi
+mini(x,y)i=\{xiif xi\$\textbackslash{}leq\$yiyiif xi>yi
 
 
 逐元素整数算术运算由目标架构的原生整数指令执行。默认语义是溢出或下溢时的环绕语义。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-integer}{整数}。
@@ -9497,7 +9497,7 @@ cuda_tile.shli %lhs %rhs %overflow
 
 
 
-shli(x,y)i=xi≪yi
+shli(x,y)i=xi\$\textbackslash{}ll\$yi
 
 
 \texttt{rhs} 操作数被解释为无符号整数。
@@ -9587,7 +9587,7 @@ cuda_tile.shri %lhs %rhs %signedness
 
 
 
-shri(x,y)i=xi≫yi
+shri(x,y)i=xi\$\textbackslash{}gg\$yi
 
 
 当 \texttt{unsigned} 时，高位补零；当 \texttt{signed} 时，高位填充符号位。
@@ -9757,7 +9757,7 @@ of two tile values with integer element types.
 
 
 
-xori(x,y)i=xi⊕yi
+xori(x,y)i=xi\$\textbackslash{}oplus\$yi
 
 
 逐元素整数算术运算由目标架构的原生整数指令执行。默认语义是溢出或下溢时的环绕语义。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-integer}{整数运算}。
@@ -9852,7 +9852,7 @@ cuda_tile.andi %lhs %rhs
 
 
 
-andi(x,y)i=xi∧yi
+andi(x,y)i=xi\$\textbackslash{}wedge\$yi
 
 
 逐元素整数算术运算由目标架构的原生整数指令执行。默认语义在溢出或下溢时采用环绕语义。更多详情请参阅\href{https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#op-group-integer}{整数}。

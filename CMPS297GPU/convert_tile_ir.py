@@ -40,14 +40,33 @@ translated_files = [
 def escape_latex(text, in_math=False):
     if in_math:
         return text
-    # Fix common Unicode characters that break LaTeX
-    text = text.replace('−', '-') # U+2212 Minus
-    text = text.replace('—', '---') # Em dash
-    text = text.replace('–', '--')  # En dash
-    text = text.replace('“', "``")
-    text = text.replace('”', "''")
-    text = text.replace('‘', "`")
-    text = text.replace('’', "'")
+    
+    # Mapping Unicode to LaTeX math or standard characters
+    unicode_map = {
+        '−': '-',      # U+2212 Minus
+        '—': '---',    # Em dash
+        '–': '--',     # En dash
+        '“': "``",
+        '”': "''",
+        '‘': "`",
+        '’': "'",
+        '′': "'",  # Prime
+        '∗': "*",
+        '∈': r'$\in$',
+        '∑': r'$\sum$',
+        '⋮': r'$\vdots$',
+        '⋅': r'$\cdot$',
+        '∣': r'$|$',
+        '≥': r'$\geq$',
+        '≤': r'$\leq$',
+        '≪': r'$\ll$',
+        '≫': r'$\gg$',
+        '⊕': r'$\oplus$',
+        '∧': r'$\wedge$',
+        '\u2061': '',  # Function Application (invisible)
+    }
+    for u_char, latex_rep in unicode_map.items():
+        text = text.replace(u_char, latex_rep)
     
     specials = {
         '&': r'\&',
@@ -141,7 +160,7 @@ def convert_set(file_list, output_filename, doc_title):
 
 \title{""" + doc_title + r"""}
 \author{}
-\date{2025年12月}
+\date{Dec 2025}
 
 \begin{document}
 \maketitle
@@ -228,7 +247,7 @@ def convert_set(file_list, output_filename, doc_title):
                 # Absolute path for images
                 full_img_path = os.path.join(copied_images_dir, path).replace('\\', '/')
                 
-                content_list.append(r"\begin{figure}[h]\centering" + "\n")
+                content_list.append(r"\begin{figure}[!ht]\centering" + "\n")
                 if path.endswith('.svg'):
                     content_list.append(f"\\includesvg[width=0.8\\textwidth]{{{full_img_path}}}\n")
                 else:
@@ -309,4 +328,4 @@ def convert_set(file_list, output_filename, doc_title):
 
 if __name__ == "__main__":
     convert_set(original_files, "Tile_IR.tex", "Tile IR Specification")
-    convert_set(translated_files, "Tile_IR_Translated.tex", "Tile IR 规范（中文翻译）")
+    convert_set(translated_files, "Tile_IR_Translated.tex", "Tile IR 规范（DeepSeek翻译）")
