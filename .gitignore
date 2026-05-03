@@ -138,3 +138,5 @@ dmypy.json
 *.synctex.gz
 *.toc
 *.xdv
+
+svg-inkscape
