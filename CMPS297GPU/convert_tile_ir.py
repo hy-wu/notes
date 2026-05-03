@@ -1,7 +1,17 @@
 import os
 import re
+import sys
 
-files_dir = r"C:\Users\hy-wu.DESKTOP-G355NC5\1\note\tile"
+# Windows
+if os.name == 'nt':
+    files_dir = r"C:\Users\hy-wu.DESKTOP-G355NC5\1\note\tile"
+# WSL Ubuntu
+elif os.name == 'posix':
+    files_dir = r"/mnt/c/Users/hy-wu.DESKTOP-G355NC5/1/note/tile"
+else:
+    print("Unsupported OS")
+    sys.exit(1)
+copied_images_dir = "images"
 
 original_files = [
     "1. Introduction — Tile IR.md",
@@ -30,6 +40,15 @@ translated_files = [
 def escape_latex(text, in_math=False):
     if in_math:
         return text
+    # Fix common Unicode characters that break LaTeX
+    text = text.replace('−', '-') # U+2212 Minus
+    text = text.replace('—', '---') # Em dash
+    text = text.replace('–', '--')  # En dash
+    text = text.replace('“', "``")
+    text = text.replace('”', "''")
+    text = text.replace('‘', "`")
+    text = text.replace('’', "'")
+    
     specials = {
         '&': r'\&',
         '%': r'\%',
@@ -54,27 +73,39 @@ def escape_latex(text, in_math=False):
     return res
 
 def process_inline(text):
-    # Handle links [text](link) -> text
-    text = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', text)
-    
     placeholders = []
     def add_placeholder(s):
         placeholders.append(s)
         return f"__PLACEHOLDER_{len(placeholders)-1}__"
 
-    # 1. Math
+    # 1. Math - Handle $$...$$ first, then $...$
+    # We use a non-greedy match that covers potential single-line display math
+    text = re.sub(r'\$\$.*?\$\$', lambda m: add_placeholder(m.group(0)), text)
     text = re.sub(r'\$.*?\$', lambda m: add_placeholder(m.group(0)), text)
     
     # 2. Code
     text = re.sub(r'`([^`]+)`', lambda m: add_placeholder(r'\texttt{' + escape_latex(m.group(1)) + '}'), text)
+
+    # 3. Links [text](url) -> \href{url}{text}
+    def link_handler(m):
+        label = m.group(1)
+        url = m.group(2)
+        # Process label for bold/italic/etc but keep it simple
+        processed_label = label
+        processed_label = re.sub(r'\*\*([^\*]+)\*\*', r'\\textbf{\1}', processed_label)
+        processed_label = re.sub(r'\*([^\*]+)\*', r'\\textit{\1}', processed_label)
+        # Escape the label but not the URL
+        return add_placeholder(r'\href{' + url + r'}{' + escape_latex(processed_label) + r'}')
     
-    # 3. Bold
+    text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', link_handler, text)
+    
+    # 4. Bold
     text = re.sub(r'\*\*([^\*]+)\*\*', lambda m: add_placeholder(r'\textbf{' + escape_latex(m.group(1)) + '}'), text)
     
-    # 4. Italic
+    # 5. Italic
     text = re.sub(r'\*([^\*]+)\*', lambda m: add_placeholder(r'\textit{' + escape_latex(m.group(1)) + '}'), text)
     
-    # 5. Escape the rest
+    # 6. Escape the rest
     parts = re.split(r'(__PLACEHOLDER_\d+__)', text)
     res = ""
     for part in parts:
@@ -131,12 +162,12 @@ def convert_set(file_list, output_filename, doc_title):
         with open(file_path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
             
-        state = {'list_stack': [], 'in_table': False, 'in_code_block': False}
+        state = {'list_stack': [], 'in_table': False, 'in_code_block': False, 'in_math_block': False}
         
         for i, line in enumerate(lines):
             line = line.rstrip('\n')
             
-            # Code blocks
+            # 1. Code blocks
             if line.strip().startswith('```'):
                 if not state['in_code_block']:
                     state['in_code_block'] = True
@@ -150,12 +181,34 @@ def convert_set(file_list, output_filename, doc_title):
                 content_list.append(line + "\n")
                 continue
 
+            # 2. Math blocks ($$ ... $$)
+            # Check for starting a math block
+            if not state['in_math_block'] and line.strip().startswith('$$'):
+                if line.strip().endswith('$$') and len(line.strip()) >= 4:
+                    # Single line display math
+                    content_list.append(line + "\n")
+                    continue
+                else:
+                    state['in_math_block'] = True
+                    content_list.append(line + "\n")
+                    continue
+            
+            # If we are inside a math block
+            if state['in_math_block']:
+                content_list.append(line + "\n")
+                if line.strip().endswith('$$'):
+                    state['in_math_block'] = False
+                continue
+
             # Headings
             h_match = re.match(r'^(#+)\s+(.*)', line)
             if h_match:
                 level_str, h_text = h_match.groups()
                 # Clean up NVIDIA doc heading links
                 h_text = re.sub(r'\s*\[#\].*$', '', h_text)
+                # Strip redundant hardcoded numbers like "8.12. " or "1.1. "
+                h_text = re.sub(r'^[\d\.]+\s+', '', h_text)
+
                 level = len(level_str)
                 if level == 1: cmd = "section"
                 elif level == 2: cmd = "subsection"
@@ -163,6 +216,7 @@ def convert_set(file_list, output_filename, doc_title):
                 else: cmd = "paragraph"
                 content_list.append(f"\\{cmd}{{{process_inline(h_text)}}}\n")
                 continue
+
 
             # Images
             img_match = re.search(r'!\[(.*?)\]\((.*?)\)', line)
@@ -172,7 +226,7 @@ def convert_set(file_list, output_filename, doc_title):
                 if path.startswith('./'): path = path[2:]
                 
                 # Absolute path for images
-                full_img_path = os.path.join(files_dir, path).replace('\\', '/')
+                full_img_path = os.path.join(copied_images_dir, path).replace('\\', '/')
                 
                 content_list.append(r"\begin{figure}[h]\centering" + "\n")
                 if path.endswith('.svg'):
