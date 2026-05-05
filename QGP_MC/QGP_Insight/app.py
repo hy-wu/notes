@@ -11,7 +11,11 @@ DB_PATH = r"C:\Users\hy-wu.DESKTOP-G355NC5\Documents\GitHub\notes\QGP_MC\QGP_Ins
 def load_db():
     if not os.path.exists(DB_PATH): return []
     with open(DB_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+        data = json.load(f)
+        # 兼容性修复：确保旧数据也有 short_summary 字段
+        for p in data:
+            if "short_summary" not in p: p["short_summary"] = None
+        return data
 
 def save_db(db):
     with open(DB_PATH, "w", encoding="utf-8") as f:
@@ -19,12 +23,9 @@ def save_db(db):
 
 db = load_db()
 
-# --- Pre-processing: Separate Literature and Simulation Data ---
-# 识别规则：文件名包含 box_ 且路径包含 cuda_out 的视为模拟数据
 papers_db = [p for p in db if not ("box_" in p["filename"] and "cuda_out" in p["path"])]
 data_db = [p for p in db if "box_" in p["filename"] and "cuda_out" in p["path"]]
 
-# --- Sidebar ---
 with st.sidebar:
     st.title("⚙️ 控制面板")
     if st.button("🔄 重新扫描目录", use_container_width=True):
@@ -32,10 +33,38 @@ with st.sidebar:
         st.rerun()
     
     st.divider()
-    st.subheader("📊 统计信息")
+    st.subheader("🚀 自动化任务")
+    pending = [p for p in papers_db if not p["summary"]]
+    if st.button(f"批量生成摘要 (剩余 {len(pending)} 篇)", use_container_width=True, disabled=len(pending)==0):
+        batch_size = 5
+        to_process = pending[:batch_size]
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+        
+        for i, paper in enumerate(to_process):
+            status_text.text(f"正在分析 ({i+1}/{len(to_process)}): {paper['filename']}")
+            res = generate_summary(paper["path"])
+            
+            # 更新内存和数据库
+            paper["summary"] = res.get("full")
+            paper["short_summary"] = res.get("short")
+            for p in db:
+                if p["path"] == paper["path"]:
+                    p["summary"] = paper["summary"]
+                    p["short_summary"] = paper["short_summary"]
+                    break
+            
+            progress_bar.progress((i + 1) / len(to_process))
+        
+        save_db(db)
+        st.success(f"已完成 {len(to_process)} 篇论文的批量分析！")
+        st.rerun()
+
+    st.divider()
+    st.subheader("📊 库统计")
     st.write(f"学术文献: {len(papers_db)} 篇")
     st.write(f"模拟结果: {len(data_db)} 份")
-    sum_count = len([p for p in papers_db if p['summary']])
+    sum_count = len([p for p in papers_db if p["summary"]])
     st.progress(sum_count/len(papers_db) if papers_db else 0)
     st.write(f"摘要生成率: {sum_count}/{len(papers_db)}")
 
@@ -43,20 +72,31 @@ with st.sidebar:
 st.title("🔬 QGP Literature Insight")
 
 # --- Search Section ---
-search_query = st.text_input("🔍 智能检索 (输入话题、公式或关键词)", placeholder="例如：自旋极化中的 Wigner 函数演化...")
+st.subheader("🔍 智能检索")
+search_query = st.text_input("输入话题、公式或关键词：", placeholder="例如：哪些论文提到了 Wigner 函数？")
 
 if search_query:
-    summaries_text = "\n".join([f"File: {p['filename']}\nSummary: {p['summary']}" for p in papers_db if p['summary']])
+    # 准备摘要数据
+    valid_summaries = [p for p in papers_db if p["summary"]]
+    summaries_text = "\n".join([f"文件: {p['filename']}\n摘要: {p['summary']}" for p in valid_summaries])
+    
     if summaries_text:
-        with st.spinner("DeepSeek 正在思考..."):
+        st.status(f"🚀 正在调用 DeepSeek-V3 对 {len(valid_summaries)} 篇论文摘要进行语义分析...")
+        with st.spinner("DeepSeek 正在思考并筛选文献..."):
             ans = semantic_search(search_query, summaries_text)
         st.chat_message("assistant").write(ans)
-
-# --- Library Tabs ---
+    else:
+        st.warning("💡 **当前处于关键词检索模式**。由于你还没有生成任何论文摘要，AI 无法进行深度语义分析。建议你先点击下方论文的“生成摘要”按钮，或者在侧边栏点击“批量生成”。")
+        
+        # 本地匹配结果预览
+        matches = [p for p in papers_db if search_query.lower() in p["filename"].lower()]
+        if matches:
+            st.success(f"找到 {len(matches)} 个标题匹配的文件。请在下方的“文献库”标签页中查看。")
+        else:
+            st.error("未找到匹配的文件名。")
 tab1, tab2, tab3 = st.tabs(["📚 文献库", "🧩 知识集群", "💾 模拟数据结果"])
 
 with tab1:
-    # Filter
     all_tags = sorted(list(set([t for p in papers_db for t in p["tags"]])))
     selected_tags = st.multiselect("按关键词标签过滤:", all_tags)
     
@@ -67,28 +107,34 @@ with tab1:
         filtered_db = [p for p in papers_db if search_query.lower() in p["filename"].lower()]
 
     for i, paper in enumerate(filtered_db):
-        with st.expander(f"📄 {paper['filename']}", expanded=(i==0)):
+        # 构造标题栏：文件名 + 标签 + 20字概要
+        tag_str = f"[{', '.join(paper['tags'])}]" if paper['tags'] else ""
+        short_sum = f" | {paper['short_summary']}" if paper['short_summary'] else ""
+        expander_title = f"📄 {paper['filename']}  {tag_str}{short_sum}"
+        
+        with st.expander(expander_title, expanded=False):
             col1, col2 = st.columns([4, 1])
             with col1:
-                # 修复 Tag 显示：使用 Streamlit 原生组件确保可见性
-                if paper['tags']:
-                    st.write("标签: " + " ".join([f"`{t}`" for t in paper['tags']]))
-                
-                if paper['summary']:
-                    st.markdown("**AI 概述 (DeepSeek-V3):**")
-                    st.info(paper['summary'])
+                if paper["summary"]:
+                    st.markdown("**AI 详细概述 (DeepSeek):**")
+                    st.info(paper["summary"])
                 else:
                     st.write("*待生成摘要...*")
                 st.caption(f"路径: {paper['path']}")
             
             with col2:
                 if st.button("生成摘要", key=f"btn_{i}"):
-                    with st.spinner("正在阅读 PDF..."):
-                        paper['summary'] = generate_summary(paper['path'])
-                        # 在原始 db 中更新
+                    with st.spinner("DeepSeek 正在阅读并总结..."):
+                        res = generate_summary(paper["path"])
+                        # 更新当前数据
+                        paper["summary"] = res.get("full")
+                        paper["short_summary"] = res.get("short")
+                        # 同步到数据库
                         for p in db:
-                            if p['path'] == paper['path']:
-                                p['summary'] = paper['summary']
+                            if p["path"] == paper["path"]:
+                                p["summary"] = paper["summary"]
+                                p["short_summary"] = paper["short_summary"]
+                                break
                         save_db(db)
                         st.rerun()
                 st.markdown(f"[📂 打开本地文件](file:///{paper['path']})")
@@ -107,9 +153,7 @@ with tab2:
 
 with tab3:
     st.subheader("Cuda 模拟结果记录")
-    st.write("这些是自动识别出的 `box_...` 类型数据结果文件。")
-    # 按截面参数 d 排序展示
-    sorted_data = sorted(data_db, key=lambda x: x['filename'])
+    sorted_data = sorted(data_db, key=lambda x: x["filename"])
     for d in sorted_data:
         cols = st.columns([5, 1])
         cols[0].write(f"📊 `{d['filename']}`")

@@ -11,8 +11,14 @@
  * Support for both Classical DSMC and Relativistic BAMPS modes.
  */
 
-// --- MODE SWITCH ---
+// --- MODE SWITCH (Override via nvcc -D) ---
+#ifndef MODE_RELATIVISTIC
 #define MODE_RELATIVISTIC 1 // 1 for Relativistic (BAMPS), 0 for Classical (Newtonian)
+#endif
+
+#ifndef ENSKOG_ORDER
+#define ENSKOG_ORDER 1      // 0: Local (Ideal), 1: Nearest Neighbor, 2: Next Nearest
+#endif
 // -------------------
 
 #define PI 3.14159265358979323846f
@@ -113,20 +119,89 @@ __global__ void collide_enskog_kernel(
 {
     int cell_idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (cell_idx >= num_cells) return;
-    int n_i = grid_counts[cell_idx]; if (n_i < 2) return;
+    int n_i = grid_counts[cell_idx]; if (n_i < 1) return;
     curandState local_state = rand_states[cell_idx];
-    int M = n_i / 2; float amplification = (float)n_i * (n_i - 1) / 2.0f / (float)M;
-    for (int k = 0; k < M; k++) {
-        int i_off = (int)(curand_uniform(&local_state) * n_i);
-        int j_off = (int)(curand_uniform(&local_state) * n_i);
-        if (i_off == j_off) continue;
-        int idx_i = grid_indices[cell_idx * MAX_PARTICLES_PER_CELL + i_off];
-        int idx_j = grid_indices[cell_idx * MAX_PARTICLES_PER_CELL + j_off];
-        float4 P1 = mom[idx_i]; float4 P2 = mom[idx_j];
 
+    // --- ORDER 0: Local Collisions ---
+    if (n_i >= 2) {
+        int M = n_i / 2; float amplification = (float)n_i * (n_i - 1) / 2.0f / (float)M;
+        for (int k = 0; k < M; k++) {
+            int i_off = (int)(curand_uniform(&local_state) * n_i);
+            int j_off = (int)(curand_uniform(&local_state) * n_i);
+            if (i_off == j_off) continue;
+            int idx_i = grid_indices[cell_idx * MAX_PARTICLES_PER_CELL + i_off];
+            int idx_j = grid_indices[cell_idx * MAX_PARTICLES_PER_CELL + j_off];
+            
+            float4 P1 = mom[idx_i]; float4 P2 = mom[idx_j];
+#if MODE_RELATIVISTIC
+            float E_sum = P1.w + P2.w;
+            float3 beta = make_float3((P1.x + P2.x) / E_sum, (P1.y + P2.y) / E_sum, (P1.z + P2.z) / E_sum);
+            float s = E_sum * E_sum - ((P1.x + P2.x) * (P1.x + P2.x) + (P1.y + P2.y) * (P1.y + P2.y) + (P1.z + P2.z) * (P1.z + P2.z));
+            if (s <= md2) continue;
+            float v_rel = s / (2.0f * P1.w * P2.w);
+            float sigma = (9.0f * PI * as * as) / (md2 * (1.0f + md2 / s)) * HBARC * HBARC;
+#else
+            float3 v_rel_vec = make_float3(P1.x/MASS - P2.x/MASS, P1.y/MASS - P2.y/MASS, P1.z/MASS - P2.z/MASS);
+            float v_rel = sqrtf(v_rel_vec.x*v_rel_vec.x + v_rel_vec.y*v_rel_vec.y + v_rel_vec.z*v_rel_vec.z);
+            float sigma = 0.5f; 
+#endif
+            float prob = amplification * v_rel * sigma * dt / (dv * testpartcl);
+            if (curand_uniform(&local_state) < prob) {
+#if MODE_RELATIVISTIC
+                float p_cm = sqrtf(s) / 2.0f;
+                float q2 = md2 * curand_uniform(&local_state) / (1.0f - curand_uniform(&local_state) + 4.0f * md2 / s); 
+                float costheta = 1.0f - 2.0f * q2 / s;
+                float sintheta = sqrtf(fmaxf(0.0f, 1.0f - costheta * costheta));
+                float phi = curand_uniform(&local_state) * 2.0f * PI;
+                float4 P1_cm = make_float4(p_cm * sintheta * cosf(phi), p_cm * sintheta * sinf(phi), p_cm * costheta, p_cm);
+                float4 P2_cm = make_float4(-P1_cm.x, -P1_cm.y, -P1_cm.z, P1_cm.w);
+                float3 minus_beta = make_float3(-beta.x, -beta.y, -beta.z);
+                mom[idx_i] = boost_relativistic(P1_cm, minus_beta); mom[idx_j] = boost_relativistic(P2_cm, minus_beta);
+#else
+                float3 v_cm = make_float3((P1.x + P2.x)/(2*MASS), (P1.y + P2.y)/(2*MASS), (P1.z + P2.z)/(2*MASS));
+                float phi = curand_uniform(&local_state) * 2.0f * PI;
+                float costheta = curand_uniform(&local_state) * 2.0f - 1.0f;
+                float sintheta = sqrtf(fmaxf(0.0f, 1.0f - costheta * costheta));
+                float v_mag = v_rel / 2.0f;
+                float3 v1_new = make_float3(v_mag*sintheta*cosf(phi), v_mag*sintheta*sinf(phi), v_mag*costheta);
+                mom[idx_i].x = (v_cm.x + v1_new.x) * MASS; mom[idx_i].y = (v_cm.y + v1_new.y) * MASS; mom[idx_i].z = (v_cm.z + v1_new.z) * MASS;
+                mom[idx_j].x = (v_cm.x - v1_new.x) * MASS; mom[idx_j].y = (v_cm.y - v1_new.y) * MASS; mom[idx_j].z = (v_cm.z - v1_new.z) * MASS;
+                mom[idx_i].w = (mom[idx_i].x*mom[idx_i].x + mom[idx_i].y*mom[idx_i].y + mom[idx_i].z*mom[idx_i].z)/(2*MASS);
+                mom[idx_j].w = (mom[idx_j].x*mom[idx_j].x + mom[idx_j].y*mom[idx_j].y + mom[idx_j].z*mom[idx_j].z)/(2*MASS);
+#endif
+            }
+        }
+    }
+
+    // --- ENSKOG HIGHER ORDERS: Non-local (Cross-cell) ---
+#if ENSKOG_ORDER >= 1
+    int ix = cell_idx % IX; int iy = (cell_idx / IX) % IX; int iz = cell_idx / (IX * IX);
+    
+    // Neighbor list offsets (Ancient style backward checking to avoid double counting)
+    // Order 1: 3 neighbors (-1,0,0), (0,-1,0), (0,0,-1)
+    // Order 2: + diagonals/farther (replicating mc.cu patterns)
+    int n_offsets[][3] = {
+        {-1, 0, 0}, {0, -1, 0}, {0, 0, -1}, // Order 1
+        {-2, 0, 0}, {0, -2, 0}, {0, 0, -2}, // Order 2 (Linear-2)
+        {-1, -1, 0}, {-1, 0, -1}, {0, -1, -1} // Order 2 (Diagonal)
+    };
+    int num_neighbors = (ENSKOG_ORDER == 1) ? 3 : 9;
+
+    for (int n = 0; n < num_neighbors; n++) {
+        int nix = (ix + n_offsets[n][0] + IX) % IX;
+        int niy = (iy + n_offsets[n][1] + IX) % IX;
+        int niz = (iz + n_offsets[n][2] + IX) % IX;
+        int n_cell_idx = nix + IX * niy + IX * IX * niz;
+        int n_j = grid_counts[n_cell_idx];
+        if (n_j < 1) continue;
+
+        // Sample 1 cross-cell pair for each neighbor direction
+        int idx_i = grid_indices[cell_idx * MAX_PARTICLES_PER_CELL + (int)(curand_uniform(&local_state) * n_i)];
+        int idx_j = grid_indices[n_cell_idx * MAX_PARTICLES_PER_CELL + (int)(curand_uniform(&local_state) * n_j)];
+        
+        float4 P1 = mom[idx_i]; float4 P2 = mom[idx_j];
 #if MODE_RELATIVISTIC
         float E_sum = P1.w + P2.w;
-        float3 beta = make_float3((P1.x + P2.x) / E_sum, (P1.y + P2.y) / E_sum, (P1.z + P2.z) / E_sum);
         float s = E_sum * E_sum - ((P1.x + P2.x) * (P1.x + P2.x) + (P1.y + P2.y) * (P1.y + P2.y) + (P1.z + P2.z) * (P1.z + P2.z));
         if (s <= md2) continue;
         float v_rel = s / (2.0f * P1.w * P2.w);
@@ -134,10 +209,10 @@ __global__ void collide_enskog_kernel(
 #else
         float3 v_rel_vec = make_float3(P1.x/MASS - P2.x/MASS, P1.y/MASS - P2.y/MASS, P1.z/MASS - P2.z/MASS);
         float v_rel = sqrtf(v_rel_vec.x*v_rel_vec.x + v_rel_vec.y*v_rel_vec.y + v_rel_vec.z*v_rel_vec.z);
-        float sigma = 0.5f; // Classical hard sphere cross section
+        float sigma = 0.5f;
 #endif
-        float prob = amplification * v_rel * sigma * dt / (dv * testpartcl);
-
+        // Prob scaled by total pairs across cells
+        float prob = ((float)n_i * n_j) * v_rel * sigma * dt / (dv * testpartcl);
         if (curand_uniform(&local_state) < prob) {
 #if MODE_RELATIVISTIC
             float p_cm = sqrtf(s) / 2.0f;
@@ -147,10 +222,10 @@ __global__ void collide_enskog_kernel(
             float phi = curand_uniform(&local_state) * 2.0f * PI;
             float4 P1_cm = make_float4(p_cm * sintheta * cosf(phi), p_cm * sintheta * sinf(phi), p_cm * costheta, p_cm);
             float4 P2_cm = make_float4(-P1_cm.x, -P1_cm.y, -P1_cm.z, P1_cm.w);
+            float3 beta = make_float3((P1.x + P2.x) / E_sum, (P1.y + P2.y) / E_sum, (P1.z + P2.z) / E_sum);
             float3 minus_beta = make_float3(-beta.x, -beta.y, -beta.z);
             mom[idx_i] = boost_relativistic(P1_cm, minus_beta); mom[idx_j] = boost_relativistic(P2_cm, minus_beta);
 #else
-            // Classical Isotropic Elastic Collision
             float3 v_cm = make_float3((P1.x + P2.x)/(2*MASS), (P1.y + P2.y)/(2*MASS), (P1.z + P2.z)/(2*MASS));
             float phi = curand_uniform(&local_state) * 2.0f * PI;
             float costheta = curand_uniform(&local_state) * 2.0f - 1.0f;
@@ -164,6 +239,8 @@ __global__ void collide_enskog_kernel(
 #endif
         }
     }
+#endif
+
     rand_states[cell_idx] = local_state;
 }
 

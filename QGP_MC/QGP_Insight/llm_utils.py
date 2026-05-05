@@ -2,9 +2,10 @@
 from openai import OpenAI
 from dotenv import load_dotenv
 import fitz
+import json
 
 # Load .env from the same directory as this script
-env_path = os.path.join(os.path.dirname(__file__), '.env')
+env_path = os.path.join(os.path.dirname(__file__), ".env")
 load_dotenv(dotenv_path=env_path)
 
 def get_deepseek_client():
@@ -18,27 +19,25 @@ def extract_abstract(pdf_path):
     try:
         doc = fitz.open(pdf_path)
         text = ""
-        # Extract first 3 pages
         for i in range(min(3, len(doc))):
             text += doc[i].get_text()
-        return text[:6000] # DeepSeek has large context, 6000 chars is safe
+        return text[:6000]
     except Exception as e:
         return f"Error reading PDF: {str(e)}"
 
 def generate_summary(pdf_path):
     client = get_deepseek_client()
     if not client:
-        return "API Key not found. Please set DEEPSEEK_API_KEY in .env file."
+        return {"full": "API Key not found.", "short": "No Key"}
     
     content = extract_abstract(pdf_path)
     prompt = f"""
-    你是一个顶尖的理论物理学家，擅长高能重离子物理（QGP）、QCD以及蒙特卡洛算法。
-    请仔细阅读以下物理论文的摘要和引言部分，并提供一个专业、精准的中文综述（300-500字）。
+    你是一个顶尖的理论物理学家。请阅读以下物理论文内容，提供两个版本的中文综述：
+    1. 【完整综述】：300-500字，包含研究背景、核心方法、主要结论。
+    2. 【极简摘要】：20字以内，一句话说明核心物理贡献。
     
-    综述结构：
-    1. 【研究背景】：说明该研究试图解决什么物理问题。
-    2. 【核心方法】：详细描述所采用的理论模型或数值算法（如 Boltzmann 演化、自旋极化计算等）。
-    3. 【主要结论】：概括其物理意义。
+    输出格式必须是严格的 JSON：
+    {{"full": "...", "short": "..."}}
     
     论文内容：
     {content}
@@ -46,16 +45,17 @@ def generate_summary(pdf_path):
     
     try:
         response = client.chat.completions.create(
-            model="deepseek-chat", # deepseek-v3/v2.5
+            model="deepseek-chat",
             messages=[
-                {"role": "system", "content": "You are a professional research assistant."},
+                {"role": "system", "content": "You are a professional physics researcher. Always output valid JSON."},
                 {"role": "user", "content": prompt},
             ],
+            response_format={ "type": "json_object" },
             stream=False
         )
-        return response.choices[0].message.content
+        return json.loads(response.choices[0].message.content)
     except Exception as e:
-        return f"DeepSeek API Error: {str(e)}"
+        return {"full": f"Error: {str(e)}", "short": "Error"}
 
 def semantic_search(query, summaries):
     client = get_deepseek_client()

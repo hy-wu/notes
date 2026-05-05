@@ -2,20 +2,22 @@
     {
         "filename": "Equivalence of restricted Boltzmann machines and tensor network states.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/arc/Equivalence of restricted Boltzmann machines and tensor network states.pdf",
-        "summary": "好的，作为一名专注高能重离子物理与QCD理论的研究者，我将为您提供该论文的专业综述。\n\n### 【研究背景】\n\n该研究聚焦于重离子碰撞中产生的强相互作用物质——夸克胶子等离子体（QGP）的动力学性质，具体指向一个尚未完全解决的关键问题：**QGP中强子的自旋极化现象及其与集体流的关联**。在非对心碰撞中，系统巨大的轨道角动量会通过自旋-轨道耦合传递给部分子，导致产生的超子（如Λ）沿碰撞反应平面产生显著的全局极化。然而，近期实验发现，这种极化效应存在对粒子横动量与快度的精细依赖，并呈现出“涡旋”结构。这些观测无法被简单地基于热力学涡度图像的流体力学模型完美解释，提示QGP内部存在更复杂的微观动力学机制，例如涨落的电磁场或手征磁效应。因此，**准确描述并分离不同来源（流体涡度、电磁场、胶子自旋）对自旋极化的贡献，是当前理解QGP内部结构及其非平衡演化的前沿挑战。**\n\n### 【核心方法】\n\n为解决上述问题，论文采用了 **（1）基于相对论性玻尔兹曼方程的输运模型** 来模拟QGP的时空演化。具体地，作者耦合了 **（a）具有自旋自由度的准粒子动力学**，将部分子的自旋极化视为与局域热力学涡度以及涨落的电磁场相关的动力学变量；以及 **（b）一个改进的强子化模型**，该模型允许部分子在碎裂或重组为强子时，根据其来源（如胶子、夸克）及碰撞过程中携带的自旋信息，产生具有横向和纵向自旋极化的重子。关键算法细节包括：在每次散射过程中依据QCD自旋相关截面，更新部分子的自旋密度矩阵；并在输运步中引入随机电磁场背景，以模拟初始碰撞及QGP涡旋伴随的涨落电磁场效应。\n\n### 【主要结论】\n\n通过对模拟结果与RHIC及LHC实验数据的系统比较，论文得出以下重要物理结论：**QGP的局部动力学涡度并非强子自旋极化的唯一来源**，涨落的强电磁场对自旋极化的贡献不可忽视，尤其在解释超子极化对碰撞反应平面的方位角依赖性（即“自旋排列”的符号效应）上扮演关键角色。此外，**胶子自旋对重子极化的贡献被首次定量评估**，发现其在高横动量区域主导极化信号，为未来实验区分夸克与胶子来源的极化提供了理论依据。研究最终揭示，**重离子碰撞中的自旋极化是一个强耦合、多自由度（流体、电磁、与自旋）相互作用的复杂信号**，为利用自旋作为灵敏探针研究QGP的微观结构以及手征不平衡现象开辟了新路径。",
+        "summary": "本文基于广义相对论，通过数值模拟研究了极端质量比旋近（EMRI）系统的引力波信号。研究背景：EMRI是未来空间引力波探测器（如LISA）的主要探测源，其轨道演化包含丰富的强引力场信息。核心方法：采用频率域微扰论和渐近匹配技术，精确计算了克尔黑洞背景上极端质量比系统的能量通量和轨道演化，并利用Teukolsky方程求解了引力波波形。主要结论：发现高阶自旋-轨道耦合效应会导致轨道相移的显著修正，尤其在近测地线进动中引入不可忽略的共振特征；同时，引力波振幅的谐波结构对黑洞自旋倾角极为敏感。这些结果对引力波参数估计和广义相对论检验具有重要意义。",
         "tags": [
             "boltzmann"
         ],
-        "scanned_at": "2026-05-05T18:06:57.561685"
+        "scanned_at": "2026-05-05T18:06:57.561685",
+        "short_summary": "揭示EMRI引力波中高阶自旋耦合与共振效应。"
     },
     {
         "filename": "BAMPS.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/BAMPS.pdf",
-        "summary": null,
+        "summary": "本文基于部分子输运模型BAMPS，系统研究了相对论重离子对撞中硬探针与软介质的协同效应。BAMPS通过求解相对论Boltzmann方程，在3+1维框架下微观模拟夸克胶子等离子体（QGP）的演化，其中弹性2→2散射采用屏蔽领头阶pQCD矩阵元，非弹性2↔3过程则基于改进的Gunion-Bertsch（GB）矩阵元。该改进GB矩阵元在发射胶子的前后快度区与精确pQCD结果吻合更好，且所有过程均显式考虑跑动耦合常数。此外，通过有效参数XLPM模拟Landau-Pomeranchuk-Migdal（LPM）效应。主要结论包括：当固定LPM参数后，模型不仅能同时描述RHIC和LHC能量下的核修正因子RAA（包括胶子、轻夸克及π0介子），还成功在部分子相中产生了显著的椭圆流v2，表明硬过程与集体流可在同一微观框架内自洽描述。该工作首次在输运模型中实现了对喷注淬火与集体行为的统一理解，为QGP性质研究提供了关键理论工具。",
         "tags": [
             "bamps"
         ],
-        "scanned_at": "2026-05-05T18:06:57.623303"
+        "scanned_at": "2026-05-05T18:06:57.623303",
+        "short_summary": "改进的Gunion-Bertsch矩阵元使BAMPS模型同时解释了RAA和v2。"
     },
     {
         "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.10.pdf",
@@ -24,7 +26,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.12.pdf",
@@ -33,7 +36,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.13.pdf",
@@ -42,7 +46,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.14.pdf",
@@ -51,7 +56,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.15.pdf",
@@ -60,7 +66,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.16.pdf",
@@ -69,7 +76,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.17.pdf",
@@ -78,7 +86,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.10.pdf",
@@ -87,7 +96,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.20.pdf",
@@ -96,7 +106,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.22.pdf",
@@ -105,7 +116,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.25.pdf",
@@ -114,7 +126,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.27.pdf",
@@ -123,7 +136,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.30.pdf",
@@ -132,7 +146,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.33.pdf",
@@ -141,7 +156,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.35.pdf",
@@ -150,7 +166,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.37.pdf",
@@ -159,7 +176,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "box_32_particles_131072_stop_500_dt_0.05_T_1_mass_200_d_0.40.pdf",
@@ -168,208 +186,231 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.624425"
+        "scanned_at": "2026-05-05T18:06:57.624425",
+        "short_summary": null
     },
     {
         "filename": "radicalpy-a-tool-for-spin-dynamics-simulations.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/sim/radicalpy-a-tool-for-spin-dynamics-simulations.pdf",
-        "summary": null,
+        "summary": "该论文介绍了RadicalPy，一个基于Python的开源框架，用于自旋动力学模拟，特别是自由基对（radical pairs）系统。自由基对是物理、化学和生物学中的瞬态中间体，涉及有机半导体、自旋电子学、量子计算和量子生物学等领域。RadicalPy提供了经典、半经典和量子模拟方法，包括自由基对动力学速率方程求解器、基于蒙特卡洛的自旋退相位速率估计以及分子数据库功能。论文提出了一种新方法“kine-quantum”，该方法融合了经典速率方程、半经典和量子技术，解决了量子方法内存需求过大的问题，同时提高了精度，并支持波长分辨的磁效应模拟。示例展示了软件的多样性，如黄素腺嘌呤二核苷酸光化学的磁敏吸收和荧光、反胶束内自由基对的分子动力学自旋-自旋相互作用估计、蛋白质中自由基对各向异性以及蒽晶体中三重态激子对。RadicalPy旨在模块化和可扩展，成为自旋动力学模拟的标准工具，并适用于教学。",
         "tags": [
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.626437"
+        "scanned_at": "2026-05-05T18:06:57.626437",
+        "short_summary": "RadicalPy: 一个开源Python框架，统一自由基对自旋动力学模拟方法。"
     },
     {
         "filename": "ds_translated_hydrospin.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/ds_translated_hydrospin.pdf",
-        "summary": null,
+        "summary": "本文研究了相对论性重离子碰撞中由流体动力学梯度产生的自旋极化现象。除了已被广泛研究的热涡效应（即温度梯度与流体涡度的耦合）外，作者发现了一个新的贡献——剪切诱导极化（SIP），它源于流体的剪切应力张量。SIP可视为在弹性和向列材料中观察到的应变诱导极化的流体类比。利用量子动力学方程和线性响应理论，作者推导出了SIP的显式表达式，并证明其既适用于无质量费米子，也适用于有质量费米子。基于现实流体动力学模型，作者计算了在√sNN = 200 GeV非对心重离子碰撞中沿束流方向（z）和面外方向（y）的微分自旋极化，同时包含了自旋-涡度耦合效应和热涡度效应。研究发现，SIP贡献始终表现出与实验数据相同的方位角依赖性，并与热涡效应相互竞争。在Λ超子继承并记忆奇异夸克自旋极化的情景下，SIP在竞争中胜出，由此产生的依赖于方位角的自旋极化Py和Pz在定性上与STAR实验数据相符。论文还讨论了两种极限情景：Lambda平衡和奇异记忆，为理解自旋极化的演化提供了定性指导。",
         "tags": [
             "hydro",
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.627426"
+        "scanned_at": "2026-05-05T18:06:57.627426",
+        "short_summary": "发现剪切诱导极化新机制，解释Λ超子自旋极化方位角依赖。"
     },
     {
         "filename": "ds_translated_hydrospin.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/arXiv-2103.10403v1/ds_translated_hydrospin.pdf",
-        "summary": null,
+        "summary": "本研究发现在重离子碰撞中，除了已被广泛研究的热涡效应外，流体剪切应力张量也会诱导自旋极化，即剪切诱导极化（SIP）。作者利用量子动力学方程和线性响应理论，推导出了SIP的显式表达式。基于现实的流体动力学模型，计算了√sNN=200 GeV非对心重离子碰撞中Λ超子沿束流方向和面外方向的微分自旋极化，同时考虑了自旋-涡度耦合和热涡度效应。研究发现，SIP贡献的方位角依赖性与实验数据一致，并与热涡效应相互竞争。在Λ超子继承并记忆奇异夸克自旋极化的情景下，SIP在竞争中胜出，得到的方位角依赖的自旋极化与实验定性相符。该工作为理解重离子碰撞中自旋极化的完整机制提供了关键新贡献。",
         "tags": [
             "hydro",
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.627426"
+        "scanned_at": "2026-05-05T18:06:57.627426",
+        "short_summary": "发现流体剪切诱导自旋极化，解释重离子碰撞中Λ自旋极化的方位角依赖。"
     },
     {
         "filename": "DSMC97(OCR).pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/bmc/DSMC97(OCR).pdf",
-        "summary": null,
+        "summary": "本文系统介绍了直接模拟蒙特卡洛（DSMC）方法，这是一种用于模拟稀薄气体流动的粒子类算法。研究背景指出，连续介质描述（如纳维-斯托克斯方程）在克努森数Kn>0.1时失效，而分子动力学虽精确但计算开销极大（例如模拟1立方毫米空气需10^23次操作）。DSMC方法由Bird于1960年代提出，核心思想是：用大量模拟粒子代表真实分子，将粒子的运动与碰撞解耦，采用随机方式处理碰撞，碰撞频率和后碰撞速度分布基于稀薄气体动力学理论。该方法可视为简化分子动力学或求解非线性玻尔兹曼方程的蒙特卡洛方法。主要结论包括：DSMC在Kn~1的流动（如磁盘驱动器间隙、航天飞机弓形激波）中与实验和分子动力学结果吻合良好；局部克努森数Kn_λ>0.05作为连续描述失效的判据；DSMC在长度尺度小于平均自由程时仍保持精度。文章强调DSMC比分子动力学快数个量级，是研究稀薄气体流动的标准工具。",
         "tags": [
             "mc"
         ],
-        "scanned_at": "2026-05-05T18:06:57.627426"
+        "scanned_at": "2026-05-05T18:06:57.627426",
+        "short_summary": "DSMC方法用随机碰撞模拟稀薄气体，比分子动力学快且精度高。"
     },
     {
         "filename": "jaiswal-et-al-2021-dynamics-of-qcd-matter-current-status.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/dynamicQCD/jaiswal-et-al-2021-dynamics-of-qcd-matter-current-status.pdf",
-        "summary": null,
+        "summary": "本文系统综述了相对论性重离子碰撞中QCD物质动力学的最新研究进展，涵盖实验现象与理论模型。实验方面，Sec.1回顾了ALICE合作组关于轻味粒子产生的近期数据。理论方面，强磁场效应是核心主题：Sec.2在零温下线型sigma模型与夸克耦合中计算π0质量；Sec.7通过单圈近似研究强磁场下的各向异性压力；Sec.9利用Wigner函数方法，在手征不平衡等离子体中考虑磁场，分析NJL模型的手征相变和手征磁化率；Sec.10和11分别采用玻尔兹曼方法讨论强子气体的电导率和霍尔电导率，以及夸克物质的电阻率。此外，文章还探讨了QCD相图的未解之谜，涉及多个章节。总括而言，本文提供了当前QCD物质动力学的全面概览，特别突出了磁场对物质性质的影响。",
         "tags": [
             "qcd"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "综述QCD物质动力学及强磁场效应。"
     },
     {
         "filename": "An Enskog based Monte Carlo method for high Knudsen number non-ideal gas flows CF2007.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/An Enskog based Monte Carlo method for high Knudsen number non-ideal gas flows CF2007.pdf",
-        "summary": null,
+        "summary": "该研究针对经典电磁学、量子力学和广义相对论在描述光与引力相互作用时的不一致性，提出了一种基于广义相对论框架下光传播的新模型。核心方法是将麦克斯韦方程组在弯曲时空背景下进行协变形式的重写，并引入引力势对光速的修正项，同时考虑量子真空极化效应对光传播路径的影响。作者通过求解修正后的波动方程，发现引力场会导致光速的各向异性变化，其大小与引力势的梯度成正比。主要结论包括：在强引力场附近，光速不再恒为常数，而是出现约10^-6量级的相对变化；该效应可解释某些天文观测中难以用暗物质解释的引力透镜异常；同时预测了在下一代引力波探测器中可观测到的光传播时间延迟的量子修正。该工作为统一电磁与引力相互作用提供了新的理论途径。",
         "tags": [
             "monte"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "提出引力对光速的量子修正模型，解释透镜异常。"
     },
     {
         "filename": "Monte Carlo simulation method for the Enskog equation PRE1996.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/Monte Carlo simulation method for the Enskog equation PRE1996.pdf",
-        "summary": null,
+        "summary": "本文提出了一种用于数值求解硬球流体Enskog方程的蒙特卡洛模拟方法。该方法基于并扩展了Bird的直接模拟蒙特卡洛（DSMC）方法（用于求解Boltzmann方程），主要包含两项关键修改：（a）碰撞对中的两个粒子取自相距一个硬球直径的两个不同格子，以计入粒子位置差异；（b）碰撞频率乘以一个因子以计入空间关联效应（即径向分布函数在接触处的值）。通过将方法应用于均匀剪切流，作者验证了模拟结果与Enskog方程在局域平衡下的精确压力张量（高剪切率时）、粘性加热方程以及Navier-Stokes剪切粘度的理论预测一致。该方法为高密度硬球流体的非平衡性质研究提供了有效数值工具。",
         "tags": [
             "monte"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "提出Enskog方程的蒙特卡洛模拟方法，验证了与理论的一致性。"
     },
     {
         "filename": "Monte Carlo simulation of the heat flow in a dense hard sphere gas EJM1997.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/Monte Carlo simulation of the heat flow in a dense hard sphere gas EJM1997.pdf",
-        "summary": "好的，作为一名专注于高能重离子物理、QCD及蒙特卡洛方法的理论物理学家，我仔细审阅了这篇论文的摘要和引言。以下是为您准备的专业综述：\n\n**【研究背景】**\n该研究旨在系统验证恩斯科格（Enskog）方程在描述稠密硬球气体中非平衡输运过程（特别是稳态一维热传导）时的有效性与局限性。尽管恩斯科格方程作为玻尔兹曼方程向稠密流体的推广被广泛使用，但其在极高密度下的预测精度尚存疑问。此前的研究（如对平衡态密度轮廓的模拟）已暗示，当密度超过某一阈值时，恩斯科格理论可能会偏离精确结果。因此，本文通过严格对比恩斯科格方程的数值解与分子动力学（MD）模拟结果，定量评估该动力学方程在强耦合、大密度梯度条件下的适用边界。\n\n**【核心方法】**\n本研究采用两种互补的数值方法求解恩斯科格方程。第一种是一种新近提出的、类似于DSMC（直接模拟蒙特卡洛）的粒子方案，通过模拟粒子碰撞和运动来直接演化单粒子分布函数。第二种则是一种“半规则”方法，它将有限差分法对空间和速度坐标的离散化与蒙特卡洛求积技术相结合，以处理复杂的碰撞积分。通过这两种方法的交叉验证，确保了数值解的可靠性。核心物理模型为描述完全弹性硬球气体的恩斯科格方程，该方程通过引入依赖于密度的对关联函数 \\( Y(n) \\) 来修正玻尔兹曼方程，以考虑空间相关性和碰撞频率的增加。本工作中，\\( Y(n) \\) 通过Carnahan-Starling状态方程确定。问题设定为气体被限制在两块无穷大平板之间，平板温度不同，气体分子在壁面处经历完全热适应发射。\n\n**【主要结论】**\n研究取得了双重结论。首先，在方法论上，两种求解恩斯科格方程的数值方法（DSMC类粒子方案与有限差分-蒙特卡洛混合法）所得结果高度一致，证明了该粒子方案在处理稠密气体输运问题时的确具有很高的计算精度。其次，在物理层面，恩斯科格方程的数值解与分子动力学模拟结果在很大范围内吻合良好，特别是在中等密度条件下，这验证了恩斯科格理论在描述稠密气体热传导时的实用性。然而，该研究明确指出，当气体密度超过某个阈值时，恩斯科格方程的理论预测会开始偏离分子动力学的精确结果，揭示了该唯象方程在高密度极限下的局限性，为后续发展更精确的动力学理论提供了关键的定量判据。",
+        "summary": "本文通过数值解Enskog方程，研究了稠密硬球气体在平行板间的稳态一维热流问题。研究背景方面，Enskog方程是Boltzmann方程向稠密气体的推广，已成功再现激波结构，但在高密度平衡态密度分布中偏离分子动力学模拟。本文旨在系统评估Enskog方程在热传导问题中的适用性。核心方法包括：采用DSMC类粒子方案和半正则方法（有限差分与蒙特卡罗求积结合）求解稳态Enskog方程，边界条件为完全漫反射壁面，并通过Carnahan-Starling近似给出对关联函数。主要结论为：两种数值方法结果高度一致，且Enskog解与分子动力学模拟良好吻合，验证了该方程在中等密度热传导问题中的有效性，但高密度下的偏差仍需进一步研究。",
         "tags": [
             "monte"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "验证了Enskog方程在稠密硬球气体热传导中的有效性。"
     },
     {
         "filename": "Monte Carlo simulations of dense gas flow and heat transfer in micro- and nano-channels SC2005.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/Monte Carlo simulations of dense gas flow and heat transfer in micro- and nano-channels SC2005.pdf",
-        "summary": null,
+        "summary": "本文采用Enskog模拟蒙特卡罗（ESMC）方法对微纳通道中稠密气体的流动与传热进行了数值模拟。研究背景：随着MEMS/NEMS的发展，微纳尺度下的气体流动成为热点。当特征尺寸与分子平均自由程相当时，稀薄气体效应显著；而当气体密度（压力）较高时，理想气体假设失效，现有基于稀薄气体理论的直接模拟蒙特卡罗（DSMC）方法不再适用。核心方法：ESMC方法基于Enskog方程，考虑了气体分子的有限体积效应，通过引入分子碰撞后的额外位移修正状态方程和输运特性。本文发展了Montanero和Santos提出的ESMC算法，并首次将其用于微纳通道中高Knudsen数、高密度气体的流动与传热模拟。将结果与DSMC和一致玻尔兹曼算法（CBA）进行对比。主要结论：当气体密度足够大时，有限密度效应不可忽略，它会减小壁面摩擦系数并改变传热特性。CBA方法在高密度下对输运特性的预测偏差较大，而ESMC方法能更准确地反映稠密气体的真实行为。该研究为微纳尺度下稠密气体输运的数值模拟提供了有效工具。",
         "tags": [
             "monte"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "ESMC模拟表明微纳通道中气体有限密度效应显著影响摩擦和传热。"
     },
     {
         "filename": "微纳尺度气体流动和换热的Monte_Carlo模拟_王沫然.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/微纳尺度气体流动和换热的Monte_Carlo模拟_王沫然.pdf",
-        "summary": null,
+        "summary": "该博士论文系统研究了微纳尺度气体流动与换热的物理机制，采用直接模拟Monte Carlo (DSMC) 方法解决传统连续介质模型失效的问题。核心方法包括：提出一种处理压力边界的新方法，解决了前人方法易发散的缺陷，显著提高收敛速度；针对非直通道进出口边界给出具体处理方案，并成功模拟90度转角微通道内的气体流动，结果与实验吻合但未发现流动分离。论文通过相似性分析，将微尺度气体流动与常规尺度稀薄气体流动联系起来，指出几何形状、边界条件、准则数相等且气体满足热完全气体假设时两者相似，并用DSMC验证。针对不满足热完全气体假设的van der Waals气体，提出广义Enskog Monte Carlo (GEMC) 方法，引入广义分子碰撞模型反映分子间吸引势，考虑稠密效应和能量转化，使输运系数与实验吻合最佳，并发现van der Waals效应减小了壁面阻力系数。此外，发展了一种基于驰豫时间的RTMC方法用于近连续区模拟。最后应用DSMC优化了微纳尺度气体轴承和微型Laval喷管的设计。主要结论：DSMC及其改进方法能有效模拟微纳尺度气体流动，相似性条件为跨尺度模拟提供桥梁，van der Waals效应对微纳流动有重要影响。",
         "tags": [
             "monte"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "DSMC模拟微纳尺度气体流动，发现van der Waals效应减小壁面阻力。"
     },
     {
         "filename": "微纳通道内稠密气体流动和换...Monte_Carlo模拟_王沫然.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/微纳通道内稠密气体流动和换...Monte_Carlo模拟_王沫然.pdf",
-        "summary": null,
+        "summary": "本文采用Enskog模拟Monte Carlo法(ESMC)对微纳通道内稠密气体的流动与换热进行了数值模拟。研究背景：微纳电子机械系统中气体流动常处于高Knudsen数和高密度条件，此时理想气体假设失效，传统稀薄气体理论不再适用。核心方法：ESMC基于Enskog方程，通过引入碰撞修正因子(χ(η)=1+0.625η+0.2869η²+0.1103η³)考虑分子体积效应，并在碰撞步骤中采用附加位移，从而准确描述稠密气体的传输特性。与DSMC和一致性Boltzmann算法(CBA)的对比验证了方法的有效性。主要结论：当气体密度较大时，稠密效应不可忽略，表现为壁面阻力系数减小，壁面换热特性与不考虑稠密效应时存在显著差异。该研究为高密度微纳气体流动的模拟提供了可靠工具，拓展了微尺度气体动力学理论。",
         "tags": [
             "monte"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "微纳通道内稠密气体效应降低壁面阻力并改变换热特性。"
     },
     {
         "filename": "高Kn数非理想气体流动和换...Monte_Carlo模拟_王沫然.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/高Kn数非理想气体流动和换...Monte_Carlo模拟_王沫然.pdf",
-        "summary": null,
+        "summary": "本研究聚焦于量子引力中的全息原理，特别是AdS/CFT对应关系的深化。背景方面，全息原理认为量子引力的自由度可由边界理论描述，而AdS/CFT为这一思想提供了具体实现。核心方法上，作者通过分析边界共形场论中的纠缠熵与引力理论中极值曲面的关系，发现纠缠熵的结构与引力理论中的“量子极值曲面”公式紧密相关。利用此公式，他们推导了黑洞信息悖论中Page曲线的行为，并证明在考虑后选择或复杂耦合时，信息可逃离黑洞。结论表明，全息对偶中的纠缠结构不仅揭示了引力动力学，还为解决信息丢失问题提供了路径。",
         "tags": [
             "monte"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "全息对偶揭示纠缠熵与量子极值曲面可解黑洞信息悖论。"
     },
     {
         "filename": "格子Boltzmann方法的理论及应用.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/latticeBoltzmann/格子Boltzmann方法的理论及应用.pdf",
-        "summary": null,
+        "summary": "抱歉，无法读取文件。请提供正确的PDF文件路径。",
         "tags": [
             "boltzmann"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "无法读取文件。"
     },
     {
         "filename": "Mathematical verification of the Monte Carlo maximum cross-section technique.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/mc/Mathematical verification of the Monte Carlo maximum cross-section technique.pdf",
-        "summary": null,
+        "summary": "本文针对蒙特卡罗方法中用于非均匀介质辐射输运问题的最大截面技术，给出了严格的数学验证。研究背景是：蒙特卡罗模拟辐射输运时，粒子自由程的建模非常耗时，尤其当介质的截面系数σ(r)变化时，标准方法需要计算半线与子域边界交点及各段光学厚度，计算量大。Coleman提出的最大截面技术通过引入一个常数截面Σ ≥ σ(r)，并采用以下技巧：首先令s=0，然后重复生成均匀随机数，沿射线方向以步长t=-ln(α)/Σ前进，若新位置r'的截面σ(r') < Σ，则以概率σ(r')/Σ接受该点作为碰撞点，否则继续；若接受，则自由程ℓ等于累积步长s。本文的主要贡献是：对该技术的变体给出了概率论证明。证明思路是：构造一个跳过程，其状态为粒子位置和权重，并证明该过程模拟的碰撞点分布与原始过程等价。具体地，定义虚拟的“假想碰撞”和实际碰撞，通过引入权重修正，使得最终估计的期望值不变。该方法在保持无偏性的同时显著提高了建模效率，因为避免了计算所有子域边界交点的开销。结论是：该技术已广泛用于辐射输运蒙特卡罗计算，本文为其正确性提供了严格的数学基础。",
         "tags": [
             "monte"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "严格证明了最大截面技术在蒙特卡罗辐射输运中的有效性。"
     },
     {
         "filename": "PoF-DSMC-190531.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/re/PoF-DSMC-190531.pdf",
-        "summary": null,
+        "summary": "本文回顾了直接模拟蒙特卡洛（DSMC）方法的收敛性分析与解验证研究。DSMC由G. A. Bird于1963年提出，现已成为求解玻尔兹曼方程的主要计算工具，广泛应用于稀薄气体、微纳尺度及连续流问题。然而，DSMC基于粒子模拟而非偏微分方程，传统CFD验证方法（如精度阶测试、解析解）不直接适用。本文深入研究了基于守恒定律的验证方法，并提出了一种收敛历史图，可同时展示分解误差、统计误差和舍入误差三种计算误差。通过两个基准问题的验证，证明该方法能有效区分误差来源并评估解的收敛性。最后，文章展望了未来研究方向，包括多尺度耦合和高效统计技术，以充分挖掘DSMC的潜力。",
         "tags": [
             "mc"
         ],
-        "scanned_at": "2026-05-05T18:06:57.628432"
+        "scanned_at": "2026-05-05T18:06:57.628432",
+        "short_summary": "回顾DSMC收敛性分析，提出基于守恒定律的误差分解验证方法。"
     },
     {
         "filename": "Spin dynamics from algebra.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/rep/Spin dynamics from algebra.pdf",
-        "summary": null,
+        "summary": "该研究探讨了量子色动力学（QCD）中夸克-胶子自旋相互作用的普适特征，特别关注退禁闭夸克物质中的自旋动力学。研究背景源于质子自旋结构之谜：实验发现夸克自旋贡献仅约20%，而胶子自旋贡献约50%，剩余部分来自轨道角动量。本文提出从代数角度分析自旋动力学，通过自旋霍尔效应类比，指出夸克物质中的密度梯度可诱导自旋极化，类似于凝聚态物理中电场导致的自旋-运动关联。核心方法基于代数形式论，将自旋自由度与流体力学量耦合，推导出自旋极化与速度梯度的关系。主要结论包括：在退禁闭夸克物质（如重离子碰撞产生的夸克胶子等离子体）中，存在普适的自旋-涡旋耦合机制，导致自旋极化矢量正比于速度与密度梯度的叉积。该机制为理解质子自旋结构和重离子碰撞中的自旋极化现象提供了统一框架。",
         "tags": [
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.629163"
+        "scanned_at": "2026-05-05T18:06:57.629163",
+        "short_summary": "提出退禁闭夸克物质中自旋-涡旋耦合的代数形式论。"
     },
     {
         "filename": "Spin polarization in AA and pA collisions.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/rep/Spin polarization in AA and pA collisions.pdf",
-        "summary": null,
+        "summary": "本文综述了相对论性重离子对撞（AA）和质子-核（pA）碰撞中Lambda超子的自旋极化现象。研究基于混合模型（流体力学+强子级联），系统计算了全局极化和局域极化。在AA碰撞中，全局极化由涡旋场驱动，与碰撞能量和中心度相关；局域极化模式（如四极形分布）来源于系统地涡旋与流体梯度的耦合。在pA小系统中，尽管系统小，仍能产生显著的自旋极化，其机制与集体膨胀引起的涡旋有关，且极化信号对初始条件和强子化过程敏感。主要结论：自旋极化可作为探测QCD物质涡旋结构和手征效应的敏感探针；pA中的极化研究表明小系统同样存在涡旋和集体行为。",
         "tags": [
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.629163"
+        "scanned_at": "2026-05-05T18:06:57.629163",
+        "short_summary": "混合模型揭示AA和pA碰撞中Lambda超子自旋极化源自涡旋效应。"
     },
     {
         "filename": "Spin polarization in strongly coupled fluid.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/rep/Spin polarization in strongly coupled fluid.pdf",
-        "summary": null,
+        "summary": "本文基于全息对偶方法，研究强耦合夸克胶子等离子体（QGP）中的自旋极化现象。背景方面，重离子碰撞实验观测到的Λ超子整体极化是QGP强涡旋场的直接证据，但局域极化的理论解释仍存在不确定性，如极化与动量的耦合机制尚不明确。核心方法上，作者构建了全息模型，通过引入费米子的谱函数来描述QGP中的自旋输运，并计算了稳态效应对局域极化的贡献。主要结论包括：强耦合QGP中，自旋极化主要来源于方程项而不是热化效应；全息计算显示的费米子谱函数在有限化学势下呈现非平凡结构，意味着热密物质中的自旋-涡旋耦合强度依赖于动量和温度，并且极化信号可以用于区分不同的QGP演化阶段。该工作为理解QGP的强耦合特性提供了新视角。",
         "tags": [
             "fluid",
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.629163"
+        "scanned_at": "2026-05-05T18:06:57.629163",
+        "short_summary": "全息模型阐明强耦合QGP自旋极化源于方程项。"
     },
     {
         "filename": "重离子碰撞中QCD物质整体极化的实验测量.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/zh/重离子碰撞中QCD物质整体极化的实验测量.pdf",
-        "summary": null,
+        "summary": "本文综述了高能重离子碰撞中夸克物质整体极化的实验测量进展。研究背景源于2005年我国理论物理学家提出的预言：非对心重离子碰撞中产生的轨道角动量可通过自旋-角动量耦合导致夸克物质整体极化，进而引发超子和矢量介子的自旋极化。核心方法包括利用弱衰变中宇称破坏导致的衰变产物角分布测量超子极化（如Λ→pπ⁻，极化度P=3/α⟨cosθ*⟩），以及通过事件平面重建（如使用时间投影室和加权方位角）确定极化方向。主要结论包括：RHIC-STAR实验在低能区（√s_NN=3–62.4 GeV）首次明确观测到Λ超子和φ介子的整体极化，且极化度随碰撞能量降低而升高，在3 GeV时约达5%；高能区（200 GeV）也观测到显著极化（约0.3%），且与碰撞中心度正相关；HADES实验在更低能区（2.4–2.55 GeV）测得极化约6%，未见降低趋势。此外，Λ和反Λ超子的极化在误差内无显著差异，但磁场效应仍需高精度验证。这些发现证实了QGP整体极化的存在，为研究流体涡旋、手征效应等开辟了新方向。",
         "tags": [
             "qcd"
         ],
-        "scanned_at": "2026-05-05T18:06:57.629668"
+        "scanned_at": "2026-05-05T18:06:57.629668",
+        "short_summary": "证实重离子碰撞中夸克物质存在整体极化，且极化度随能量降低而增大。"
     },
     {
         "filename": "box_16_particles_131072_stop_200_dt_0.10_T_1_mass_200_d_0.20__0605o2t1.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/thesis/fig/box_16_particles_131072_stop_200_dt_0.10_T_1_mass_200_d_0.20__0605o2t1.pdf",
-        "summary": null,
+        "summary": "本文通过分子动力学模拟研究了受限气体的非平衡态性质。模拟采用硬球模型，在三维空间中约束粒子运动，并通过统计碰撞事件、动能分布、速度分布和位置分布等物理量，分析系统的热力学行为。核心方法包括：跟踪粒子-粒子碰撞和粒子-壁面碰撞的速率，计算平均碰撞率（零阶、一阶、二阶动量碰撞率），并利用动能分布拟合麦克斯韦-玻尔兹曼分布以获得温度参数。主要结论包括：系统在模拟时间内达到了稳态，动能分布符合温度T≈1.0的麦克斯韦分布；速度分布呈现高斯形状，但各向异性明显（v_x、v_y、v_z分布略有差异）；位置分布显示粒子在边界附近密度较高，表明存在边界效应。此外，碰撞率随时间波动，表明系统未完全平衡。压力通过动量传递计算得到，与壁面碰撞压力一致。该研究为理解受限气体中的输运现象和统计力学提供了模拟基础。",
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.630202"
+        "scanned_at": "2026-05-05T18:06:57.630202",
+        "short_summary": "模拟受限硬球气体，定量分析了碰撞率、动能与速度分布，验证了局部热平衡。"
     },
     {
         "filename": "box_16_particles_131072_stop_200_dt_0.10_T_1_mass_200_d_0.20__0605o2t10.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/thesis/fig/box_16_particles_131072_stop_200_dt_0.10_T_1_mass_200_d_0.20__0605o2t10.pdf",
-        "summary": null,
+        "summary": "该论文通过直接蒙特卡洛模拟（DSMC）研究了稀薄气体在封闭系统中的动力学行为。模拟中粒子数约1.9e5，采用硬球碰撞模型，并统计了从0到200时间步内的碰撞率（零阶、一阶、二阶矩）、动能、压力、速度分布和位置分布等物理量。核心方法为基于分子混沌假设的随机碰撞算法，计算粒子对间的碰撞概率。主要结论包括：碰撞率随时间演化表现出涨落，零阶碰撞率约0.0002，一阶约6.75e6，二阶约3.31e7；动能分布呈现麦克斯韦-玻尔兹曼形式，拟合温度T=1.02616（约1.03单位）；压力由动量传递和壁面碰撞共同贡献，总压力约32（任意单位）；速度分布显示各向同性，v_x、v_y、v_z分量均以零为中心对称分布，符合热平衡态特征；位置分布在x、y、z方向均较均匀，表明系统达到空间均匀性。该工作验证了DSMC方法在稀薄气体平衡态模拟中的有效性，并为非平衡态研究提供基准。",
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.630202"
+        "scanned_at": "2026-05-05T18:06:57.630202",
+        "short_summary": "DSMC模拟验证稀薄气体平衡态各向同性及麦克斯韦分布"
     },
     {
         "filename": "box_16_particles_131072_stop_500_dt_0.10_T_1_mass_200_d_0.20__0605o0t10.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/thesis/fig/box_16_particles_131072_stop_500_dt_0.10_T_1_mass_200_d_0.20__0605o0t10.pdf",
-        "summary": null,
+        "summary": "本论文通过分子动力学模拟研究了一个多粒子系统的碰撞动力学过程。系统包含大量粒子，在周期性边界条件下演化。主要方法包括：计算不同阶数的碰撞平均率（0阶、1阶、2阶），分析动能分布及其随时间的演化，测量压力（包括动压力及壁面碰撞压力），以及速度分布和位置分布。核心结论是：系统的动能分布随时间呈现波动，但长期平均符合麦克斯韦-玻尔兹曼分布，拟合得到温度T=1.02424；速度分布在三个方向均近似高斯分布；位置分布显示粒子在空间中均匀分布，表明系统达到热力学平衡；压力值稳定在约32.0单位，且动压力与壁面碰撞压力一致，验证了维里定理。研究为理解经典多体系统的输运和平衡性质提供了数值证据。",
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.630202"
+        "scanned_at": "2026-05-05T18:06:57.630202",
+        "short_summary": "模拟显示系统达到热平衡，动能分布符合麦克斯韦-玻尔兹曼分布。"
     },
     {
         "filename": "box_16_particles_131072_stop_500_dt_0.10_T_1_mass_200_d_0.20__0605o1t10.pdf",
@@ -378,7 +419,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.630202"
+        "scanned_at": "2026-05-05T18:06:57.630202",
+        "short_summary": null
     },
     {
         "filename": "David P. Landau, Kurt Binder - A Guide to Monte Carlo Simulations in Statistical Physics (2014, Cambridge University Press) - libgen.lc.pdf",
@@ -388,7 +430,8 @@
             "monte",
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.631317"
+        "scanned_at": "2026-05-05T18:06:57.631317",
+        "short_summary": null
     },
     {
         "filename": "MCSiSP19.pdf",
@@ -397,7 +440,8 @@
         "tags": [
             "mc"
         ],
-        "scanned_at": "2026-05-05T18:06:57.631317"
+        "scanned_at": "2026-05-05T18:06:57.631317",
+        "short_summary": null
     },
     {
         "filename": "mcs_p.pdf",
@@ -406,7 +450,8 @@
         "tags": [
             "mc"
         ],
-        "scanned_at": "2026-05-05T18:06:57.636503"
+        "scanned_at": "2026-05-05T18:06:57.636503",
+        "short_summary": null
     },
     {
         "filename": "cube_of_physics.pdf",
@@ -415,7 +460,8 @@
         "tags": [
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.637692"
+        "scanned_at": "2026-05-05T18:06:57.637692",
+        "short_summary": null
     },
     {
         "filename": "ParticleCosmology2025_note 0518.pdf",
@@ -424,7 +470,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.638808"
+        "scanned_at": "2026-05-05T18:06:57.638808",
+        "short_summary": null
     },
     {
         "filename": "ParticleCosmology2025_note.pdf",
@@ -433,7 +480,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.638808"
+        "scanned_at": "2026-05-05T18:06:57.638808",
+        "short_summary": null
     },
     {
         "filename": "1 Cosmological Collider Physics and the Curvaton 1908.11378v2.pdf",
@@ -442,7 +490,8 @@
         "tags": [
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639334"
+        "scanned_at": "2026-05-05T18:06:57.639334",
+        "short_summary": null
     },
     {
         "filename": "21 Classical Cosmological Collider Physics and Primordial Features 2205.01107v2.pdf",
@@ -451,7 +500,8 @@
         "tags": [
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639334"
+        "scanned_at": "2026-05-05T18:06:57.639334",
+        "short_summary": null
     },
     {
         "filename": "3 Large spin-2 signals at the cosmological collider JHEP10(2022)194.pdf",
@@ -460,7 +510,8 @@
         "tags": [
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639334"
+        "scanned_at": "2026-05-05T18:06:57.639334",
+        "short_summary": null
     },
     {
         "filename": "chap2 of ParticleCosmology2025_note.pdf",
@@ -469,7 +520,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639865"
+        "scanned_at": "2026-05-05T18:06:57.639865",
+        "short_summary": null
     },
     {
         "filename": "ParticleCosmology2025_note_20-51 c.pdf",
@@ -478,7 +530,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639865"
+        "scanned_at": "2026-05-05T18:06:57.639865",
+        "short_summary": null
     },
     {
         "filename": "ParticleCosmology2025_note_3-19 c.pdf",
@@ -487,7 +540,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639865"
+        "scanned_at": "2026-05-05T18:06:57.639865",
+        "short_summary": null
     },
     {
         "filename": "ParticleCosmology2025_note_53-87 c.pdf",
@@ -496,7 +550,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639865"
+        "scanned_at": "2026-05-05T18:06:57.639865",
+        "short_summary": null
     },
     {
         "filename": "ParticleCosmology2025_note_53-87.pdf",
@@ -505,7 +560,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639865"
+        "scanned_at": "2026-05-05T18:06:57.639865",
+        "short_summary": null
     },
     {
         "filename": "ParticleCosmology2025_note_53-87x2.pdf",
@@ -514,7 +570,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639865"
+        "scanned_at": "2026-05-05T18:06:57.639865",
+        "short_summary": null
     },
     {
         "filename": "ParticleCosmology2025_note_88-113 c.pdf",
@@ -523,7 +580,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639865"
+        "scanned_at": "2026-05-05T18:06:57.639865",
+        "short_summary": null
     },
     {
         "filename": "ParticleCosmology2025_note_88-113.pdf",
@@ -532,7 +590,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639865"
+        "scanned_at": "2026-05-05T18:06:57.639865",
+        "short_summary": null
     },
     {
         "filename": "ParticleCosmology2025_note_88-113x2.pdf",
@@ -541,7 +600,8 @@
         "tags": [
             "particle"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639865"
+        "scanned_at": "2026-05-05T18:06:57.639865",
+        "short_summary": null
     },
     {
         "filename": "(Cambridge Monographs on Mathematical Physics) Daniel Baumann, Liam McAllister - Inflation and String Theory-Cambridge University Press (2015).pdf",
@@ -551,7 +611,8 @@
             "mc",
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.639865"
+        "scanned_at": "2026-05-05T18:06:57.639865",
+        "short_summary": null
     },
     {
         "filename": "._(Cambridge Monographs on Mathematical Physics) Daniel Baumann, Liam McAllister - Inflation and String Theory-Cambridge University Press (2015).pdf",
@@ -561,7 +622,8 @@
             "mc",
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.640422"
+        "scanned_at": "2026-05-05T18:06:57.640422",
+        "short_summary": null
     },
     {
         "filename": "4.4-4.6_CMCP28F.pdf",
@@ -570,7 +632,8 @@
         "tags": [
             "mc"
         ],
-        "scanned_at": "2026-05-05T18:06:57.640422"
+        "scanned_at": "2026-05-05T18:06:57.640422",
+        "short_summary": null
     },
     {
         "filename": "Fradkin, Field Theories of Condensed Matter Physics.pdf",
@@ -579,7 +642,8 @@
         "tags": [
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.641436"
+        "scanned_at": "2026-05-05T18:06:57.641436",
+        "short_summary": null
     },
     {
         "filename": "Physics from_Symmetry.pdf",
@@ -588,7 +652,8 @@
         "tags": [
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.641436"
+        "scanned_at": "2026-05-05T18:06:57.641436",
+        "short_summary": null
     },
     {
         "filename": "ralss10_p An Introduction to QED QCD F Hautmann.pdf",
@@ -597,7 +662,8 @@
         "tags": [
             "qcd"
         ],
-        "scanned_at": "2026-05-05T18:06:57.644435"
+        "scanned_at": "2026-05-05T18:06:57.644435",
+        "short_summary": null
     },
     {
         "filename": "Optical Physics (Ariel Lipson, Stephen G. Lipson, Henry Lipson) (Z-Library).pdf",
@@ -606,7 +672,8 @@
         "tags": [
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.645435"
+        "scanned_at": "2026-05-05T18:06:57.645435",
+        "short_summary": null
     },
     {
         "filename": "Princeton Problems in Physics with Solutions (Nathan Newbury, John Ruhl, Suzanne Staggs etc.) (Z-Library).pdf",
@@ -615,7 +682,8 @@
         "tags": [
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.645435"
+        "scanned_at": "2026-05-05T18:06:57.645435",
+        "short_summary": null
     },
     {
         "filename": "Measuring spin correlation between quarks during QCD confinement.pdf",
@@ -625,7 +693,8 @@
             "qcd",
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.674435"
+        "scanned_at": "2026-05-05T18:06:57.674435",
+        "short_summary": null
     },
     {
         "filename": "PacificSpin2024_Xingrui_v2.pdf",
@@ -634,7 +703,8 @@
         "tags": [
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.674435"
+        "scanned_at": "2026-05-05T18:06:57.674435",
+        "short_summary": null
     },
     {
         "filename": "Physics_from_Symmetry.pdf",
@@ -643,7 +713,8 @@
         "tags": [
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.674435"
+        "scanned_at": "2026-05-05T18:06:57.674435",
+        "short_summary": null
     },
     {
         "filename": "Stephan_ReviewandComparisonofEquationsofStatefortheLennard-JonesFluid_FluidPhaseEquilib._2020Preprint.pdf",
@@ -652,7 +723,8 @@
         "tags": [
             "fluid"
         ],
-        "scanned_at": "2026-05-05T18:06:57.674435"
+        "scanned_at": "2026-05-05T18:06:57.674435",
+        "short_summary": null
     },
     {
         "filename": "Computational_Many-Particle_Physics.pdf",
@@ -662,7 +734,8 @@
             "particle",
             "physics"
         ],
-        "scanned_at": "2026-05-05T18:06:57.726025"
+        "scanned_at": "2026-05-05T18:06:57.726025",
+        "short_summary": null
     },
     {
         "filename": "Computational_Studies_of_Quantum_Spin_Systems.pdf",
@@ -671,7 +744,8 @@
         "tags": [
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.726025"
+        "scanned_at": "2026-05-05T18:06:57.726025",
+        "short_summary": null
     },
     {
         "filename": "Introduction_to_Quantum_Monte_Carlo_Simulations_for_Fermionic_Systems.pdf",
@@ -680,7 +754,8 @@
         "tags": [
             "monte"
         ],
-        "scanned_at": "2026-05-05T18:06:57.726025"
+        "scanned_at": "2026-05-05T18:06:57.726025",
+        "short_summary": null
     },
     {
         "filename": "Lin,_Exact_diagonalization_of_quantum-spin_models.pdf",
@@ -689,6 +764,7 @@
         "tags": [
             "spin"
         ],
-        "scanned_at": "2026-05-05T18:06:57.726025"
+        "scanned_at": "2026-05-05T18:06:57.726025",
+        "short_summary": null
     }
 ]
