@@ -112,7 +112,7 @@ __global__ void collide_pairs_sampled_kernel(
                 float p_cm = sqrtf(s) / 2.0f;
                 float q2 = md2 * curand_uniform(&local_state) / (1.0f - curand_uniform(&local_state) + 4.0f * md2 / s); 
                 float costheta = 1.0f - 2.0f * q2 / s;
-                float sintheta = sqrtf(max(0.0f, 1.0f - costheta * costheta));
+                float sintheta = sqrtf(fmaxf(0.0f, 1.0f - costheta * costheta));
                 float phi = curand_uniform(&local_state) * 2.0f * PI;
                 float4 P1_cm = make_float4(p_cm * sintheta * cosf(phi), p_cm * sintheta * sinf(phi), p_cm * costheta, p_cm);
                 float4 P2_cm = make_float4(-P1_cm.x, -P1_cm.y, -P1_cm.z, P1_cm.w);
@@ -232,7 +232,7 @@ int main() {
         float p_mag = 2.0f; 
         float phi = (float)rand()/RAND_MAX * 2.0f * PI;
         float costheta = (float)rand()/RAND_MAX * 2.0f - 1.0f;
-        float sintheta = sqrtf(max(0.0f, 1.0f - costheta * costheta));
+        float sintheta = sqrtf(fmaxf(0.0f, 1.0f - costheta * costheta));
         h_mom[i] = make_float4(p_mag * sintheta * cosf(phi), 
                                p_mag * sintheta * sinf(phi), 
                                p_mag * costheta, 

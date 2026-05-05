@@ -30,7 +30,7 @@ __global__ void init_particles_kernel(float4* pos, float4* mom, int* is_alive, c
         float p_mag = 2.0f;
         float phi = curand_uniform(&local_state) * 2.0f * PI;
         float costheta = curand_uniform(&local_state) * 2.0f - 1.0f;
-        float sintheta = sqrtf(max(0.0f, 1.0f - costheta * costheta));
+        float sintheta = sqrtf(fmaxf(0.0f, 1.0f - costheta * costheta));
         mom[idx] = make_float4(p_mag*sintheta*cosf(phi), p_mag*sintheta*sinf(phi), p_mag*costheta, p_mag);
         pos[idx] = make_float4(curand_uniform(&local_state)*box_size - box_size/2.0f,
                                curand_uniform(&local_state)*box_size - box_size/2.0f,
@@ -108,7 +108,7 @@ __global__ void collide_enskog_kernel(
             float p_cm = sqrtf(s) / 2.0f;
             float q2 = md2 * curand_uniform(&local_state) / (1.0f - curand_uniform(&local_state) + 4.0f * md2 / s); 
             float costheta = 1.0f - 2.0f * q2 / s;
-            float sintheta = sqrtf(max(0.0f, 1.0f - costheta * costheta));
+            float sintheta = sqrtf(fmaxf(0.0f, 1.0f - costheta * costheta));
             float phi = curand_uniform(&local_state) * 2.0f * PI;
             float4 P1_cm = make_float4(p_cm * sintheta * cosf(phi), p_cm * sintheta * sinf(phi), p_cm * costheta, p_cm);
             float4 P2_cm = make_float4(-P1_cm.x, -P1_cm.y, -P1_cm.z, P1_cm.w);
@@ -160,36 +160,72 @@ public:
     }
 };
 
+#include <stdarg.h>
+
+// Ancient Style Terminal Logger
+void log_info(FILE* f, const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    vprintf(format, args); // Print to screen
+    va_end(args);
+    
+    va_start(args, format);
+    if (f) {
+        vfprintf(f, format, args); // Print to log file
+        fflush(f);
+    }
+    va_end(args);
+}
+
 int main() {
     int N = 100000; float box_size = 10.0f;
     BAMPS_Ancient sim(N, box_size, 10);
     
-    // Logging Setup
+    // Terminal Logging Setup
     time_t now = time(0);
     char* timestamp = ctime(&now);
-    FILE* logf = fopen("physics_master.log", "a");
-    fprintf(logf, "\n# --- RUN START: %s", timestamp);
-    fprintf(logf, "# Step Time Temp Pressure_Wall Energy Count\n");
+    FILE* master_f = fopen("bamps_master.log", "a");
+    log_info(master_f, "\n# ========================================\n");
+    log_info(master_f, "# RUN START: %s", timestamp);
+    log_info(master_f, "# ========================================\n");
     
-    // Overwrite short log for visualization
     FILE* short_log = fopen("physics_log.txt", "w");
     fprintf(short_log, "Step Time Temp Pressure_Wall Energy Count\n");
 
-    int total_steps = 2000;
-    printf("Starting Long Validation Run (%d steps, 100k particles)...\n", total_steps);
+    int total_steps = 20000;
+    log_info(master_f, "Starting Ancient-Hybrid Simulation (%d particles, %d steps)\n", N, total_steps);
+    
+    cudaEvent_t start_bench, stop_bench;
+    cudaEventCreate(&start_bench); cudaEventCreate(&stop_bench);
+    cudaEventRecord(start_bench);
+
     for(int i=0; i<=total_steps; i++) {
         sim.evolve();
         if(i % 20 == 0) {
             double stats[10], wall_mom; sim.get_diagnostics(stats, &wall_mom);
             double Area = 6.0 * box_size * box_size;
-            double P_wall = wall_mom / (0.2 * Area); // Avg over 20 steps
+            double P_wall = wall_mom / (0.2 * Area); 
             double T = stats[0] / (3.0 * stats[1]);
-            fprintf(logf, "%d %f %f %f %f %f\n", i, i*0.01, T, P_wall, stats[0], stats[1]);
+            
             fprintf(short_log, "%d %f %f %f %f %f\n", i, i*0.01, T, P_wall, stats[0], stats[1]);
-            if(i % 500 == 0) printf("Step %d/%d: T=%.4f, P_wall=%.4f\n", i, total_steps, T, P_wall);
+            if(i % 500 == 0) {
+                log_info(master_f, "Step %4d/%d: T=%.4f GeV, P_wall=%.4f GeV/fm^3, N=%.0f\n", i, total_steps, T, P_wall, stats[1]);
+            }
         }
     }
-    fclose(logf); fclose(short_log);
+    cudaEventRecord(stop_bench);
+    cudaEventSynchronize(stop_bench);
+    float ms_total = 0;
+    cudaEventElapsedTime(&ms_total, start_bench, stop_bench);
+    log_info(master_f, "Performance: %d steps in %f ms (Avg: %f ms/step)\n", total_steps, ms_total, ms_total / (float)total_steps);
+    
+    fclose(short_log);
+    
+    // Final check
+    double final_stats[10], dummy_wall;
+    sim.get_diagnostics(final_stats, &dummy_wall);
+    log_info(master_f, "Simulation finished. Final T: %.4f, Final N: %.0f\n", final_stats[0]/(3.0*final_stats[1]), final_stats[1]);
+    if (master_f) fclose(master_f);
 
     float4* h_mom = new float4[sim.max_slots]; int* h_alive = new int[sim.max_slots];
     cudaMemcpy(h_mom, sim.d_mom, sim.max_slots * sizeof(float4), cudaMemcpyDeviceToHost);
