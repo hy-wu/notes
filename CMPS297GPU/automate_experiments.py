@@ -9,6 +9,7 @@ MODES = {
     1: "RELATIVISTIC"
 }
 ORDERS = [0, 1, 2]
+STEPS = 50000 # Example: Reduced to 5000 for faster testing, can be 20000
 OUTPUT_DIR = "experiment_results"
 SRC_FILE = "code/bamps_gpu_ancient.cu"
 BIN_FILE = "./bamps_bin"
@@ -21,7 +22,9 @@ def run_command(cmd):
         if output == b'' and process.poll() is not None:
             break
         if output:
-            print(output.decode().strip())
+            line = output.decode().strip()
+            if "Step" in line or "Performance" in line: # Only show progress
+                print(line)
     return process.poll()
 
 def automate():
@@ -35,14 +38,14 @@ def automate():
     for m_val, m_name in MODES.items():
         for o in ORDERS:
             tag = f"{m_name}_ORDER{o}"
-            print(f"\n>>> STARTING EXPERIMENT: {tag} <<<")
+            print(f"\n>>> STARTING EXPERIMENT: {tag} ({STEPS} steps) <<<")
             
             case_dir = os.path.join(OUTPUT_DIR, tag)
             if not os.path.exists(case_dir):
                 os.makedirs(case_dir)
 
-            # 1. Compile with specific flags
-            compile_cmd = f"nvcc -O3 -DMODE_RELATIVISTIC={m_val} -DENSKOG_ORDER={o} {SRC_FILE} -o {BIN_FILE}"
+            # 1. Compile with specific flags including TOTAL_STEPS
+            compile_cmd = f"nvcc -O3 -DMODE_RELATIVISTIC={m_val} -DENSKOG_ORDER={o} -DTOTAL_STEPS={STEPS} {SRC_FILE} -o {BIN_FILE}"
             if run_command(compile_cmd) != 0:
                 print(f"Compilation failed for {tag}")
                 continue

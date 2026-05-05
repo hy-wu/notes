@@ -35,8 +35,8 @@ with st.sidebar:
     st.divider()
     st.subheader("🚀 自动化任务")
     pending = [p for p in papers_db if not p["summary"]]
-    if st.button(f"批量生成摘要 (剩余 {len(pending)} 篇)", use_container_width=True, disabled=len(pending)==0):
-        batch_size = 5
+    batch_size = 5
+    if st.button(f"批量生成 {batch_size} 篇摘要 (剩余 {len(pending)} 篇)", use_container_width=True, disabled=len(pending)==0):
         to_process = pending[:batch_size]
         progress_bar = st.progress(0)
         status_text = st.empty()
@@ -71,19 +71,24 @@ with st.sidebar:
 # --- Header ---
 st.title("🔬 QGP Literature Insight")
 
+# --- Caching the Search to save Tokens and Time ---
+@st.cache_data(show_spinner=False)
+def cached_semantic_search(query, text):
+    return semantic_search(query, text)
+
 # --- Search Section ---
 st.subheader("🔍 智能检索")
 search_query = st.text_input("输入话题、公式或关键词：", placeholder="例如：哪些论文提到了 Wigner 函数？")
 
 if search_query:
-    # 准备摘要数据
     valid_summaries = [p for p in papers_db if p["summary"]]
     summaries_text = "\n".join([f"文件: {p['filename']}\n摘要: {p['summary']}" for p in valid_summaries])
     
     if summaries_text:
-        st.status(f"🚀 正在调用 DeepSeek-V3 对 {len(valid_summaries)} 篇论文摘要进行语义分析...")
-        with st.spinner("DeepSeek 正在思考并筛选文献..."):
-            ans = semantic_search(search_query, summaries_text)
+        # 使用 with 确保状态在结束后能正确更新
+        with st.status(f"🚀 正在分析 {len(valid_summaries)} 篇论文摘要...", expanded=True) as status:
+            ans = cached_semantic_search(search_query, summaries_text)
+            status.update(label="✅ AI 语义分析完成", state="complete", expanded=False)
         st.chat_message("assistant").write(ans)
     else:
         st.warning("💡 **当前处于关键词检索模式**。由于你还没有生成任何论文摘要，AI 无法进行深度语义分析。建议你先点击下方论文的“生成摘要”按钮，或者在侧边栏点击“批量生成”。")

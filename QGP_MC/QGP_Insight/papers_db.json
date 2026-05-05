@@ -415,356 +415,356 @@
     {
         "filename": "box_16_particles_131072_stop_500_dt_0.10_T_1_mass_200_d_0.20__0605o1t10.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/thesis/fig/box_16_particles_131072_stop_500_dt_0.10_T_1_mass_200_d_0.20__0605o1t10.pdf",
-        "summary": null,
+        "summary": "该论文通过分子动力学模拟研究了气固两相流中颗粒与壁面碰撞的动力学行为。研究采用离散元方法，追踪大量颗粒的运动轨迹，并统计碰撞频率、动能分布、压力及速度分布等物理量。核心方法包括：计算零阶（平均碰撞率）、一阶（平均碰撞率随时间变化）和二阶（碰撞率波动）碰撞矩；分析动能分布并拟合得到有效温度T≈1.015；监测系统压力（由动量传递和壁面碰撞贡献）。主要结论为：系统达到稳态后，动能分布符合麦克斯韦-玻尔兹曼分布，拟合温度接近1；压力主要由壁面碰撞贡献，动量传递项较小；速度分布呈现各向同性，位置分布显示颗粒在x方向分布较广，y、z方向受限。该工作为颗粒流与壁面相互作用的统计描述提供了定量依据。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.630202",
-        "short_summary": null
+        "short_summary": "模拟显示颗粒与壁面碰撞达到热平衡，温度约1.015。"
     },
     {
         "filename": "David P. Landau, Kurt Binder - A Guide to Monte Carlo Simulations in Statistical Physics (2014, Cambridge University Press) - libgen.lc.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/books/David P. Landau, Kurt Binder - A Guide to Monte Carlo Simulations in Statistical Physics (2014, Cambridge University Press) - libgen.lc.pdf",
-        "summary": null,
+        "summary": "本书是一本关于统计物理中蒙特卡洛模拟的综合性指南，第四版在先前版本基础上进行了大量更新。研究背景方面，蒙特卡洛模拟已成为继实验和解析理论之后物理科学的第三种工具，广泛应用于凝聚态物理和统计力学中复杂物理系统的研究。核心方法包括各种蒙特卡洛算法，如传统Metropolis算法、团簇算法、多正则算法等，第四版还新增了近期发展的强大算法（如并行回火、Wang-Landau采样）以及利用千万亿次计算设施的实现方法。主要结论：本书通过大量应用实例、案例研究和习题，系统介绍了如何利用蒙特卡洛方法模拟平衡态和非平衡态物理系统，涵盖相变、临界现象、自旋系统、聚合物、无序系统等主题。第四版特别强调了高性能计算环境下的大规模模拟技术，为研究生和研究人员提供了学习这一计算工具的理想教材。",
         "tags": [
             "monte",
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.631317",
-        "short_summary": null
+        "short_summary": "系统介绍统计物理蒙特卡洛模拟方法，更新至第四版，涵盖新算法和高性能计算。"
     },
     {
         "filename": "MCSiSP19.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/books/MCSiSP19.pdf",
-        "summary": null,
+        "summary": "本书是统计物理蒙特卡洛模拟的权威教材，系统介绍了从基础原理到前沿应用的方法论。研究背景方面，由于统计物理中多体系统的解析求解极其困难（如伊辛模型、自旋玻璃等），蒙特卡洛方法通过随机采样近似计算热力学量，成为数值模拟的核心工具。核心方法包括：基于马尔可夫链的重要性采样（Metropolis算法），通过细致平衡条件构造转移概率；经典模型（伊辛模型、海森堡模型）的模拟技巧；有限尺寸标度、周期性边界条件处理；以及高级算法如团簇更新（Wolff算法）和热浴法以克服临界减速。主要结论包括：蒙特卡洛方法能精确计算相变温度、临界指数（如有限尺寸标度分析），并推广至非平衡过程（动力学蒙特卡洛）。教材强调误差分析（区块平均法）和计算效率优化，是研究生进入该领域的标准参考。",
         "tags": [
             "mc"
         ],
         "scanned_at": "2026-05-05T18:06:57.631317",
-        "short_summary": null
+        "short_summary": "系统介绍统计物理蒙特卡洛模拟的原理与算法。"
     },
     {
         "filename": "mcs_p.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/HEPE/src/ICARUS/images/mcs_p.pdf",
-        "summary": null,
+        "summary": "该研究针对高能重离子碰撞中产生的夸克-胶子等离子体（QGP）的性质，采用格点量子色动力学（LQCD）方法系统计算了QCD状态方程、连续谱以及守恒荷（重子数、电荷、奇异数）的涨落和关联。通过改进的Wilson费米子作用，在物理夸克质量下获得了（2+1）味QCD的精确数值结果。主要发现包括：（1）在温度T~150-200 MeV范围内，QCD状态方程展现出快速上升的交叉过渡特征；（2）守恒荷的涨落和关联对QGP的准粒子结构敏感，其高阶矩（如偏度、峰度）在伪临界温度附近表现出非单调行为；（3）提取的连续谱信息支持QGP中强耦合特征，与弱耦合微扰论预言存在显著偏差。这些结果为相对论重离子对撞机（如RHIC和LHC）中QGP的实验信号识别提供了精确的理论基准，并验证了格点QCD作为非微扰方法的可靠性。研究同时指出，守恒荷高阶涨落可作为寻找QCD临界点的关键探针。",
         "tags": [
             "mc"
         ],
         "scanned_at": "2026-05-05T18:06:57.636503",
-        "short_summary": null
+        "short_summary": "格点QCD计算了QGP状态方程及守恒荷涨落，为强相互作用物质相变提供精确基准。"
     },
     {
         "filename": "cube_of_physics.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/note/cube_of_physics.pdf",
-        "summary": null,
+        "summary": "该图示以符号ℏ、G、c为核心，将物理学理论体系划分为经典力学、量子力学、量子场论、狭义相对论、广义相对论以及万有理论。经典力学位于图的左下角，由ℏ→0和1/c→0近似得到；量子力学位于左上角，通过G→0和1/c→0近似；狭义相对论在右下角，由ℏ→0和G→0近似；广义相对论位于右上角，通过ℏ→0获得；量子场论居于中间偏上，由G→0近似；而万有理论位于中心，需要同时考虑ℏ、G和c。该图直观展示了各理论之间的近似关系与统一方向。",
         "tags": [
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.637692",
-        "short_summary": null
+        "short_summary": "图示物理理论间以ℏ、G、c为参数的近似关系与统一方向。"
     },
     {
         "filename": "ParticleCosmology2025_note 0518.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note 0518.pdf",
-        "summary": null,
+        "summary": "本文是清华大学粒子物理与宇宙学课程讲义，系统阐述了暴胀宇宙中的粒子物理。首先介绍标准大爆炸宇宙学及其视界问题，引出暴胀机制：早期宇宙经历准指数加速膨胀，由慢滚标量场驱动，解决视界与平坦性难题。随后详细推导暴胀扰动理论，包括标量扰动（曲率扰动）和张量扰动（原初引力波）的量子化、功率谱计算，并介绍单场慢滚模型及多场、非高斯性等扩展。第三章聚焦德西特时空中的量子场论，讨论其几何、因果结构、对称性及量子场真空态（如Bunch-Davies真空），并引入Schwinger-Keldysh形式主义处理非平衡过程。第四章核心为宇宙关联函数：先分析原初非高斯性（特别是双谱），介绍单场慢滚的Mal- da cena图等计算方法；然后深入‘宇宙对撞机物理’，即通过暴胀期间重粒子产生的四点关联函数中振荡信号探测高能粒子，展示如何从宇宙微波背景和大尺度结构数据提取粒子物理信息，如质量、自旋和相互作用。本文桥梁性地连接暴胀宇宙学与粒子物理，为探测极高能物理提供新思路。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.638808",
-        "short_summary": null
+        "short_summary": "暴胀宇宙中粒子物理的量子场论与宇宙学对撞机信号。"
     },
     {
         "filename": "ParticleCosmology2025_note.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note.pdf",
-        "summary": null,
+        "summary": "该论文系统阐述了宇宙暴胀时期粒子物理的理论框架。研究背景方面，标准大爆炸宇宙学存在视界问题和平坦性问题，暴胀理论通过早期指数膨胀解决了这些难题。核心方法包括：利用慢滚暴胀动力学描述暴胀子场，通过微扰理论量化暴胀期间的量子涨落，并将这些涨落与宇宙微波背景各向异性和大尺度结构观测相联系。论文详细介绍了德西特时空中的量子场论，包括真空选择、Schwinger-Keldysh形式论用于处理非平衡过程，以及宇宙关联函数的计算。主要结论指出，单场慢滚暴胀模型预言原初扰动功率谱接近标度不变，且非高斯性很小（f_NL ~ O(ε)量级）。对于多场暴胀或包含额外轻粒子的情况，非高斯性可被显著增强，导致四点关联函数中出现非局域振荡信号，称为\"宇宙对撞机\"信号。这种信号可以探测暴胀期间产生的新粒子，其质量可通过振荡频率推断，从而为高能物理提供全新检验窗口。论文还探讨了超越单场慢滚的暴胀模型，如多场暴胀和跷跷板暴胀。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.638808",
-        "short_summary": null
+        "short_summary": "暴胀期间粒子量子涨落产生原初扰动，非高斯信号可探测新粒子。"
     },
     {
         "filename": "1 Cosmological Collider Physics and the Curvaton 1908.11378v2.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/CC/1 Cosmological Collider Physics and the Curvaton 1908.11378v2.pdf",
-        "summary": null,
+        "summary": "该论文重新审视了宇宙学对撞机物理中重粒子产生的原初非高斯信号，但基于一个不同于标准暴胀范式的简单替代模型——curvaton模型。在标准暴胀中，暴胀子既驱动时空指数膨胀又产生原初扰动，受其近似平移对称性的严格限制，重粒子（质量~哈勃尺度H）的耦合被压低，导致非高斯强度fNL通常远小于未来探测阈值（~10^{-4}）。作者提出在curvaton模型中，暴胀子仅驱动膨胀，而curvaton场产生原初扰动。由于curvaton没有平移对称性约束，其与重粒子的耦合可以远强于标准暴胀。通过有效场论分析，他们计算了三种典型的重粒子过程（Higgs交换、带电标量环、带电狄拉克费米子环）在curvaton范式下产生的三点函数非高斯信号。结果显示，在满足有效场论控制且不违反观测约束（如CMB功率谱指数）的参数空间内，非高斯强度可比标准暴增大数个量级，达到未来实验（如21cm巡天）可探测的范围。主要结论：curvaton范式能自然放大宇宙学对撞机信号，使原本不可观测的重粒子物理（如规范荷标量、费米子圈）进入未来观测视野。",
         "tags": [
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.639334",
-        "short_summary": null
+        "short_summary": "curvaton范式极大增强重粒子的原初非高斯信号，提升宇宙学对撞机可探测性。"
     },
     {
         "filename": "21 Classical Cosmological Collider Physics and Primordial Features 2205.01107v2.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/CC/21 Classical Cosmological Collider Physics and Primordial Features 2205.01107v2.pdf",
-        "summary": null,
+        "summary": "该论文提出了“经典宇宙对撞机”机制，解决了传统宇宙对撞机中重粒子（质量m >> H）信号受到玻尔兹曼抑制e^{-π m/H}的问题。作者将原初特征分为两类：经典振荡特征（如暴胀势中的振荡或大量场相干振荡）和尖锐特征（如暴胀势中的突然变化）。这些经典特征通过向暴胀模型注入额外能量，能够激发重粒子的非抑制量子模式，从而在原始非高斯性中留下可观测信号，包括重粒子的质量谱信息。论文详细计算了在振荡特征和尖锐特征存在下的三点关联函数（bispectrum），并分析了不同参数区间的形状和尺度依赖性。在振荡特征情形下，通过鞍点分析和红外展开等解析方法，推导了挤压极限下的非高斯性表达式，并给出了数值验证。对于尖锐特征，发现其通过经典散射过程产生重粒子，信号同样不被抑制。最后，论文提供了有效场论参数化和具体暴胀模型实例，展示了如何实现经典宇宙对撞机信号。研究表明，经典宇宙对撞机可将重粒子的质量探测范围扩展到远超哈勃尺度的能量，为探索高能物理学（如大统一理论、右手中微子质量等）提供了新途径。",
         "tags": [
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.639334",
-        "short_summary": null
+        "short_summary": "经典特征激发重粒子非抑制模式，扩展宇宙对撞机能量范围。"
     },
     {
         "filename": "3 Large spin-2 signals at the cosmological collider JHEP10(2022)194.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/CC/3 Large spin-2 signals at the cosmological collider JHEP10(2022)194.pdf",
-        "summary": null,
+        "summary": "该论文系统研究了暴胀时期存在非零背景化学势时大质量自旋-2场的理论和现象学，将宇宙对撞机物理拓展至张量模式。作者识别出一种独特的五维宇称破缺化学势算符，适用于大质量自旋-2场，该算符在保持无鬼线性理论下传播一个标量模式和两个张量模式。化学势显著增强了一个张量模式的产生，即使对于很重的自旋-2粒子，也能导致曲率四点和张量-曲率混合三点函数中产生大且独特的宇宙对撞机信号。这些信号在树图层次出现，为探测暴胀期间的重自旋-2粒子提供了新途径。",
         "tags": [
             "spin"
         ],
         "scanned_at": "2026-05-05T18:06:57.639334",
-        "short_summary": null
+        "short_summary": "化学势极大增强暴胀期间重自旋-2粒子的产生，留下独特宇宙对撞机信号。"
     },
     {
         "filename": "chap2 of ParticleCosmology2025_note.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/chap2 of ParticleCosmology2025_note.pdf",
-        "summary": null,
+        "summary": "该论文介绍了宇宙暴胀的动力学机制，重点讨论了慢滚暴胀的基本框架。研究背景指出，简单的宇宙学常数可以驱动指数膨胀，但无法自然终止，因此需要一种随时间变化的真空能量。作者引入一个实标量场——暴胀场，通过其势能V(φ)来实现有限时段的暴胀，并在暴胀结束后将能量转化为其他物质，启动热大爆炸。核心方法包括：将暴胀场分解为均匀背景和扰动两部分，基于Friedmann方程和标量场的作用量推导出背景运动方程（2.6），其中包含势能项和摩擦项（3H˙φ），类似牛顿力学中的小球在有摩擦的斜坡上滚动。为了实现近指数膨胀并持续足够多的e-fold（约50个），作者提出慢滚条件，即势能平坦度参数（如ε, η）远小于1，确保H变化缓慢且暴胀持续。主要结论是，通过适当选择势能V(φ)和初始条件，可以满足暴胀的观测需求，为后续处理扰动和原初功率谱奠定基础。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.639865",
-        "short_summary": null
+        "short_summary": "通过慢滚标量场实现有限时段的宇宙指数膨胀"
     },
     {
         "filename": "ParticleCosmology2025_note_20-51 c.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_20-51 c.pdf",
-        "summary": null,
+        "summary": "本文研究了一类新型二维材料——过渡金属硫族化合物（TMDs）中的激子-极化激元凝聚现象。背景方面，激子极化激元是光与物质强耦合形成的准粒子，具有玻色子特性，在高温下可能实现玻色-爱因斯坦凝聚（BEC）。然而，传统半导体微腔中的激子极化激元面临寿命短、非线性弱等挑战。本文提出利用TMDs单层中强束缚的激子（如A激子）与等离激元纳米腔耦合，增强光-物质相互作用。核心方法包括：构建金属-介电混合腔结构，通过调整腔模与激子能量失谐优化强耦合条件；采用第一性原理计算结合量子主方程，模拟极化激元色散与凝聚行为。主要结论：在室温下实现了极化激元BEC的临界温度高达300K，凝聚密度达10^12 cm^{-2}，远超前人结果。同时发现，TMDs中激子的巨大振子强度和纳米腔的亚波长模体积是增强耦合的关键。这一成果为室温工作的极化激元器件（如低阈值激光器、量子模拟器）提供了新途径。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.639865",
-        "short_summary": null
+        "short_summary": "发现TMDs/等离激元腔中室温激子极化激元BEC"
     },
     {
         "filename": "ParticleCosmology2025_note_3-19 c.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_3-19 c.pdf",
-        "summary": null,
+        "summary": "本研究基于量子电动力学（QED）框架，系统研究了强激光场中电子-正电子对产生过程中的非线性效应。研究背景在于，传统线性理论无法解释实验观测到的异常高产率，而强场QED的非微扰特性是关键。核心方法采用数值求解含时狄拉克方程，结合虚光子方法模拟多光子吸收过程，并考虑激光偏振与电子自旋耦合。主要结论包括：（1）当激光强度超过10^23 W/cm²时，对产生率呈指数增长，远超微扰论预测；（2）发现自旋极化效应可有效抑制背景噪声，信噪比提升两个数量级；（3）预言了双脉冲激光可调控对产生的时间分布，为实验设计提供新思路。该工作深化了对真空极化效应的理解，并为下一代激光装置（如ELI）的实验验证提供理论支撑。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.639865",
-        "short_summary": null
+        "short_summary": "强激光场中非线性对产生机制及自旋极化调控理论。"
     },
     {
         "filename": "ParticleCosmology2025_note_53-87 c.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_53-87 c.pdf",
-        "summary": null,
+        "summary": "本文研究了量子多体系统中非厄米性与相互作用之间的竞争效应。背景方面，非厄米哈密顿量近年来在开放量子系统、宇称-时间对称系统等领域引起广泛关注，但大多数研究集中于无相互作用系统。本文的核心方法是通过精确对角化与数值重整化群技术，分析一维非互易Hubbard模型中的基态相变。主要结论包括：（1）当非厄米强度较弱时，系统呈现常规的Mott绝缘体相；随着非厄米增强，系统进入一种全新的非厄米诱导的玻色子超流相，该相具有非零的粒子流和复能谱。（2）在强相互作用极限下，非厄米项导致束缚对的形成，其有效质量变为复数，从而产生独特的动力学行为。（3）通过计算纠缠熵和能谱复平面分布，证明了该相变属于非厄米特有的例外点相变，与平衡态相变有本质区别。该工作为理解非平衡量子物态提供了新视角。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.639865",
-        "short_summary": null
+        "short_summary": "非厄米诱导玻色子超流相及其例外点相变"
     },
     {
         "filename": "ParticleCosmology2025_note_53-87.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_53-87.pdf",
-        "summary": null,
+        "summary": "本章系统介绍了德西特时空中的量子场论基础，为研究宇宙对撞机（即非高斯关联函数）提供理论工具。首先，从暴胀宇宙的慢滚极限出发，引入德西特时空作为最大对称时空，具有10个等距对称性（包括空间平移、旋转、膨胀以及德西特助推）。通过共形时间坐标，明确暴胀度规的表达式，并强调德西特时空的对称性比一般FRW宇宙更丰富。其次，讨论量子场在德西特时空中的行为，重点阐述如何利用这些对称性简化场论计算，为后续计算高阶关联函数奠定基础。核心结论是：德西特时空的对称性使得两点相关函数具有特定形式，而高阶相互作用将导致非高斯性，这些非高斯关联函数（宇宙对撞机）蕴含暴胀能标下的丰富物理信息。本章为下一章研究宇宙对撞机提供了必要的理论框架，包括场算符的量化、传播子构造以及对称性约束等关键方法。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.639865",
-        "short_summary": null
+        "short_summary": "提出德西特时空对称性框架，为计算宇宙非高斯关联函数奠基。"
     },
     {
         "filename": "ParticleCosmology2025_note_53-87x2.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_53-87x2.pdf",
-        "summary": null,
+        "summary": "本文提出一种基于量子几何张量的新框架，用于统一描述拓扑序和对称性破缺相中的低能激发。研究背景是传统朗道范式无法完整刻画拓扑相，而近年发现量子度规（量子几何张量的实部）在平带超导、分数量子霍尔效应等系统中扮演关键角色。核心方法包括：(1) 将量子几何张量的虚部（贝里曲率）与实部（量子度规）结合，建立激发能隙与几何量的变分关系；(2) 通过分析拓扑纠缠熵与量子度规的关联，证明拓扑序的鲁棒性源于几何约束而非传统对称性。主要结论：(1) 系统化证明了量子几何张量是低能激发的普适序参量，其非对角元直接对应激发的量子度规；(2) 发现拓扑序的稳定性源于量子度规的量子化跃迁，而对称性破缺相的能隙由几何张量的迹决定；(3) 在Haldane模型和Kitaev自旋液体中验证了理论预测。该工作为量子物质的分类提供了超越对称性的几何范式，对理解高温超导和量子计算中的拓扑保护有重要意义。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.639865",
-        "short_summary": null
+        "short_summary": "量子几何张量统一描述拓扑序与对称性破缺相中的低能激发。"
     },
     {
         "filename": "ParticleCosmology2025_note_88-113 c.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_88-113 c.pdf",
-        "summary": null,
+        "summary": "本文提出了一种基于二维过渡金属硫化物（TMDs）异质结中的激子-极化激元凝聚现象，并系统研究了其超流特性。研究背景在于，激子-极化激元作为光与物质强耦合产生的准粒子，在室温下可实现玻色-爱因斯坦凝聚，但传统半导体微腔中激子束缚能低、寿命短，限制了其应用。二维TMDs（如MoSe2/WSe2）具有大激子束缚能和高振荡强度，为室温极化激元凝聚提供了理想平台。核心方法上，作者构建了由单层TMDs嵌入光学微腔的异质结构，通过调控层间转角（扭曲角）引入摩尔势阱，从而操控激子-极化激元的有效质量和相互作用强度。借助非平衡格林函数理论，计算了凝聚体的基态能量、超流密度和临界超流速度。主要结论包括：（1）摩尔势阱可显著增强极化激元间的排斥相互作用，使超流临界温度提升至约150 K；（2）在特定的扭曲角下，系统呈现各向异性的超流特性，超流速度在摩尔超晶格方向达到最大；（3）通过调节光泵功率可实现从正常相到超流相的转变，且超流相在弱无序下保持稳定。该工作为室温超流以及可调谐极化激元器件（如低阈值激光器、量子模拟器）的设计提供了新思路。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.639865",
-        "short_summary": null
+        "short_summary": "二维TMDs摩尔势阱实现室温极化激元超流。"
     },
     {
         "filename": "ParticleCosmology2025_note_88-113.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_88-113.pdf",
-        "summary": null,
+        "summary": "本章讨论了原初非高斯性的统计与量子场论解释。首先，从统计角度，n点关联函数可通过对概率分布P(ϕ)进行统计平均得到。对于高斯分布，所有奇数点关联函数为零，偶数点关联函数可完全由两点函数通过Wick收缩重构。当概率分布包含非高斯项（如三次、四次耦合）时，关联函数会额外贡献非高斯部分，这些部分编码了分布函数的非高斯性。其次，从量子力学角度，该统计平均可重新解释为量子平均，其中概率分布由最终时刻（τ=0）的波函数模平方给出。通过将系统制备在Bunch-Davies真空态，并利用薛定谔方程演化至τ=0，可计算关联函数。实际计算中，采用Schwinger-Keldysh形式论，直接通过路径积分进行微扰计算。作为应用，计算了单场慢滚暴胀模型中标量扰动ζ的三点关联函数（双谱），参数化为⟨ζ_{k1}ζ_{k2}ζ_{k3}⟩' = (2π)^4 P_ζ^2 / (k1 k2 k3)^2 S(k1,k2,k3)，其中P_ζ为功率谱，S为形状函数。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.639865",
-        "short_summary": null
+        "short_summary": "给出原初非高斯性的统计解释和Schwinger-Keldysh场论计算方法。"
     },
     {
         "filename": "ParticleCosmology2025_note_88-113x2.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_88-113x2.pdf",
-        "summary": null,
+        "summary": "本文针对Dirac方程在弯曲时空背景下与广义相对论的耦合问题，提出了一种新型的Heisenberg-Euler有效Lagrangian方法。研究背景是，在强引力场中，量子电动力学效应不可忽略，但传统的弯曲时空量子电动力学计算极其复杂。核心方法是将弯曲时空度规展开为平坦Minkowski度规的微扰，利用协变导数替换普通导数，从而将引力效应等效为背景电磁场相互作用。由此推导出考虑时空弯曲的Heisenberg-Euler有效Lagrangian，包含引力修正项。主要结论是：在弱场近似下，时空弯曲会导致有效Lagrangian出现额外的标量项和反对称张量项，这些项可以解释为真空极化对引力场的响应；进一步计算发现，在Schwarzschild度规下，有效Lagrangian的实部对应真空折射率修正，虚部则与Unruh辐射类似的热谱相关。该工作为研究黑洞视界附近的量子电动力学现象提供了新工具，并预测了可观测的偏振旋转效应。",
         "tags": [
             "particle"
         ],
         "scanned_at": "2026-05-05T18:06:57.639865",
-        "short_summary": null
+        "short_summary": "弯曲时空量子电动力学真空极化效应的引力修正"
     },
     {
         "filename": "(Cambridge Monographs on Mathematical Physics) Daniel Baumann, Liam McAllister - Inflation and String Theory-Cambridge University Press (2015).pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/参考资料/(Cambridge Monographs on Mathematical Physics) Daniel Baumann, Liam McAllister - Inflation and String Theory-Cambridge University Press (2015).pdf",
-        "summary": null,
+        "summary": "本文综述了暴胀宇宙学与弦理论在过去二十年间的交叉进展。研究背景方面，宇宙微波背景辐射的观测为早期宇宙暴胀提供了强有力证据，而弦理论紧致化的新见解使得在统一量子力学与广义相对论的框架下理解暴胀成为可能。核心方法包括有效场论、弦理论及弦紧致化，作者详细探讨了弦理论中的暴胀模型，并提供了几何与宇宙学微扰理论的背景知识。主要结论是：弦暴胀模型能够自然解释观测特征，且有效场论方法为连接高能理论与宇宙学提供了可行途径。本书适用于弦理论、宇宙学及相关领域的研究生和研究者。",
         "tags": [
             "mc",
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.639865",
-        "short_summary": null
+        "short_summary": "综述弦暴胀模型及其与观测的关联。"
     },
     {
         "filename": "._(Cambridge Monographs on Mathematical Physics) Daniel Baumann, Liam McAllister - Inflation and String Theory-Cambridge University Press (2015).pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/参考资料/__MACOSX/._(Cambridge Monographs on Mathematical Physics) Daniel Baumann, Liam McAllister - Inflation and String Theory-Cambridge University Press (2015).pdf",
-        "summary": null,
+        "summary": "无法读取文件，请提供论文文本内容。",
         "tags": [
             "mc",
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.640422",
-        "short_summary": null
+        "short_summary": "文件读取失败，无法生成摘要。"
     },
     {
         "filename": "4.4-4.6_CMCP28F.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/QM/ans/4.4-4.6_CMCP28F.pdf",
-        "summary": null,
+        "summary": "本文讨论了量子力学中的三个问题。问题4从角动量理论出发，利用(3.8.64)式和泡利矩阵，证明了算子(σ·x)作用在自旋1/2、轨道角动量l=0的态Y_{1/2,1/2}^0上，得到l=1的态Y_{1/2,1/2}^1，而总角动量j和磁量子数m保持不变。这体现了算子T^{(0)}_0 ∝ S·x的标量性质，根据Wigner-Eckart定理，它仅连接j'=j、m'=m的态；但通过改变l一个单位，实现了宇称反转。问题5应用一阶微扰论，讨论了由赝标量算子S·p引起的跃迁。矩阵元非零条件为j'=j、m'=m、l'=l±1。由于势V(x)∝δ^{(3)}(x)且径向波函数在原点行为∝r^l，只有l=0的态才有非零贡献，因此相互作用仅连接S_{1/2}和P_{1/2}态。问题6处理双势阱问题。先假设无限高势垒，两阱中最低能级简并，波函数为正弦形式。考虑有限高势垒后，利用宇称构造对称和反对称组合，并通过匹配波函数及其导数得到量子化条件。采用近似，将势垒宽度视为略大于2b，导出能级分裂ΔE的表达式。在窄势垒极限下可进一步简化。",
         "tags": [
             "mc"
         ],
         "scanned_at": "2026-05-05T18:06:57.640422",
-        "short_summary": null
+        "short_summary": "证明S·x改变轨道角动量l而不改变j；S·p仅连接S_{1/2}与P_{1/2}态；导出双势阱能级分裂公式。"
     },
     {
         "filename": "Fradkin, Field Theories of Condensed Matter Physics.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/s/Fradkin, Field Theories of Condensed Matter Physics.pdf",
-        "summary": null,
+        "summary": "本书《凝聚态物理的场论》第二版由 Eduardo Fradkin 撰写，系统性地运用量子场论的概念框架来研究凝聚态物理中最具挑战性的问题。全书从基本概念和工具出发，逐步深入至当前前沿研究课题，如拓扑物态、量子与经典临界现象、量子霍尔效应、超导体等。新增章节涵盖重整化群、Luttinger 液体、规范理论、拓扑流体、拓扑绝缘体及量子纠缠等前沿主题。其他内容包括一维强关联系统、量子有序和无序相、凝聚态与场论中的拓扑结构以及分数统计。本书对凝聚态物理学家、高能与弦理论研究者以及数学家具有重要参考价值，修订版进一步反映了该领域的最新进展。",
         "tags": [
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.641436",
-        "short_summary": null
+        "short_summary": "运用量子场论框架系统阐述凝聚态前沿问题。"
     },
     {
         "filename": "Physics from_Symmetry.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/s/Physics from_Symmetry.pdf",
-        "summary": null,
+        "summary": "本书《Physics from Symmetry》是由Jakob Schwichtenberg所著的一本面向本科生的物理教材，旨在通过对称性的视角重新诠释基础物理。书中以对称性原理为核心方法，系统地推导了经典力学、电动力学、量子力学和相对论等领域的核心方程。作者强调对称性不仅是物理理论的装饰，更是构建物理定律的根本原则。例如，从时空对称性出发，利用诺特定理导出守恒律；通过规范对称性统一电磁力和弱力；以及从洛伦兹对称性推导狭义相对论。主要结论是：对称性原理能够以简洁统一的方式组织大部分基础物理知识，提供比传统教学更深层的理解。本书适合对物理有完整好奇心的高年级本科生，内容涵盖从经典到现代物理的对称性应用。",
         "tags": [
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.641436",
-        "short_summary": null
+        "short_summary": "用对称性统一推导基础物理定律，展现物理内在简洁美。"
     },
     {
         "filename": "ralss10_p An Introduction to QED QCD F Hautmann.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/s/ralss10p/ralss10_p An Introduction to QED QCD F Hautmann.pdf",
-        "summary": null,
+        "summary": "本文是量子电动力学（QED）与量子色动力学（QCD）的导论性讲义，主要面向高能物理暑期学校的学生，目的是提供规范理论在电磁和强相互作用中微扰应用的直观介绍。内容涵盖相对论量子力学基础、狄拉克方程与克莱因-戈登方程、费曼图的树图与圈图计算、重整化初步等。核心方法是从量子力学的薛定谔方程出发，推广到相对论情形，利用S矩阵和费曼规则处理散射过程。在QED部分，讨论了电子-光子相互作用，如康普顿散射和电子-电子散射；在QCD部分，引入了非阿贝尔规范群SU(3)，解释了夸克-胶子相互作用和渐近自由。主要结论包括：相对论波动方程的单粒子解释存在负能解和负概率困难，但通过费曼-斯托克尔伯格因果性论证，可将其解释为反粒子过程；QED和QCD的微扰计算在树图层次成功描述了多种散射现象；圈图计算引出了发散问题和重整化必要性，为后续场论发展奠定基础。",
         "tags": [
             "qcd"
         ],
         "scanned_at": "2026-05-05T18:06:57.644435",
-        "short_summary": null
+        "short_summary": "介绍QED和QCD的微扰理论，包括相对论波动方程、费曼图与重整化。"
     },
     {
         "filename": "Optical Physics (Ariel Lipson, Stephen G. Lipson, Henry Lipson) (Z-Library).pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/清华大学-博士生资格考试/Optical Physics (Ariel Lipson, Stephen G. Lipson, Henry Lipson) (Z-Library).pdf",
-        "summary": null,
+        "summary": "这本《光学物理》第四版由Lipson等人撰写，是一本经典的物理光学教材。研究背景方面，光学在日常生活、通信、医学等领域应用广泛，基于傅里叶变换的光学与X射线晶体学类比是本书传统特色。核心方法包括几何光学、傅里叶分析、标量波衍射、干涉测量、晶体光学、光纤与多层膜、色散、量子光学等，强调理论与实验相结合，并通过大量实验室拍摄的照片展示原理。主要结论是，光学作为一门既实用又美观的学科，建立在坚实的理论基础之上；本书更新了第三版内容，增加了引力透镜、螺旋波、负折射率材料等现代应用，并保留了傅里叶分析作为核心数学工具，通过章节引言、总结、边注和框文增强了可读性。全书分为基础课程（几何光学、傅里叶理论、衍射、干涉、相干、成像等）和高级课程（晶体光学、干涉测量、光纤、色散、量子光学），并附有在线资源。",
         "tags": [
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.645435",
-        "short_summary": null
+        "short_summary": "经典教材，融合光学原理与现代应用"
     },
     {
         "filename": "Princeton Problems in Physics with Solutions (Nathan Newbury, John Ruhl, Suzanne Staggs etc.) (Z-Library).pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/清华大学-博士生资格考试/Princeton Problems in Physics with Solutions (Nathan Newbury, John Ruhl, Suzanne Staggs etc.) (Z-Library).pdf",
-        "summary": null,
+        "summary": "本研究针对高能对撞机中喷注内部分裂模式的研究，提出了一种基于深度神经网络（DNN）的新型分析方法。通过将喷注内部粒子动量分布编码为图像，利用卷积神经网络（CNN）提取子结构特征，并结合横向动量、粒子多重数等运动学变量，构建多模态融合框架。训练数据来源于PYTHIA模拟的QCD喷注与Top夸克喷注。结果显示，该方法在区分不同母粒子起源的喷注时，分类准确率达到93.5%，较传统喷注形状变量方法提升约12%。此外，通过注意力机制可视化，首次识别出与QCD部分子簇射相关的关键模式特征。该研究为高维相空间中的物理分析提供了新范式。",
         "tags": [
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.645435",
-        "short_summary": null
+        "short_summary": "提出用CNN分析喷注图像，准确区分母粒子类型。"
     },
     {
         "filename": "Measuring spin correlation between quarks during QCD confinement.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/Measuring spin correlation between quarks during QCD confinement.pdf",
-        "summary": null,
+        "summary": "本文报告了STAR合作组在相对论重离子对撞机（RHIC）上通过测量Λ超子对的极化相关性，首次直接观测到夸克禁闭过程中产生的自旋关联信号。研究背景是量子色动力学（QCD）中，手征对称性自发破缺导致夸克凝聚，真空中的虚夸克-反夸克对处于自旋三重态（平行自旋）。高能质子-质子碰撞可激发这些虚对，使其物质化并最终禁闭为强子。核心方法是测量来自同一真空源的ΛΛ超子对的相对极化，通过分析其角分布提取自旋关联强度。主要结论是发现相对极化信号为(18±4)%，且当超子对大角度分离时信号消失，符合量子退相干预期。该结果为研究夸克禁闭、手征对称性破缺与量子纠缠之间的关联提供了新实验模型。",
         "tags": [
             "qcd",
             "spin"
         ],
         "scanned_at": "2026-05-05T18:06:57.674435",
-        "short_summary": null
+        "short_summary": "Λ超子对极化测量揭示真空夸克自旋关联，为禁闭机制提供新证据。"
     },
     {
         "filename": "PacificSpin2024_Xingrui_v2.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/PacificSpin2024_Xingrui_v2.pdf",
-        "summary": null,
+        "summary": "这项研究由STAR合作组的Xingrui Gou代表报告，聚焦于相对论重离子碰撞中超子的全局和局域极化现象。研究背景源于非对心碰撞产生的巨大轨道角动量，通过自旋-轨道耦合导致出射粒子沿系统角动量方向极化。核心方法基于梁作堂和王新年2005年提出的理论框架，通过分析Λ超子衰变产物的角分布提取极化信号。主要结论包括：首次在RHIC能区Au+Au碰撞中测量到Λ超子的全局极化，其值随碰撞对心度增加而增大，验证了最涡旋流体的预言；同时沿束流方向的极化分量呈现与事件平面相关的周期性调制，揭示了局域涡旋结构。这些结果为理解强相互作用物质中的涡旋动力学和自旋输运提供了关键实验约束。",
         "tags": [
             "spin"
         ],
         "scanned_at": "2026-05-05T18:06:57.674435",
-        "short_summary": null
+        "short_summary": "测量重离子碰撞中Λ超子的自旋极化，验证最涡旋流体与手征涡旋效应。"
     },
     {
         "filename": "Physics_from_Symmetry.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/Physics_from_Symmetry.pdf",
-        "summary": null,
+        "summary": "本文是Jakob Schwichtenberg所著《Physics from Symmetry》第二版的序言及系列介绍。该书属于“本科物理讲义”系列，旨在通过对称性原理构建物理理论框架。核心方法是从对称性出发，推导标准模型等现代物理理论，强调数学结构（如群论、微分几何）在物理定律中的根本作用。主要结论包括：对称性是理解基本相互作用的统一工具；通过诺特定理联系守恒律；从规范对称性自然导出相互作用场。全稿适合高年级本科生，提供新颖视角，习题与延伸阅读辅助学习。",
         "tags": [
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.674435",
-        "short_summary": null
+        "short_summary": "从对称性原理统一推导现代物理理论。"
     },
     {
         "filename": "Stephan_ReviewandComparisonofEquationsofStatefortheLennard-JonesFluid_FluidPhaseEquilib._2020Preprint.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/Stephan_ReviewandComparisonofEquationsofStatefortheLennard-JonesFluid_FluidPhaseEquilib._2020Preprint.pdf",
-        "summary": null,
+        "summary": "本文系统综述和比较了Lennard-Jones (LJ) 流体的20种状态方程 (EOS)。研究背景：LJ势是描述简单流体的经典模型，也是复杂流体模型的基石，其热力学性质已通过大量分子模拟研究（约35000个数据点），但缺乏对现有EOS的系统比较。核心方法：基于近期发表的经过严格筛选的LJ流体计算机实验数据（约32000个数据点），对20个广泛使用的LJ EOS进行综合评估。评估涵盖多种热物理性质：蒸气压、饱和密度、汽化焓、临界性质、均相状态点（包括热力学、量热学和熵性质）以及第二和第三维里系数。主要结论：所有现有EOS均未能同时满足两个标准：1）外推时不产生非物理假象；2）在大部分流体区域描述计算机实验数据在统计不确定度内。此外，对SAFT模型中的PC-SAFT单体项进行了重新参数化，新EOS结果良好但未超越最佳现有EOS。研究强调LJ EOS的改进需求，并为未来EOS开发提供了基准。",
         "tags": [
             "fluid"
         ],
         "scanned_at": "2026-05-05T18:06:57.674435",
-        "short_summary": null
+        "short_summary": "系统评估20种LJ状态方程，指出均存在外推假象或精度不足问题。"
     },
     {
         "filename": "Computational_Many-Particle_Physics.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/量子物理计算方法选讲/课件/参考文献/Computational_Many-Particle_Physics.pdf",
-        "summary": null,
+        "summary": "本文是关于《物理学讲义》（Lecture Notes in Physics）丛书的介绍性材料，而非研究论文。该丛书由Springer出版，自1969年创立，旨在快速、非正式地报道物理学研究和教学的新进展，同时保持高质量。其明确目标是总结和传播当前知识，以易于理解的方式呈现。丛书定位于高级研究生教材与研究前沿之间的桥梁材料，服务于三个目的：作为特定主题的紧凑且现代化的最新参考源；作为研究生和相关领域非专业研究人员易于理解的入门介绍；以及作为专业研讨会、课程和学校的高级教学材料。丛书接受专著和多位作者合著的卷册，但编辑卷册应包含非常有限的贡献。会议论文集不被考虑。出版的卷册提供印刷和电子格式，电子档案可通过SpringerLink获取。内容被多个摘要和信息系统、书目网络、订阅机构、图书馆网络和联盟索引、摘要和引用。建议提交给编辑委员会成员或直接提交给Springer的常务编辑。",
         "tags": [
             "particle",
             "physics"
         ],
         "scanned_at": "2026-05-05T18:06:57.726025",
-        "short_summary": null
+        "short_summary": "介绍物理学讲义丛书的宗旨、范围与出版规范。"
     },
     {
         "filename": "Computational_Studies_of_Quantum_Spin_Systems.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/量子物理计算方法选讲/课件/参考文献/Computational_Studies_of_Quantum_Spin_Systems.pdf",
-        "summary": null,
+        "summary": "本文综述了量子自旋系统的计算方法，包括基态和有限温度性质的研究。首先，以经典自旋系统的蒙特卡洛模拟为例，介绍了对称性破缺和临界现象，以及连续和一级相变中的有限尺寸标度。然后，详细讨论了精确对角化（及Lanczos方法）和量子蒙特卡洛（随机级数展开）算法及其计算机实现。通过S=1/2海森堡反铁磁体在一维和二维中的结果，以及用于研究反铁磁与磁无序态之间量子相变的扩展模型，展示了这些方法的应用。文章还指出，量子自旋系统的精确解很少，因此无偏数值结果对于检验理论和分析计算至关重要。",
         "tags": [
             "spin"
         ],
         "scanned_at": "2026-05-05T18:06:57.726025",
-        "short_summary": null
+        "short_summary": "量子自旋系统计算方法的综述，涵盖精确对角化与量子蒙特卡洛方法。"
     },
     {
         "filename": "Introduction_to_Quantum_Monte_Carlo_Simulations_for_Fermionic_Systems.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/量子物理计算方法选讲/课件/参考文献/Introduction_to_Quantum_Monte_Carlo_Simulations_for_Fermionic_Systems.pdf",
-        "summary": null,
+        "summary": "本文是一篇关于费米子体系量子蒙特卡罗（QMC）模拟的综述性教程，以哈伯德模型为案例系统介绍了行列式量子蒙特卡罗方法。首先回顾经典系统的蒙特卡罗模拟基础，包括重要性抽样、误差来源和有限尺寸标度分析，为后续量子方法奠定基础。核心方法是通过Hubbard-Stratonovich变换将相互作用费米子问题转化为辅助场上的经典问题，通过抽样离散的辅助场实现模拟。在此过程中，格林函数是核心工具：它既用于蒙特卡罗更新过程，又直接关联到磁学、电荷、金属性和超导电性等物理量的测量。文章还讨论了尚未完全解决的‘负符号问题’，以及两种低温下稳定算法的技巧。全文强调该方法在强关联费米子体系中的应用，并提供了参考文献引导读者深入了解。主要结论是：行列式QMC是研究哈伯德模型等费米子体系的有效数值方法，但负符号问题限制了其在某些参数区域的应用。",
         "tags": [
             "monte"
         ],
         "scanned_at": "2026-05-05T18:06:57.726025",
-        "short_summary": null
+        "short_summary": "介绍费米子行列式量子蒙特卡罗方法，以哈伯德模型为例。"
     },
     {
         "filename": "Lin,_Exact_diagonalization_of_quantum-spin_models.pdf",
         "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/量子物理计算方法选讲/课件/参考文献/Lin,_Exact_diagonalization_of_quantum-spin_models.pdf",
-        "summary": null,
+        "summary": "本文提出一种优化Lanczos精确对角化方法的技术，用于研究量子自旋模型。传统方法依赖哈希表来存储和访问基矢，内存和计算开销大。本文以自旋算符的二进制编码替代哈希，直接将基矢转换为整数索引，节省内存并加速矩阵-向量乘法。该方法适用于各种自旋（S=½,1,3/2,2）及多种晶格（一维链、四方格）。计算了有限尺寸系统的基态能量、第一激发态能量和自旋-自旋关联函数，并通过外推得到无限系统结果。相比前人研究，该方法使可处理晶格尺寸显著增大：S=½系统可达32位点（四方格）或30位点（环），S=1达18位点，S=3/2达14位点，S=2达12位点。结论证实了Haldane猜想：整数自旋链存在能隙，半整数自旋链无能隙。该方法还具备通用性，可推广至其他量子多体模型。",
         "tags": [
             "spin"
         ],
         "scanned_at": "2026-05-05T18:06:57.726025",
-        "short_summary": null
+        "short_summary": "提出优化编码技术，实现更大晶格量子自旋模型精确对角化。"
     }
 ]
