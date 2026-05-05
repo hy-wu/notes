@@ -3,9 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 /**
- * BAMPS GPU Implementation - "Ancient" Hybrid Edition (Wall Collision & Distribution)
+ * BAMPS GPU Implementation - "Ancient" Hybrid Edition (Logging & Long Run)
  */
 
 #define PI 3.14159265358979323846f
@@ -38,7 +39,6 @@ __global__ void init_particles_kernel(float4* pos, float4* mom, int* is_alive, c
     }
 }
 
-// 1. Position Update with Wall Reflection and Momentum Tracking
 __global__ void update_pos_wall_kernel(
     float4* pos, float4* mom, int* is_alive,
     int* grid_indices, int* grid_counts, double* d_wall_mom,
@@ -53,18 +53,14 @@ __global__ void update_pos_wall_kernel(
     float half = box_size / 2.0f;
     double dp = 0;
     
-    // Hard Wall Reflection (X, Y, Z)
     if (p.x > half) { dp += 2.0 * fabs(m.x); p.x = 2*half - p.x; m.x = -m.x; }
     else if (p.x < -half) { dp += 2.0 * fabs(m.x); p.x = -2*half - p.x; m.x = -m.x; }
-    
     if (p.y > half) { dp += 2.0 * fabs(m.y); p.y = 2*half - p.y; m.y = -m.y; }
     else if (p.y < -half) { dp += 2.0 * fabs(m.y); p.y = -2*half - p.y; m.y = -m.y; }
-    
     if (p.z > half) { dp += 2.0 * fabs(m.z); p.z = 2*half - p.z; m.z = -m.z; }
     else if (p.z < -half) { dp += 2.0 * fabs(m.z); p.z = -2*half - p.z; m.z = -m.z; }
 
     if (dp > 0) atomicAdd(d_wall_mom, dp);
-    
     pos[idx] = p; mom[idx] = m;
 
     int ix = (int)((p.x + half) / box_size * (float)IX);
@@ -72,7 +68,6 @@ __global__ void update_pos_wall_kernel(
     int iz = (int)((p.z + half) / box_size * (float)IX);
     ix = max(0, min(ix, IX - 1)); iy = max(0, min(iy, IX - 1)); iz = max(0, min(iz, IX - 1));
     int cell_id = ix + IX * iy + IX * IX * iz;
-
     int offset = atomicAdd(&grid_counts[cell_id], 1);
     if (offset < MAX_PARTICLES_PER_CELL) grid_indices[cell_id * MAX_PARTICLES_PER_CELL + offset] = idx;
 }
@@ -145,7 +140,7 @@ public:
         cudaMalloc(&d_is_alive, max_slots * sizeof(int)); cudaMalloc(&d_grid_indices, num_cells * MAX_PARTICLES_PER_CELL * sizeof(int));
         cudaMalloc(&d_grid_counts, num_cells * sizeof(int)); cudaMalloc(&d_stats, 10 * sizeof(double));
         cudaMalloc(&d_wall_mom, sizeof(double)); cudaMalloc(&d_rand_states, (num_cells + n) * sizeof(curandState));
-        init_rand_kernel<<<((num_cells + n) + 255)/256, 256>>>(d_rand_states, 1234ULL, num_cells + n);
+        init_rand_kernel<<<((num_cells + n) + 255)/256, 256>>>(d_rand_states, (unsigned long)time(NULL), num_cells + n);
         cudaMemset(d_is_alive, 0, max_slots * sizeof(int));
         init_particles_kernel<<<(n + 255)/256, 256>>>(d_pos, d_mom, d_is_alive, d_rand_states + num_cells, n, box_size);
     }
@@ -161,37 +156,47 @@ public:
         diagnostics_kernel<<<(max_slots+255)/256, 256>>>(d_mom, d_is_alive, d_stats, max_slots);
         cudaMemcpy(h_stats, d_stats, 10 * sizeof(double), cudaMemcpyDeviceToHost);
         cudaMemcpy(h_wall, d_wall_mom, sizeof(double), cudaMemcpyDeviceToHost);
-        cudaMemset(d_wall_mom, 0, sizeof(double)); // Reset wall momentum after read
+        cudaMemset(d_wall_mom, 0, sizeof(double));
     }
 };
 
 int main() {
     int N = 100000; float box_size = 10.0f;
     BAMPS_Ancient sim(N, box_size, 10);
-    FILE* logf = fopen("physics_log.txt", "w");
-    fprintf(logf, "Step Time Temp Pressure_Wall Energy Count\n");
+    
+    // Logging Setup
+    time_t now = time(0);
+    char* timestamp = ctime(&now);
+    FILE* logf = fopen("physics_master.log", "a");
+    fprintf(logf, "\n# --- RUN START: %s", timestamp);
+    fprintf(logf, "# Step Time Temp Pressure_Wall Energy Count\n");
+    
+    // Overwrite short log for visualization
+    FILE* short_log = fopen("physics_log.txt", "w");
+    fprintf(short_log, "Step Time Temp Pressure_Wall Energy Count\n");
 
-    printf("Starting Direct-Pressure Validation (100k particles)...\n");
-    for(int i=0; i<300; i++) {
+    int total_steps = 2000;
+    printf("Starting Long Validation Run (%d steps, 100k particles)...\n", total_steps);
+    for(int i=0; i<=total_steps; i++) {
         sim.evolve();
-        if(i % 10 == 0) {
+        if(i % 20 == 0) {
             double stats[10], wall_mom; sim.get_diagnostics(stats, &wall_mom);
             double Area = 6.0 * box_size * box_size;
-            double P_wall = wall_mom / (0.1 * Area); // P = DeltaP / (DeltaT * Area) over 10 steps
+            double P_wall = wall_mom / (0.2 * Area); // Avg over 20 steps
             double T = stats[0] / (3.0 * stats[1]);
             fprintf(logf, "%d %f %f %f %f %f\n", i, i*0.01, T, P_wall, stats[0], stats[1]);
-            if(i % 100 == 0) printf("Step %d: T=%.4f, P_wall=%.4f\n", i, T, P_wall);
+            fprintf(short_log, "%d %f %f %f %f %f\n", i, i*0.01, T, P_wall, stats[0], stats[1]);
+            if(i % 500 == 0) printf("Step %d/%d: T=%.4f, P_wall=%.4f\n", i, total_steps, T, P_wall);
         }
     }
-    fclose(logf);
+    fclose(logf); fclose(short_log);
 
-    // Save final energies for distribution analysis
     float4* h_mom = new float4[sim.max_slots]; int* h_alive = new int[sim.max_slots];
     cudaMemcpy(h_mom, sim.d_mom, sim.max_slots * sizeof(float4), cudaMemcpyDeviceToHost);
     cudaMemcpy(h_alive, sim.d_is_alive, sim.max_slots * sizeof(int), cudaMemcpyDeviceToHost);
     FILE* ef = fopen("energies.txt", "w");
     for(int i=0; i<sim.max_slots; i++) if(h_alive[i]==1) fprintf(ef, "%f\n", h_mom[i].w);
     fclose(ef);
-    printf("Validation data saved.\n");
+    printf("Run complete. Check physics_master.log and energy plots.\n");
     return 0;
 }
