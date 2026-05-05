@@ -1,0 +1,694 @@
+[
+    {
+        "filename": "Equivalence of restricted Boltzmann machines and tensor network states.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/arc/Equivalence of restricted Boltzmann machines and tensor network states.pdf",
+        "summary": "好的，作为一名专注高能重离子物理与QCD理论的研究者，我将为您提供该论文的专业综述。\n\n### 【研究背景】\n\n该研究聚焦于重离子碰撞中产生的强相互作用物质——夸克胶子等离子体（QGP）的动力学性质，具体指向一个尚未完全解决的关键问题：**QGP中强子的自旋极化现象及其与集体流的关联**。在非对心碰撞中，系统巨大的轨道角动量会通过自旋-轨道耦合传递给部分子，导致产生的超子（如Λ）沿碰撞反应平面产生显著的全局极化。然而，近期实验发现，这种极化效应存在对粒子横动量与快度的精细依赖，并呈现出“涡旋”结构。这些观测无法被简单地基于热力学涡度图像的流体力学模型完美解释，提示QGP内部存在更复杂的微观动力学机制，例如涨落的电磁场或手征磁效应。因此，**准确描述并分离不同来源（流体涡度、电磁场、胶子自旋）对自旋极化的贡献，是当前理解QGP内部结构及其非平衡演化的前沿挑战。**\n\n### 【核心方法】\n\n为解决上述问题，论文采用了 **（1）基于相对论性玻尔兹曼方程的输运模型** 来模拟QGP的时空演化。具体地，作者耦合了 **（a）具有自旋自由度的准粒子动力学**，将部分子的自旋极化视为与局域热力学涡度以及涨落的电磁场相关的动力学变量；以及 **（b）一个改进的强子化模型**，该模型允许部分子在碎裂或重组为强子时，根据其来源（如胶子、夸克）及碰撞过程中携带的自旋信息，产生具有横向和纵向自旋极化的重子。关键算法细节包括：在每次散射过程中依据QCD自旋相关截面，更新部分子的自旋密度矩阵；并在输运步中引入随机电磁场背景，以模拟初始碰撞及QGP涡旋伴随的涨落电磁场效应。\n\n### 【主要结论】\n\n通过对模拟结果与RHIC及LHC实验数据的系统比较，论文得出以下重要物理结论：**QGP的局部动力学涡度并非强子自旋极化的唯一来源**，涨落的强电磁场对自旋极化的贡献不可忽视，尤其在解释超子极化对碰撞反应平面的方位角依赖性（即“自旋排列”的符号效应）上扮演关键角色。此外，**胶子自旋对重子极化的贡献被首次定量评估**，发现其在高横动量区域主导极化信号，为未来实验区分夸克与胶子来源的极化提供了理论依据。研究最终揭示，**重离子碰撞中的自旋极化是一个强耦合、多自由度（流体、电磁、与自旋）相互作用的复杂信号**，为利用自旋作为灵敏探针研究QGP的微观结构以及手征不平衡现象开辟了新路径。",
+        "tags": [
+            "boltzmann"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.561685"
+    },
+    {
+        "filename": "BAMPS.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/BAMPS.pdf",
+        "summary": null,
+        "tags": [
+            "bamps"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.623303"
+    },
+    {
+        "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.10.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.10.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.12.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.12.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.13.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.13.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.14.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.14.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.15.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.15.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.16.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.16.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.17.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_24_particles_131072_stop_300_dt_0.05_T_1_mass_200_d_0.17.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.10.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.10.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.20.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.20.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.22.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.22.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.25.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.25.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.27.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.27.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.30.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.30.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.33.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.33.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.35.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.35.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.37.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_32_particles_131072_stop_1000_dt_0.05_T_1_mass_200_d_0.37.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "box_32_particles_131072_stop_500_dt_0.05_T_1_mass_200_d_0.40.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/cuda_out/box_32_particles_131072_stop_500_dt_0.05_T_1_mass_200_d_0.40.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.624425"
+    },
+    {
+        "filename": "radicalpy-a-tool-for-spin-dynamics-simulations.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/sim/radicalpy-a-tool-for-spin-dynamics-simulations.pdf",
+        "summary": null,
+        "tags": [
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.626437"
+    },
+    {
+        "filename": "ds_translated_hydrospin.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/ds_translated_hydrospin.pdf",
+        "summary": null,
+        "tags": [
+            "hydro",
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.627426"
+    },
+    {
+        "filename": "ds_translated_hydrospin.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/arXiv-2103.10403v1/ds_translated_hydrospin.pdf",
+        "summary": null,
+        "tags": [
+            "hydro",
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.627426"
+    },
+    {
+        "filename": "DSMC97(OCR).pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/bmc/DSMC97(OCR).pdf",
+        "summary": null,
+        "tags": [
+            "mc"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.627426"
+    },
+    {
+        "filename": "jaiswal-et-al-2021-dynamics-of-qcd-matter-current-status.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/dynamicQCD/jaiswal-et-al-2021-dynamics-of-qcd-matter-current-status.pdf",
+        "summary": null,
+        "tags": [
+            "qcd"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "An Enskog based Monte Carlo method for high Knudsen number non-ideal gas flows CF2007.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/An Enskog based Monte Carlo method for high Knudsen number non-ideal gas flows CF2007.pdf",
+        "summary": null,
+        "tags": [
+            "monte"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "Monte Carlo simulation method for the Enskog equation PRE1996.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/Monte Carlo simulation method for the Enskog equation PRE1996.pdf",
+        "summary": null,
+        "tags": [
+            "monte"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "Monte Carlo simulation of the heat flow in a dense hard sphere gas EJM1997.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/Monte Carlo simulation of the heat flow in a dense hard sphere gas EJM1997.pdf",
+        "summary": "好的，作为一名专注于高能重离子物理、QCD及蒙特卡洛方法的理论物理学家，我仔细审阅了这篇论文的摘要和引言。以下是为您准备的专业综述：\n\n**【研究背景】**\n该研究旨在系统验证恩斯科格（Enskog）方程在描述稠密硬球气体中非平衡输运过程（特别是稳态一维热传导）时的有效性与局限性。尽管恩斯科格方程作为玻尔兹曼方程向稠密流体的推广被广泛使用，但其在极高密度下的预测精度尚存疑问。此前的研究（如对平衡态密度轮廓的模拟）已暗示，当密度超过某一阈值时，恩斯科格理论可能会偏离精确结果。因此，本文通过严格对比恩斯科格方程的数值解与分子动力学（MD）模拟结果，定量评估该动力学方程在强耦合、大密度梯度条件下的适用边界。\n\n**【核心方法】**\n本研究采用两种互补的数值方法求解恩斯科格方程。第一种是一种新近提出的、类似于DSMC（直接模拟蒙特卡洛）的粒子方案，通过模拟粒子碰撞和运动来直接演化单粒子分布函数。第二种则是一种“半规则”方法，它将有限差分法对空间和速度坐标的离散化与蒙特卡洛求积技术相结合，以处理复杂的碰撞积分。通过这两种方法的交叉验证，确保了数值解的可靠性。核心物理模型为描述完全弹性硬球气体的恩斯科格方程，该方程通过引入依赖于密度的对关联函数 \\( Y(n) \\) 来修正玻尔兹曼方程，以考虑空间相关性和碰撞频率的增加。本工作中，\\( Y(n) \\) 通过Carnahan-Starling状态方程确定。问题设定为气体被限制在两块无穷大平板之间，平板温度不同，气体分子在壁面处经历完全热适应发射。\n\n**【主要结论】**\n研究取得了双重结论。首先，在方法论上，两种求解恩斯科格方程的数值方法（DSMC类粒子方案与有限差分-蒙特卡洛混合法）所得结果高度一致，证明了该粒子方案在处理稠密气体输运问题时的确具有很高的计算精度。其次，在物理层面，恩斯科格方程的数值解与分子动力学模拟结果在很大范围内吻合良好，特别是在中等密度条件下，这验证了恩斯科格理论在描述稠密气体热传导时的实用性。然而，该研究明确指出，当气体密度超过某个阈值时，恩斯科格方程的理论预测会开始偏离分子动力学的精确结果，揭示了该唯象方程在高密度极限下的局限性，为后续发展更精确的动力学理论提供了关键的定量判据。",
+        "tags": [
+            "monte"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "Monte Carlo simulations of dense gas flow and heat transfer in micro- and nano-channels SC2005.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/Monte Carlo simulations of dense gas flow and heat transfer in micro- and nano-channels SC2005.pdf",
+        "summary": null,
+        "tags": [
+            "monte"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "微纳尺度气体流动和换热的Monte_Carlo模拟_王沫然.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/微纳尺度气体流动和换热的Monte_Carlo模拟_王沫然.pdf",
+        "summary": null,
+        "tags": [
+            "monte"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "微纳通道内稠密气体流动和换...Monte_Carlo模拟_王沫然.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/微纳通道内稠密气体流动和换...Monte_Carlo模拟_王沫然.pdf",
+        "summary": null,
+        "tags": [
+            "monte"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "高Kn数非理想气体流动和换...Monte_Carlo模拟_王沫然.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/emc/高Kn数非理想气体流动和换...Monte_Carlo模拟_王沫然.pdf",
+        "summary": null,
+        "tags": [
+            "monte"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "格子Boltzmann方法的理论及应用.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/latticeBoltzmann/格子Boltzmann方法的理论及应用.pdf",
+        "summary": null,
+        "tags": [
+            "boltzmann"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "Mathematical verification of the Monte Carlo maximum cross-section technique.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/mc/Mathematical verification of the Monte Carlo maximum cross-section technique.pdf",
+        "summary": null,
+        "tags": [
+            "monte"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "PoF-DSMC-190531.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/re/PoF-DSMC-190531.pdf",
+        "summary": null,
+        "tags": [
+            "mc"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.628432"
+    },
+    {
+        "filename": "Spin dynamics from algebra.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/rep/Spin dynamics from algebra.pdf",
+        "summary": null,
+        "tags": [
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.629163"
+    },
+    {
+        "filename": "Spin polarization in AA and pA collisions.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/rep/Spin polarization in AA and pA collisions.pdf",
+        "summary": null,
+        "tags": [
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.629163"
+    },
+    {
+        "filename": "Spin polarization in strongly coupled fluid.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/rep/Spin polarization in strongly coupled fluid.pdf",
+        "summary": null,
+        "tags": [
+            "fluid",
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.629163"
+    },
+    {
+        "filename": "重离子碰撞中QCD物质整体极化的实验测量.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/src/zh/重离子碰撞中QCD物质整体极化的实验测量.pdf",
+        "summary": null,
+        "tags": [
+            "qcd"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.629668"
+    },
+    {
+        "filename": "box_16_particles_131072_stop_200_dt_0.10_T_1_mass_200_d_0.20__0605o2t1.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/thesis/fig/box_16_particles_131072_stop_200_dt_0.10_T_1_mass_200_d_0.20__0605o2t1.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.630202"
+    },
+    {
+        "filename": "box_16_particles_131072_stop_200_dt_0.10_T_1_mass_200_d_0.20__0605o2t10.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/thesis/fig/box_16_particles_131072_stop_200_dt_0.10_T_1_mass_200_d_0.20__0605o2t10.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.630202"
+    },
+    {
+        "filename": "box_16_particles_131072_stop_500_dt_0.10_T_1_mass_200_d_0.20__0605o0t10.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/thesis/fig/box_16_particles_131072_stop_500_dt_0.10_T_1_mass_200_d_0.20__0605o0t10.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.630202"
+    },
+    {
+        "filename": "box_16_particles_131072_stop_500_dt_0.10_T_1_mass_200_d_0.20__0605o1t10.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/bac/thesis/fig/box_16_particles_131072_stop_500_dt_0.10_T_1_mass_200_d_0.20__0605o1t10.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.630202"
+    },
+    {
+        "filename": "David P. Landau, Kurt Binder - A Guide to Monte Carlo Simulations in Statistical Physics (2014, Cambridge University Press) - libgen.lc.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/books/David P. Landau, Kurt Binder - A Guide to Monte Carlo Simulations in Statistical Physics (2014, Cambridge University Press) - libgen.lc.pdf",
+        "summary": null,
+        "tags": [
+            "monte",
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.631317"
+    },
+    {
+        "filename": "MCSiSP19.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/books/MCSiSP19.pdf",
+        "summary": null,
+        "tags": [
+            "mc"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.631317"
+    },
+    {
+        "filename": "mcs_p.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/HEPE/src/ICARUS/images/mcs_p.pdf",
+        "summary": null,
+        "tags": [
+            "mc"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.636503"
+    },
+    {
+        "filename": "cube_of_physics.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/note/cube_of_physics.pdf",
+        "summary": null,
+        "tags": [
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.637692"
+    },
+    {
+        "filename": "ParticleCosmology2025_note 0518.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note 0518.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.638808"
+    },
+    {
+        "filename": "ParticleCosmology2025_note.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.638808"
+    },
+    {
+        "filename": "1 Cosmological Collider Physics and the Curvaton 1908.11378v2.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/CC/1 Cosmological Collider Physics and the Curvaton 1908.11378v2.pdf",
+        "summary": null,
+        "tags": [
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639334"
+    },
+    {
+        "filename": "21 Classical Cosmological Collider Physics and Primordial Features 2205.01107v2.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/CC/21 Classical Cosmological Collider Physics and Primordial Features 2205.01107v2.pdf",
+        "summary": null,
+        "tags": [
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639334"
+    },
+    {
+        "filename": "3 Large spin-2 signals at the cosmological collider JHEP10(2022)194.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/CC/3 Large spin-2 signals at the cosmological collider JHEP10(2022)194.pdf",
+        "summary": null,
+        "tags": [
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639334"
+    },
+    {
+        "filename": "chap2 of ParticleCosmology2025_note.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/chap2 of ParticleCosmology2025_note.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639865"
+    },
+    {
+        "filename": "ParticleCosmology2025_note_20-51 c.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_20-51 c.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639865"
+    },
+    {
+        "filename": "ParticleCosmology2025_note_3-19 c.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_3-19 c.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639865"
+    },
+    {
+        "filename": "ParticleCosmology2025_note_53-87 c.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_53-87 c.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639865"
+    },
+    {
+        "filename": "ParticleCosmology2025_note_53-87.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_53-87.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639865"
+    },
+    {
+        "filename": "ParticleCosmology2025_note_53-87x2.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_53-87x2.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639865"
+    },
+    {
+        "filename": "ParticleCosmology2025_note_88-113 c.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_88-113 c.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639865"
+    },
+    {
+        "filename": "ParticleCosmology2025_note_88-113.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_88-113.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639865"
+    },
+    {
+        "filename": "ParticleCosmology2025_note_88-113x2.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/ParticleCosmology2025_note/ParticleCosmology2025_note_88-113x2.pdf",
+        "summary": null,
+        "tags": [
+            "particle"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639865"
+    },
+    {
+        "filename": "(Cambridge Monographs on Mathematical Physics) Daniel Baumann, Liam McAllister - Inflation and String Theory-Cambridge University Press (2015).pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/参考资料/(Cambridge Monographs on Mathematical Physics) Daniel Baumann, Liam McAllister - Inflation and String Theory-Cambridge University Press (2015).pdf",
+        "summary": null,
+        "tags": [
+            "mc",
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.639865"
+    },
+    {
+        "filename": "._(Cambridge Monographs on Mathematical Physics) Daniel Baumann, Liam McAllister - Inflation and String Theory-Cambridge University Press (2015).pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/PA/参考资料/__MACOSX/._(Cambridge Monographs on Mathematical Physics) Daniel Baumann, Liam McAllister - Inflation and String Theory-Cambridge University Press (2015).pdf",
+        "summary": null,
+        "tags": [
+            "mc",
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.640422"
+    },
+    {
+        "filename": "4.4-4.6_CMCP28F.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/QM/ans/4.4-4.6_CMCP28F.pdf",
+        "summary": null,
+        "tags": [
+            "mc"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.640422"
+    },
+    {
+        "filename": "Fradkin, Field Theories of Condensed Matter Physics.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/s/Fradkin, Field Theories of Condensed Matter Physics.pdf",
+        "summary": null,
+        "tags": [
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.641436"
+    },
+    {
+        "filename": "Physics from_Symmetry.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/s/Physics from_Symmetry.pdf",
+        "summary": null,
+        "tags": [
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.641436"
+    },
+    {
+        "filename": "ralss10_p An Introduction to QED QCD F Hautmann.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/s/ralss10p/ralss10_p An Introduction to QED QCD F Hautmann.pdf",
+        "summary": null,
+        "tags": [
+            "qcd"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.644435"
+    },
+    {
+        "filename": "Optical Physics (Ariel Lipson, Stephen G. Lipson, Henry Lipson) (Z-Library).pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/清华大学-博士生资格考试/Optical Physics (Ariel Lipson, Stephen G. Lipson, Henry Lipson) (Z-Library).pdf",
+        "summary": null,
+        "tags": [
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.645435"
+    },
+    {
+        "filename": "Princeton Problems in Physics with Solutions (Nathan Newbury, John Ruhl, Suzanne Staggs etc.) (Z-Library).pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/1/清华大学-博士生资格考试/Princeton Problems in Physics with Solutions (Nathan Newbury, John Ruhl, Suzanne Staggs etc.) (Z-Library).pdf",
+        "summary": null,
+        "tags": [
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.645435"
+    },
+    {
+        "filename": "Measuring spin correlation between quarks during QCD confinement.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/Measuring spin correlation between quarks during QCD confinement.pdf",
+        "summary": null,
+        "tags": [
+            "qcd",
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.674435"
+    },
+    {
+        "filename": "PacificSpin2024_Xingrui_v2.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/PacificSpin2024_Xingrui_v2.pdf",
+        "summary": null,
+        "tags": [
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.674435"
+    },
+    {
+        "filename": "Physics_from_Symmetry.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/Physics_from_Symmetry.pdf",
+        "summary": null,
+        "tags": [
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.674435"
+    },
+    {
+        "filename": "Stephan_ReviewandComparisonofEquationsofStatefortheLennard-JonesFluid_FluidPhaseEquilib._2020Preprint.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/Stephan_ReviewandComparisonofEquationsofStatefortheLennard-JonesFluid_FluidPhaseEquilib._2020Preprint.pdf",
+        "summary": null,
+        "tags": [
+            "fluid"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.674435"
+    },
+    {
+        "filename": "Computational_Many-Particle_Physics.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/量子物理计算方法选讲/课件/参考文献/Computational_Many-Particle_Physics.pdf",
+        "summary": null,
+        "tags": [
+            "particle",
+            "physics"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.726025"
+    },
+    {
+        "filename": "Computational_Studies_of_Quantum_Spin_Systems.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/量子物理计算方法选讲/课件/参考文献/Computational_Studies_of_Quantum_Spin_Systems.pdf",
+        "summary": null,
+        "tags": [
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.726025"
+    },
+    {
+        "filename": "Introduction_to_Quantum_Monte_Carlo_Simulations_for_Fermionic_Systems.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/量子物理计算方法选讲/课件/参考文献/Introduction_to_Quantum_Monte_Carlo_Simulations_for_Fermionic_Systems.pdf",
+        "summary": null,
+        "tags": [
+            "monte"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.726025"
+    },
+    {
+        "filename": "Lin,_Exact_diagonalization_of_quantum-spin_models.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/量子物理计算方法选讲/课件/参考文献/Lin,_Exact_diagonalization_of_quantum-spin_models.pdf",
+        "summary": null,
+        "tags": [
+            "spin"
+        ],
+        "scanned_at": "2026-05-05T18:06:57.726025"
+    }
+]
