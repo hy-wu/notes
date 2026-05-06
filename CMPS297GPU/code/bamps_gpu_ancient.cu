@@ -7,8 +7,8 @@
 #include <stdarg.h>
 
 /**
- * BAMPS GPU Implementation - "Ancient" Hybrid Edition (Fixed Energy Conservation)
- * Using 8-Color Checkerboard for Race-Free Enskog Collisions.
+ * BAMPS GPU Implementation - "Ancient" Hybrid Edition (Stable Order-2 Enskog)
+ * Using 64-Color Checkerboard (4x4x4) to eliminate Race Conditions in Order 2.
  */
 
 #ifndef MODE_RELATIVISTIC
@@ -17,10 +17,13 @@
 #ifndef ENSKOG_ORDER
 #define ENSKOG_ORDER 1
 #endif
+#ifndef TOTAL_STEPS
+#define TOTAL_STEPS 10000
+#endif
 
 #define PI 3.14159265358979323846f
 #define HBARC 0.197327f 
-#define MAX_PARTICLES_PER_CELL 128 
+#define MAX_PARTICLES_PER_CELL 256 // Increased for safety
 #define MASS 1.0f 
 
 struct Particle { float4 pos; float4 mom; };
@@ -67,7 +70,6 @@ __global__ void update_pos_wall_kernel(
 {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= num_slots || is_alive[idx] != 1) return;
-
     float4 p = pos[idx]; float4 m = mom[idx];
 #if MODE_RELATIVISTIC
     float vx = m.x / m.w; float vy = m.y / m.w; float vz = m.z / m.w;
@@ -75,9 +77,7 @@ __global__ void update_pos_wall_kernel(
     float vx = m.x / MASS; float vy = m.y / MASS; float vz = m.z / MASS;
 #endif
     p.x += vx * dt; p.y += vy * dt; p.z += vz * dt;
-
-    float half = box_size / 2.0f;
-    double dp = 0;
+    float half = box_size / 2.0f; double dp = 0;
     if (p.x > half) { dp += 2.0 * fabs(m.x); p.x = 2*half - p.x; m.x = -m.x; }
     else if (p.x < -half) { dp += 2.0 * fabs(m.x); p.x = -2*half - p.x; m.x = -m.x; }
     if (p.y > half) { dp += 2.0 * fabs(m.y); p.y = 2*half - p.y; m.y = -m.y; }
@@ -85,7 +85,6 @@ __global__ void update_pos_wall_kernel(
     if (p.z > half) { dp += 2.0 * fabs(m.z); p.z = 2*half - p.z; m.z = -m.z; }
     else if (p.z < -half) { dp += 2.0 * fabs(m.z); p.z = -2*half - p.z; m.z = -m.z; }
     if (dp > 0) atomicAdd(d_wall_mom, dp);
-
     pos[idx] = p; mom[idx] = m;
     int ix = (int)((p.x + half) / box_size * (float)IX);
     int iy = (int)((p.y + half) / box_size * (float)IX);
@@ -105,7 +104,6 @@ __device__ inline float4 boost_relativistic(float4 P, float3 beta) {
     return make_float4(P.x + factor * beta.x, P.y + factor * beta.y, P.z + factor * beta.z, gamma * (P.w - bp));
 }
 
-// 2. Race-Free Collision Kernel with Color Filter
 __global__ void collide_enskog_color_kernel(
     float4* mom, int* is_alive, int* grid_indices, int* grid_counts, curandState* rand_states,
     int num_cells, int IX, float box_size, float dt, float dv, int testpartcl, float as, float md2, int current_color) 
@@ -113,9 +111,9 @@ __global__ void collide_enskog_color_kernel(
     int cell_idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (cell_idx >= num_cells) return;
 
-    // Checkerboard Filter
+    // 64-Color Filter (4x4x4 block to isolate Order-2 interactions)
     int ix = cell_idx % IX; int iy = (cell_idx / IX) % IX; int iz = cell_idx / (IX * IX);
-    if (((ix % 2) * 4 + (iy % 2) * 2 + (iz % 2)) != current_color) return;
+    if (((ix % 4) * 16 + (iy % 4) * 4 + (iz % 4)) != current_color) return;
 
     int n_i = grid_counts[cell_idx]; if (n_i < 1) return;
     curandState local_state = rand_states[cell_idx];
@@ -165,7 +163,7 @@ __global__ void collide_enskog_color_kernel(
         }
     }
 
-    // Enskog Cross-cell
+    // Enskog Cross-cell (Order 1 & 2)
 #if ENSKOG_ORDER >= 1
     int n_offsets[][3] = { {-1, 0, 0}, {0, -1, 0}, {0, 0, -1}, {-1, -1, 0}, {-1, 0, -1}, {0, -1, -1}, {-2, 0, 0}, {0, -2, 0}, {0, 0, -2} };
     int num_n = (ENSKOG_ORDER == 1) ? 3 : 9;
@@ -237,7 +235,8 @@ public:
     void evolve() {
         cudaMemset(d_grid_counts, 0, num_cells * sizeof(int));
         update_pos_wall_kernel<<<(max_slots+255)/256, 256>>>(d_pos, d_mom, d_is_alive, d_grid_indices, d_grid_counts, d_wall_mom, max_slots, dt, box_size, dx, IX);
-        for (int color = 0; color < 8; color++) {
+        // 64-Color Checkerboard Loop
+        for (int color = 0; color < 64; color++) {
             collide_enskog_color_kernel<<<(num_cells+255)/256, 256>>>(d_mom, d_is_alive, d_grid_indices, d_grid_counts, d_rand_states, num_cells, IX, box_size, dt, dv, 100, 0.3f, 0.5f, color);
         }
     }
@@ -250,10 +249,6 @@ public:
         cudaMemset(d_wall_mom, 0, sizeof(double));
     }
 };
-
-#ifndef TOTAL_STEPS
-#define TOTAL_STEPS 10000
-#endif
 
 int main() {
     int N = 100000; float box_size = 10.0f; BAMPS_Ancient sim(N, box_size, 10);
@@ -278,11 +273,21 @@ int main() {
     float ms_total = 0; cudaEventElapsedTime(&ms_total, start_bench, stop_bench);
     log_info(master_f, "Performance: %f ms/step\n", ms_total / (float)total_steps);
     fclose(short_log);
-    float4* h_mom = new float4[sim.max_slots]; int* h_alive = new int[sim.max_slots];
+    float4* h_mom = new float4[sim.max_slots]; 
+    float4* h_pos = new float4[sim.max_slots];
+    int* h_alive = new int[sim.max_slots];
     cudaMemcpy(h_mom, sim.d_mom, sim.max_slots * sizeof(float4), cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_pos, sim.d_pos, sim.max_slots * sizeof(float4), cudaMemcpyDeviceToHost);
     cudaMemcpy(h_alive, sim.d_is_alive, sim.max_slots * sizeof(int), cudaMemcpyDeviceToHost);
+    
     FILE* ef = fopen("energies.txt", "w");
-    for(int i=0; i<sim.max_slots; i++) if(h_alive[i]==1) fprintf(ef, "%f\n", h_mom[i].w);
-    fclose(ef); if (master_f) fclose(master_f);
+    FILE* pf = fopen("positions.txt", "w");
+    for(int i=0; i<sim.max_slots; i++) {
+        if(h_alive[i]==1) {
+            fprintf(ef, "%f\n", h_mom[i].w);
+            fprintf(pf, "%f %f %f\n", h_pos[i].x, h_pos[i].y, h_pos[i].z);
+        }
+    }
+    fclose(ef); fclose(pf);
     return 0;
 }

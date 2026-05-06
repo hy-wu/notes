@@ -9,7 +9,7 @@ MODES = {
     1: "RELATIVISTIC"
 }
 ORDERS = [0, 1, 2]
-STEPS = 50000 # Example: Reduced to 5000 for faster testing, can be 20000
+STEPS = 3000 # Reduced to avoid timeout after 64-color upgrade
 OUTPUT_DIR = "experiment_results"
 SRC_FILE = "code/bamps_gpu_ancient.cu"
 BIN_FILE = "./bamps_bin"
@@ -64,14 +64,17 @@ def automate():
             files_to_move = {
                 "physics_log.txt": f"{tag}_physics.log",
                 "energies.txt": f"{tag}_energies.txt",
-                "final_validation_optimized.png": f"{tag}_plot.png"
+                "physics_validation.png": f"{tag}_validation.png",
+                "spatial_distribution.png": f"{tag}_spatial.png"
             }
             
             for src, dst in files_to_move.items():
                 if os.path.exists(src):
                     shutil.move(src, os.path.join(case_dir, dst))
-
-            # 5. Extract summary metrics from the log for our CSV
+            
+            # 5. Cleanup
+            if os.path.exists("positions.txt"): os.remove("positions.txt")
+            if os.path.exists("refined_analysis.png"): os.remove("refined_analysis.png")
             try:
                 # Read last line of current physics_log
                 last_data = np.genfromtxt(os.path.join(case_dir, f"{tag}_physics.log"), skip_header=1)[-1]
