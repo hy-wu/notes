@@ -23,6 +23,10 @@ try:
                     dt = float(line.split("DT:")[1].split(",")[0].strip())
                 if "TESTPARTCL:" in line:
                     TESTPARTCL = int(line.split("TESTPARTCL:")[1].split(",")[0].strip())
+                if "EPS:" in line:
+                    EPS = float(line.split("EPS:")[1].split(",")[0].strip())
+                if "SIGMA:" in line:
+                    SIG = float(line.split("SIGMA:")[1].split(",")[0].strip())
                 break
 except: pass
 

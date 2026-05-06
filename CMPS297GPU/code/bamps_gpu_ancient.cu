@@ -7,16 +7,11 @@
 #include <stdarg.h>
 
 /**
- * BAMPS GPU Implementation - "Ancient" Atomic Edition (High Precision vdW)
- * 
- * Logic:
- * 1. Smaller LJ parameters to reduce fluctuations.
- * 2. TESTPARTCL=1 for direct physical simulation.
- * 3. Increased thermostat frequency for stability.
+ * BAMPS GPU Implementation - "Ancient" Atomic Edition (Fixed & Robust)
  */
 
 #ifndef MODE_RELATIVISTIC
-#define MODE_RELATIVISTIC 0
+#define MODE_RELATIVISTIC 1
 #endif
 #ifndef MODE_LJ
 #define MODE_LJ 0
@@ -28,13 +23,13 @@
 #define TOTAL_STEPS 10000
 #endif
 #ifndef TESTPARTCL
-#define TESTPARTCL 1
+#define TESTPARTCL 100
 #endif
 #ifndef DELTA_T
-#define DELTA_T 0.005f
+#define DELTA_T 0.01f
 #endif
 #ifndef N_PARTICLES_OVERRIDE
-#define N_PARTICLES_OVERRIDE 5000
+#define N_PARTICLES_OVERRIDE 100000
 #endif
 
 #define PI 3.14159265358979323846f
@@ -42,7 +37,7 @@
 #define MAX_PARTICLES_PER_CELL 256 
 #define MASS 1.0f 
 
-// Reduced LJ Parameters for stability
+// LJ Parameters
 #ifndef SIGMA_OVERRIDE
 #define LJ_SIGMA 0.4f
 #else
@@ -61,7 +56,8 @@
 struct Particle { float4 pos; float4 mom; float4 force; };
 
 void log_info(FILE* f, const char* format, ...) {
-    va_list args; va_start(args, format); vprintf(format, args); va_end(args);
+    va_list args;
+    va_start(args, format); vprintf(format, args); va_end(args);
     va_start(args, format); if (f) { vfprintf(f, format, args); fflush(f); } va_end(args);
 }
 
@@ -190,6 +186,15 @@ __global__ void integrate_andersen_kernel(
     rand_states[idx % 1024] = local_state;
 }
 
+__device__ inline float4 boost_relativistic(float4 P, float3 beta) {
+    float beta2 = beta.x * beta.x + beta.y * beta.y + beta.z * beta.z;
+    if (beta2 < 1e-10f) return P;
+    float gamma = 1.0f / sqrtf(fmaxf(1e-10f, 1.0f - beta2));
+    float bp = beta.x * P.x + beta.y * P.y + beta.z * P.z;
+    float factor = (gamma - 1.0f) / beta2 * bp - gamma * P.w;
+    return make_float4(P.x + factor * beta.x, P.y + factor * beta.y, P.z + factor * beta.z, gamma * (P.w - bp));
+}
+
 __device__ void apply_collision_atomic(float4* mom, int i, int j, float4 P1n, float4 P2n, float4 P1o, float4 P2o) {
     atomicAdd(&mom[i].x, P1n.x - P1o.x); atomicAdd(&mom[i].y, P1n.y - P1o.y);
     atomicAdd(&mom[i].z, P1n.z - P1o.z); atomicAdd(&mom[i].w, P1n.w - P1o.w);
@@ -216,7 +221,8 @@ __global__ void collide_enskog_atomic_kernel(
             int idx_j = grid_indices[cell_idx * MAX_PARTICLES_PER_CELL + j_off];
             float4 P1 = mom[idx_i]; float4 P2 = mom[idx_j];
 #if MODE_RELATIVISTIC
-            float E_sum = P1.w + P2.w; float s = E_sum*E_sum - ((P1.x+P2.x)*(P1.x+P2.x) + (P1.y+P2.y)*(P1.y+P2.y) + (P1.z+P2.z)*(P1.z+P2.z));
+            float E_sum = P1.w + P2.w; float3 beta = make_float3((P1.x+P2.x)/E_sum, (P1.y+P2.y)/E_sum, (P1.z+P2.z)/E_sum);
+            float s = E_sum*E_sum - ((P1.x+P2.x)*(P1.x+P2.x) + (P1.y+P2.y)*(P1.y+P2.y) + (P1.z+P2.z)*(P1.z+P2.z));
             if (s <= md2) continue;
             float sigma = (9.0f * PI * as * as) / (md2 * (1.0f + md2 / s)) * HBARC * HBARC;
             float prob = amp * (s / (2.0f * P1.w * P2.w)) * sigma * dt / (dv * testpartcl);
@@ -236,14 +242,66 @@ __global__ void collide_enskog_atomic_kernel(
                 float cost = curand_uniform(&local_state)*2-1; float sint = sqrtf(1-cost*cost); float phi = curand_uniform(&local_state)*2*PI;
                 float3 v1n = make_float3((v_rel/2.0f)*sint*cosf(phi), (v_rel/2.0f)*sint*sinf(phi), (v_rel/2.0f)*cost);
                 float4 P1n = make_float4((v_cm.x+v1n.x)*MASS, (v_cm.y+v1n.y)*MASS, (v_cm.z+v1n.z)*MASS, 0);
-                P1n.w = (P1n.x*P1n.x+P1n.y*P1n.y+P1n.z*P1n.z)/(2.0f*MASS);
+                P1n.w = (P1n.x*P1n.x + P1n.y*P1n.y + P1n.z*P1n.z)/(2.0f*MASS);
                 float4 P2n = make_float4((v_cm.x-v1n.x)*MASS, (v_cm.y-v1n.y)*MASS, (v_cm.z-v1n.z)*MASS, 0);
-                P2n.w = (P2n.x*P2n.x+P2n.y*P2n.y+P2n.z*P2n.z)/(2.0f*MASS);
+                P2n.w = (P2n.x*P2n.x + P2n.y*P2n.y + P2n.z*P2n.z)/(2.0f*MASS);
                 apply_collision_atomic(mom, idx_i, idx_j, P1n, P2n, P1, P2);
             }
 #endif
         }
     }
+
+#if ENSKOG_ORDER >= 1
+    int ix = cell_idx % IX; int iy = (cell_idx / IX) % IX; int iz = cell_idx / (IX * IX);
+    int n_offsets[][3] = { {-1, 0, 0}, {0, -1, 0}, {0, 0, -1}, {-1, -1, 0}, {-1, 0, -1}, {0, -1, -1}, {-2, 0, 0}, {0, -2, 0}, {0, 0, -2} };
+    int num_n = (ENSKOG_ORDER == 1) ? 3 : 9;
+    for (int n = 0; n < num_n; n++) {
+        int nix = (ix + n_offsets[n][0] + IX) % IX; int niy = (iy + n_offsets[n][1] + IX) % IX; int niz = (iz + n_offsets[n][2] + IX) % IX;
+        int n_cell_idx = nix + IX * niy + IX * IX * niz;
+        int n_j = min(grid_counts[n_cell_idx], MAX_PARTICLES_PER_CELL); if (n_j < 1) continue;
+        int idx_i = grid_indices[cell_idx * MAX_PARTICLES_PER_CELL + (int)(curand_uniform(&local_state)*n_i)];
+        int idx_j = grid_indices[n_cell_idx * MAX_PARTICLES_PER_CELL + (int)(curand_uniform(&local_state)*n_j)];
+        float4 P1 = mom[idx_i]; float4 P2 = mom[idx_j];
+        float3 k_vec = make_float3((float)n_offsets[n][0], (float)n_offsets[n][1], (float)n_offsets[n][2]);
+        float k_mag = sqrtf(k_vec.x*k_vec.x + k_vec.y*k_vec.y + k_vec.z*k_vec.z);
+        k_vec.x /= k_mag; k_vec.y /= k_mag; k_vec.z /= k_mag;
+#if MODE_RELATIVISTIC
+        float3 v12 = make_float3(P1.x/P1.w - P2.x/P2.w, P1.y/P1.w - P2.y/P2.w, P1.z/P1.w - P2.z/P2.w);
+#else
+        float3 v12 = make_float3(P1.x/MASS - P2.x/MASS, P1.y/MASS - P2.y/MASS, P1.z/MASS - P2.z/MASS);
+#endif
+        float v_dot_k = v12.x*k_vec.x + v12.y*k_vec.y + v12.z*k_vec.z;
+        if (v_dot_k < 0) { 
+            float v_proj = -v_dot_k;
+#if MODE_RELATIVISTIC
+            float E_sum = P1.w + P2.w; float s = E_sum*E_sum - ((P1.x+P2.x)*(P1.x+P2.x) + (P1.y+P2.y)*(P1.y+P2.y) + (P1.z+P2.z)*(P1.z+P2.z));
+            if (s <= md2) continue;
+            float sigma = (9.0f * PI * as * as) / (md2 * (1.0f + md2 / s)) * HBARC * HBARC;
+            float prob = (float)n_i * n_j * v_proj * sigma * dt / (dv * testpartcl);
+            if (curand_uniform(&local_state) < prob) {
+                float3 b = make_float3((P1.x+P2.x)/E_sum, (P1.y+P2.y)/E_sum, (P1.z+P2.z)/E_sum);
+                float cost = curand_uniform(&local_state)*2-1; float sint = sqrtf(1-cost*cost); float phi = curand_uniform(&local_state)*2*PI;
+                float p_cm = sqrtf(s)/2.0f; float4 P1n_cm = make_float4(p_cm*sint*cosf(phi), p_cm*sint*sinf(phi), p_cm*cost, p_cm);
+                float4 P2n_cm = make_float4(-P1n_cm.x, -P1n_cm.y, -P1n_cm.z, P1n_cm.w);
+                apply_collision_atomic(mom, idx_i, idx_j, boost_relativistic(P1n_cm, make_float3(-b.x, -b.y, -b.z)), boost_relativistic(P2n_cm, make_float3(-b.x, -b.y, -b.z)), P1, P2);
+            }
+#else
+            float prob = (float)n_i * n_j * v_proj * 0.5f * dt / (dv * testpartcl);
+            if (curand_uniform(&local_state) < prob) {
+                float3 v_cm = make_float3((P1.x+P2.x)/(2*MASS), (P1.y+P2.y)/(2*MASS), (P1.z+P2.z)/(2*MASS));
+                float cost = curand_uniform(&local_state)*2-1; float sint = sqrtf(1-cost*cost); float phi = curand_uniform(&local_state)*2*PI;
+                float3 v1n = make_float3((v_rel/2.0f)*sint*cosf(phi), (v_rel/2.0f)*sint*sinf(phi), (v_rel/2.0f)*cost);
+                float4 P1n = make_float4((v_cm.x+v1n.x)*MASS, (v_cm.y+v1n.y)*MASS, (v_cm.z+v1n.z)*MASS, 0);
+                P1n.w = (P1n.x*P1n.x + P1n.y*P1n.y + P1n.z*P1n.z)/(2.0f*MASS);
+                float4 P2n = make_float4((v_cm.x-v1n.x)*MASS, (v_cm.y-v1n.y)*MASS, (v_cm.z-v1n.z)*MASS, 0);
+                P2n.w = (P2n.x*P2n.x + P2n.y*P2n.y + P2n.z*P2n.z)/(2.0f*MASS);
+                apply_collision_atomic(mom, idx_i, idx_j, P1n, P2n, P1, P2);
+            }
+#endif
+        }
+    }
+#endif
+    rand_states[cell_idx % 1024] = local_state;
 }
 
 __global__ void diagnostics_kernel(float4* mom, int* is_alive, double* stats, int num_slots) {
@@ -302,6 +360,7 @@ int main() {
     log_info(master_f, "\n# RUN MODE: %s, LJ: %d, N: %d, DT: %f, T_target: %f, TESTPARTCL: %d, SIGMA: %f, EPS: %f\n", 
              MODE_RELATIVISTIC ? "REL" : "CLASS", MODE_LJ, N, sim.dt, target_T, TESTPARTCL, LJ_SIGMA, LJ_EPSILON);
     FILE* short_log = fopen("physics_log.txt", "w"); fprintf(short_log, "Step Time Temp Pressure_Wall Energy Count Pressure_Virial\n");
+    cudaEvent_t start_bench, stop_bench; cudaEventCreate(&start_bench); cudaEventCreate(&stop_bench); cudaEventRecord(start_bench);
     for(int i=0; i<=TOTAL_STEPS; i++) {
         sim.evolve(target_T);
         if(i % 100 == 0) {
@@ -313,6 +372,9 @@ int main() {
             fprintf(short_log, "%d %f %f %f %f %f %f\n", i, i*sim.dt, T, P_wall, stats[0], stats[1], P_virial);
         }
     }
+    cudaEventRecord(stop_bench); cudaEventSynchronize(stop_bench);
+    float ms_total = 0; cudaEventElapsedTime(&ms_total, start_bench, stop_bench);
+    log_info(master_f, "Performance: %f ms/step\n", ms_total / (float)TOTAL_STEPS);
     fclose(short_log); fclose(master_f);
     float4* h_pos = new float4[sim.max_slots]; float4* h_mom = new float4[sim.max_slots]; int* h_alive = new int[sim.max_slots];
     cudaMemcpy(h_pos, sim.d_pos, sim.max_slots*sizeof(float4), cudaMemcpyDeviceToHost);
