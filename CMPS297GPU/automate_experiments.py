@@ -9,10 +9,10 @@ MODES = {
     0: "CLASSICAL",
     1: "RELATIVISTIC"
 }
-ORDERS = [0, 1, 2]
-STEPS = 20000 
-DT_VAL = 0.002
-TESTPARTCL_VAL = 20 
+ORDERS = [0, 1] 
+STEPS = 50000 
+DT_VAL = 0.005 
+TESTPARTCL_VAL = 1 
 OUTPUT_DIR = "experiment_results"
 SRC_FILE = "code/bamps_gpu_ancient.cu"
 BIN_FILE = "./bamps_bin"
@@ -36,67 +36,65 @@ def automate():
 
     summary_log = os.path.join(OUTPUT_DIR, "experiment_summary.csv")
     with open(summary_log, "w") as f:
-        f.write("Mode,Order,DT,Steps,Avg_T,Avg_P_wall,Consistency_Error%\n")
+        f.write("Mode,LJ,Order,Avg_T,Avg_P_wall,P_virial,P_vdW,vdW_Error%\n")
 
-    for m_val, m_name in MODES.items():
-        for o in ORDERS:
-            tag = f"{m_name}_ORDER{o}_DT{DT_VAL}_S{STEPS}"
-            print(f"\n>>> STARTING EXPERIMENT: {tag} <<<")
+    # Experiment Matrix
+    configs = [
+        # (Mode, LJ, Order, N)
+        (0, 0, 0, 5000),  # Classical Ideal
+        (0, 1, 0, 500),   # Classical LJ (Lower N for vdW regime)
+        (1, 0, 0, 5000),  # Relativistic Ideal
+    ]
+
+    for m_val, lj_val, o, n_target in configs:
+        m_name = MODES[m_val]
+        tag = f"{m_name}_LJ{lj_val}_ORDER{o}_N{n_target}"
+        print(f"\n>>> STARTING EXPERIMENT: {tag} <<<")
+        
+        case_dir = os.path.join(OUTPUT_DIR, tag)
+        if not os.path.exists(case_dir):
+            os.makedirs(case_dir)
+
+        compile_cmd = (f"nvcc -O3 -DMODE_RELATIVISTIC={m_val} -DMODE_LJ={lj_val} -DENSKOG_ORDER={o} "
+                       f"-DTOTAL_STEPS={STEPS} -DTESTPARTCL={TESTPARTCL_VAL} -DDELTA_T={DT_VAL} "
+                       f"-DN_PARTICLES_OVERRIDE={n_target} "
+                       f"{SRC_FILE} -o {BIN_FILE}")
+        
+        if run_command(compile_cmd) != 0: continue
+        if run_command(BIN_FILE) != 0: continue
+        if run_command("python3 viz_physics.py") != 0: continue
+
+        files_to_move = {
+            "physics_log.txt": f"{tag}_physics.log",
+            "energies.txt": f"{tag}_energies.txt",
+            "physics_validation.png": f"{tag}_validation.png",
+            "spatial_distribution.png": f"{tag}_spatial.png"
+        }
+        for src, dst in files_to_move.items():
+            if os.path.exists(src): shutil.move(src, os.path.join(case_dir, dst))
+        
+        if os.path.exists("positions.txt"): os.remove("positions.txt")
+        
+        try:
+            log_path = os.path.join(case_dir, f"{tag}_physics.log")
+            # Step Time Temp Pressure_Wall Energy Count Pressure_Virial
+            last_data = np.genfromtxt(log_path, skip_header=1)[-1]
+            t_f = last_data[2]; p_w = last_data[3]; p_v = last_data[6]
             
-            case_dir = os.path.join(OUTPUT_DIR, tag)
-            if not os.path.exists(case_dir):
-                os.makedirs(case_dir)
-
-            # 1. Compile with small DT and high STEPS
-            compile_cmd = (f"nvcc -O3 -DMODE_RELATIVISTIC={m_val} -DENSKOG_ORDER={o} "
-                           f"-DTOTAL_STEPS={STEPS} -DTESTPARTCL={TESTPARTCL_VAL} -DDELTA_T={DT_VAL} "
-                           f"{SRC_FILE} -o {BIN_FILE}")
+            # vdW Theory Sync
+            sig = 0.8; eps = 0.1; v = 1000.0; n_dens = (last_data[5] / float(TESTPARTCL_VAL)) / v
+            b = (2.0/3.0) * np.pi * (sig**3)
+            a = (16.0/9.0) * np.pi * eps * (sig**3)
+            p_theory = (n_dens * t_f) / (1.0 - n_dens * b) - a * (n_dens**2) if lj_val else n_dens*t_f
             
-            if run_command(compile_cmd) != 0:
-                print(f"Compilation failed for {tag}")
-                continue
-
-            # 2. Run Simulation
-            if run_command(BIN_FILE) != 0:
-                print(f"Execution failed for {tag}")
-                continue
-
-            # 3. Run Visualization
-            if run_command("python3 viz_physics.py") != 0:
-                print(f"Visualization failed for {tag}")
-
-            # 4. Move and Organize Results
-            files_to_move = {
-                "physics_log.txt": f"{tag}_physics.log",
-                "energies.txt": f"{tag}_energies.txt",
-                "physics_validation.png": f"{tag}_validation.png",
-                "spatial_distribution.png": f"{tag}_spatial.png"
-            }
+            err = abs(p_w - p_theory) / p_theory * 100.0
             
-            for src, dst in files_to_move.items():
-                if os.path.exists(src):
-                    shutil.move(src, os.path.join(case_dir, dst))
-            
-            # 5. Cleanup
-            if os.path.exists("positions.txt"): os.remove("positions.txt")
-            
-            # 6. Extract summary
-            try:
-                # Need to read the file we just moved
-                log_path = os.path.join(case_dir, f"{tag}_physics.log")
-                last_data = np.genfromtxt(log_path, skip_header=1)[-1]
-                t_final = last_data[2]
-                p_final = last_data[3] # Already scaled correctly in the .cu code now
-                v = 1000.0
-                n_phys = (last_data[5] / float(TESTPARTCL_VAL)) / v
-                error = abs(p_final - n_phys * t_final) / (n_phys * t_final) * 100.0
-                
-                with open(summary_log, "a") as f:
-                    f.write(f"{m_name},{o},{DT_VAL},{STEPS},{t_final:.4f},{p_final:.4f},{error:.2f}\n")
-            except Exception as e:
-                print(f"Summary extraction failed: {e}")
+            with open(summary_log, "a") as f:
+                f.write(f"{m_name},{lj_val},{o},{t_f:.4f},{p_w:.4f},{p_v:.4f},{p_theory:.4f},{err:.2f}\n")
+        except Exception as e:
+            print(f"Summary extraction failed: {e}")
 
-    print(f"\nAll experiments complete. Results organized in '{OUTPUT_DIR}'")
+    print(f"\nExperiments complete. Check '{OUTPUT_DIR}'")
 
 if __name__ == "__main__":
     automate()
