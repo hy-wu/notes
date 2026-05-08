@@ -1,11 +1,12 @@
 import os
+import shutil
 import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 
 # --- High-Resolution Configuration ---
-SIGMA_LIST = np.linspace(0.05, 0.25, 20) # 20 points for Sigma
-EPSILON_LIST = np.linspace(0.002, 0.04, 20) # 20 points for Epsilon
+SIGMA_LIST = np.linspace(0.05, 0.25, 40) # 40 points for Sigma
+EPSILON_LIST = np.linspace(0.002, 0.04, 40) # 40 points for Epsilon
 EPS_FIXED = 0.01
 SIG_FIXED = 0.15
 
@@ -49,11 +50,12 @@ def perform_scan():
         if run_command(cmd) != 0: continue
         if run_command(BIN_FILE) != 0: continue
         
+        shutil.copy('physics_log.txt', f'parameter_scan_results/physics_log_sig_{sig:.4f}.txt')
         log = np.genfromtxt('physics_log.txt', skip_header=1)
         t_f, p_v = log[-1, 2], log[-1, 6]
         p_th = get_vdw_p(N_TARGET/VOLUME, t_f, EPS_FIXED, sig)
-        sig_data.append([sig, t_f, p_v, p_th])
-        print(f"  SIG={sig:.3f} | P_meas={p_v:.4f} | P_th={p_th:.4f}", end='\r')
+        sig_data.append([sig, EPS_FIXED, t_f, p_v, p_th])
+        print(f"  SIG={sig:.3f} | EPS={EPS_FIXED:.4f} | P_meas={p_v:.4f} | P_th={p_th:.4f}", end='\r')
 
     # --- 2. SCAN EPSILON ---
     print("\nScanning Epsilon...")
@@ -66,18 +68,19 @@ def perform_scan():
         if run_command(cmd) != 0: continue
         if run_command(BIN_FILE) != 0: continue
         
+        shutil.copy('physics_log.txt', f'parameter_scan_results/physics_log_eps_{eps:.4f}.txt')
         log = np.genfromtxt('physics_log.txt', skip_header=1)
         t_f, p_v = log[-1, 2], log[-1, 6]
         p_th = get_vdw_p(N_TARGET/VOLUME, t_f, eps, SIG_FIXED)
-        eps_data.append([eps, t_f, p_v, p_th])
-        print(f"  EPS={eps:.4f} | P_meas={p_v:.4f} | P_th={p_th:.4f}", end='\r')
+        eps_data.append([eps, SIG_FIXED, t_f, p_v, p_th])
+        print(f"  EPS={eps:.4f} | SIG={SIG_FIXED:.4f} | P_meas={p_v:.4f} | P_th={p_th:.4f}", end='\r')
 
     sd = np.array(sig_data)
     ed = np.array(eps_data)
 
     # --- SAVE CSVs ---
-    np.savetxt('scan_sigma.csv', sd, delimiter=',', header="Sigma,Temp,P_measured,P_theory", comments='')
-    np.savetxt('scan_epsilon.csv', ed, delimiter=',', header="Epsilon,Temp,P_measured,P_theory", comments='')
+    np.savetxt('scan_sigma.csv', sd, delimiter=',', header="Sigma,Epsilon,Temp,P_measured,P_theory", comments='')
+    np.savetxt('scan_epsilon.csv', ed, delimiter=',', header="Epsilon,Sigma,Temp,P_measured,P_theory", comments='')
 
     # --- PLOTTING ---
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 8))
@@ -85,15 +88,15 @@ def perform_scan():
     # Plot 1: Sigma Scan
     ax1.scatter(sd[:, 0], sd[:, 2], color='blue', s=40, label='Measured $P_{virial}$')
     ax1.plot(sd[:, 0], sd[:, 3], 'r--', lw=1.5, label='vdW Theory (Point-wise)')
-    ax1.set_title(f'Pressure vs. $\sigma$\n(Fixed $\epsilon$={EPS_FIXED}, N={N_TARGET})')
-    ax1.set_xlabel('$\sigma$ [fm]'); ax1.set_ylabel('Pressure [GeV/fm$^3$]')
+    ax1.set_title(f'Pressure vs. $\\sigma$\n(Fixed $\\epsilon$={EPS_FIXED}, N={N_TARGET})')
+    ax1.set_xlabel('$\\sigma$ [fm]'); ax1.set_ylabel('Pressure [GeV/fm$^3$]')
     ax1.legend(); ax1.grid(True, alpha=0.3)
 
     # Plot 2: Epsilon Scan
     ax2.scatter(ed[:, 0], ed[:, 2], color='green', s=40, label='Measured $P_{virial}$')
     ax2.plot(ed[:, 0], ed[:, 3], 'r--', lw=1.5, label='vdW Theory (Point-wise)')
-    ax2.set_title(f'Pressure vs. $\epsilon$\n(Fixed $\sigma$={SIG_FIXED}, N={N_TARGET})')
-    ax2.set_xlabel('$\epsilon$ [GeV]'); ax2.set_ylabel('Pressure [GeV/fm$^3$]')
+    ax2.set_title(f'Pressure vs. $\\epsilon$\n(Fixed $\\sigma$={SIG_FIXED}, N={N_TARGET})')
+    ax2.set_xlabel('$\\epsilon$ [GeV]'); ax2.set_ylabel('Pressure [GeV/fm$^3$]')
     ax2.legend(); ax2.grid(True, alpha=0.3)
 
     plt.tight_layout()
