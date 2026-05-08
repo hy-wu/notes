@@ -3,3 +3,4 @@ PyMuPDF
 openai
 python-dotenv
 pandas
+rank_bm25

@@ -766,5 +766,25 @@
         ],
         "scanned_at": "2026-05-05T18:06:57.726025",
         "short_summary": "提出优化编码技术，实现更大晶格量子自旋模型精确对角化。"
+    },
+    {
+        "filename": "Study of spin polarization dependence on rapidity_ transverse momentum_ and azimuthal angle.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/Study of spin polarization dependence on rapidity_ transverse momentum_ and azimuthal angle.pdf",
+        "summary": "本论文基于de Groot–van Leeuwen–van Weert（GLW）形式的能量-动量张量和自旋张量，在相对论性自旋流体力学框架下，系统研究了Λ超子自旋极化矢量对快度、横动量和方位角的依赖关系。研究通过打破纵向boost不变性（非Bjorken流），引入物理动机的初始条件，数值求解含自旋自由度的理想气体流体力学方程，直至冻出。核心发现：(1) 自旋极化矢量各分量在快度上呈现复杂的相互混合，源于纵向膨胀与自旋动力学耦合；(2) 整体自旋极化随快度的变化趋势定性符合其他模型及实验数据；(3) 在中间快度处，纵向极化分量未出现四极结构，但在前向快度区域观测到有别于Bjorken膨胀预言的非平凡信号；(4) 自旋极化对横动量和方位角的依赖显示了流体力学剪流效应与自旋-涡度耦合的综合影响。本工作为理解重离子碰撞中自旋极化的非平衡动力学提供了重要理论参考。",
+        "tags": [
+            "spin"
+        ],
+        "scanned_at": "2026-05-08T19:27:56.732801",
+        "short_summary": "发现非Bjorken流下自旋极化快度依赖出现前向新结构。"
+    },
+    {
+        "filename": "An estimate of QGP viscosity from STAR data on _φ_ mesons.pdf",
+        "path": "C:/Users/hy-wu.DESKTOP-G355NC5/Downloads/An estimate of QGP viscosity from STAR data on _φ_ mesons.pdf",
+        "summary": "本文利用Israel-Stewart二阶粘性流体力学，结合基于格点QCD的交叉相变状态方程（Tco=196 MeV），分析了RHIC上STAR合作组在√s=200 GeV Au+Au碰撞中φ介子的实验数据。通过同时拟合φ介子的产额、平均横动量（<pT>）以及积分椭圆流（v2），得到了QGP剪切粘度与熵密度比η/s的唯象估计值：η/s = 0.15 ± 0.05（实验误差）± 0.03（初末态不确定性）。研究发现，该粘度值能够一致地描述中心碰撞中φ介子的多重数、积分v2、平均pT以及pT谱（pT < 3 GeV）。方法是基于粘性流体力学模拟，假设初始时刻τi=0.6 fm时能量密度εi=30 GeV/fm³，并采用AZHYDRO-KOLKATA程序求解演化方程。研究表明，粘性流体力学与理想流体力学不同，粘性会导致熵增，从而需要更低的初始熵密度才能产生相同的末态熵。与ADS/CFT预言的下限η/s≥1/4π≈0.08以及微扰QCD估计η/s~1相比，本文结果与格点QCD的估计η/s=0.134(33)以及Nakamura和Sakai对热胶子气体粘度η/s=0.1-0.4的估计一致。该工作为QGP粘度的唯象确定提供了重要参考。",
+        "tags": [
+            "qgp"
+        ],
+        "scanned_at": "2026-05-08T19:33:07.041144",
+        "short_summary": "拟合STAR φ介子数据得QGP粘熵比η/s=0.15±0.05±0.03"
     }
 ]

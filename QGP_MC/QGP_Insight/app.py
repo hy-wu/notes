@@ -1,12 +1,13 @@
-﻿import streamlit as st
+import streamlit as st
 import json
 import os
-from llm_utils import generate_summary, semantic_search
+from llm_utils import generate_summary, semantic_search, search_arxiv, download_arxiv_pdf, extract_full_text, get_rag_context, rag_answer
 from scanner import scan_folders
 
 st.set_page_config(page_title="QGP Paper Insight", layout="wide", page_icon="🔬")
 
 DB_PATH = r"C:\Users\hy-wu.DESKTOP-G355NC5\Documents\GitHub\notes\QGP_MC\QGP_Insight\papers_db.json"
+DOWNLOAD_DIR = r"C:\Users\hy-wu.DESKTOP-G355NC5\Downloads"
 
 def load_db():
     if not os.path.exists(DB_PATH): return []
@@ -77,39 +78,79 @@ def cached_semantic_search(query, text):
     return semantic_search(query, text)
 
 # --- Search Section ---
-st.subheader("🔍 智能检索")
-search_query = st.text_input("输入话题、公式或关键词：", placeholder="例如：哪些论文提到了 Wigner 函数？")
+st.subheader("🔍 RAG 深度文献问答")
+col_q1, col_q2 = st.columns([4, 1])
+search_query = col_q1.text_input("输入具体的物理问题、公式或课题：", placeholder="例如：描述 BAMPS 框架中使用的碰撞积分项。")
+rag_mode = col_q2.selectbox("检索策略", ["摘要语义 (快)", "全文混合 (准)", "关键词定位"])
 
 if search_query:
-    valid_summaries = [p for p in papers_db if p["summary"]]
-    summaries_text = "\n".join([f"文件: {p['filename']}\n摘要: {p['summary']}" for p in valid_summaries])
-    
-    if summaries_text:
-        # 使用 with 确保状态在结束后能正确更新
-        with st.status(f"🚀 正在分析 {len(valid_summaries)} 篇论文摘要...", expanded=True) as status:
-            ans = cached_semantic_search(search_query, summaries_text)
-            status.update(label="✅ AI 语义分析完成", state="complete", expanded=False)
-        st.chat_message("assistant").write(ans)
-    else:
-        st.warning("💡 **当前处于关键词检索模式**。由于你还没有生成任何论文摘要，AI 无法进行深度语义分析。建议你先点击下方论文的“生成摘要”按钮，或者在侧边栏点击“批量生成”。")
+    if rag_mode == "全文混合 (准)":
+        with st.status("🚀 正在跨文献检索相关片段...", expanded=True) as status:
+            context, used_papers = get_rag_context(search_query, papers_db)
+            if context:
+                status.update(label=f"✅ 找到来自 {len(used_papers)} 篇论文的相关内容，正在合成回答...", state="running")
+                ans = rag_answer(search_query, context)
+                status.update(label="✅ RAG 深度分析完成", state="complete", expanded=False)
+                st.chat_message("assistant").write(ans)
+                with st.expander("查看参考原文片段"):
+                    st.text(context)
+            else:
+                status.update(label="❌ 未找到相关内容", state="complete", expanded=False)
+                st.error("无法在库中找到与该问题相关的具体片段。")
+                
+    elif rag_mode == "关键词定位":
+        with st.status("🚀 正在全文搜索关键词...", expanded=True) as status:
+            results = []
+            for p in papers_db:
+                full_text = extract_full_text(p["path"])
+                if search_query.lower() in full_text.lower():
+                    idx = full_text.lower().find(search_query.lower())
+                    start = max(0, idx - 200)
+                    end = min(len(full_text), idx + 200)
+                    context = full_text[start:end].replace('\n', ' ')
+                    results.append({"filename": p["filename"], "context": context})
+            
+            if results:
+                status.update(label=f"✅ 在 {len(results)} 篇论文中找到匹配", state="complete", expanded=False)
+                for r in results:
+                    with st.expander(f"📄 {r['filename']}"):
+                        st.markdown(f"...{r['context']}...")
+            else:
+                status.update(label="❌ 未找到匹配", state="complete", expanded=False)
+
+    else:  # 摘要语义
+        valid_summaries = [p for p in papers_db if p["summary"]]
+        summaries_text = "\n".join([f"文件: {p['filename']}\n摘要: {p['summary']}" for p in valid_summaries])
         
-        # 本地匹配结果预览
-        matches = [p for p in papers_db if search_query.lower() in p["filename"].lower()]
-        if matches:
-            st.success(f"找到 {len(matches)} 个标题匹配的文件。请在下方的“文献库”标签页中查看。")
+        if summaries_text:
+            with st.status(f"🚀 正在分析 {len(valid_summaries)} 篇论文摘要...", expanded=True) as status:
+                ans = cached_semantic_search(search_query, summaries_text)
+                status.update(label="✅ AI 语义分析完成", state="complete", expanded=False)
+            st.chat_message("assistant").write(ans)
         else:
-            st.error("未找到匹配的文件名。")
-tab1, tab2, tab3 = st.tabs(["📚 文献库", "🧩 知识集群", "💾 模拟数据结果"])
+            st.warning("💡 请先生成摘要以使用语义检索模式。")
+
+tab1, tab2, tab3, tab4 = st.tabs(["📚 文献库", "🧩 知识集群", "💾 模拟数据结果", "🌐 学术查新"])
 
 with tab1:
+    col_f1, col_f2 = st.columns([2, 1])
     all_tags = sorted(list(set([t for p in papers_db for t in p["tags"]])))
-    selected_tags = st.multiselect("按关键词标签过滤:", all_tags)
+    selected_tags = col_f1.multiselect("按关键词标签过滤:", all_tags)
+    sort_by = col_f2.selectbox("排序方式:", ["最近扫描", "文件名 (A-Z)", "已生成摘要优先"])
     
     filtered_db = papers_db
     if selected_tags:
         filtered_db = [p for p in papers_db if any(t in selected_tags for t in p["tags"])]
-    elif search_query:
+    elif search_query and not (search_query and "rag_mode" in locals() and rag_mode != "摘要语义 (快)"):
         filtered_db = [p for p in papers_db if search_query.lower() in p["filename"].lower()]
+
+    # Apply Sorting
+    if sort_by == "最近扫描":
+        filtered_db = sorted(filtered_db, key=lambda x: x.get("scanned_at", ""), reverse=True)
+    elif sort_by == "文件名 (A-Z)":
+        filtered_db = sorted(filtered_db, key=lambda x: x["filename"].lower())
+    elif sort_by == "已生成摘要优先":
+        filtered_db = sorted(filtered_db, key=lambda x: (x["summary"] is None, x["filename"].lower()))
 
     for i, paper in enumerate(filtered_db):
         # 构造标题栏：文件名 + 标签 + 20字概要
@@ -163,3 +204,44 @@ with tab3:
         cols = st.columns([5, 1])
         cols[0].write(f"📊 `{d['filename']}`")
         cols[1].markdown(f"[查看结果](file:///{d['path']})")
+
+with tab4:
+    st.subheader("🌐 全网学术文献搜索 (arXiv & Semantic Scholar)")
+    col_s1, col_s2 = st.columns([4, 1])
+    arxiv_query = col_s1.text_input("搜索论文 (标题/作者/物理关键词):", placeholder="例如: Quark Gluon Plasma Spin")
+    max_res = col_s2.slider("结果数量", 5, 50, 10)
+    
+    if arxiv_query:
+        with st.spinner(f"正在全网检索 '{arxiv_query}'..."):
+            results = search_arxiv(arxiv_query, max_results=max_res)
+            
+        if not results:
+            st.warning("未找到相关文献。")
+        else:
+            st.success(f"找到 {len(results)} 篇相关文献 (已整合多源数据)：")
+            for i, res in enumerate(results):
+                source_tag = " [arXiv]" if "arxiv.org" in res['pdf_url'].lower() else " [Academic]"
+                with st.expander(f"🆕 [{res['published']}] {res['title']}{source_tag}"):
+                    st.markdown(f"**作者:** {', '.join(res['authors'])}")
+                    st.markdown(f"**摘要:** {res['summary']}")
+                    
+                    # 清理文件名
+                    safe_title = "".join([c if c.isalnum() or c in ' .-_' else '_' for c in res['title']])
+                    # 限制长度
+                    safe_title = safe_title[:100]
+                    save_name = f"{safe_title}.pdf"
+                    save_path = os.path.join(DOWNLOAD_DIR, save_name).replace('\\', '/')
+                    
+                    c1, c2 = st.columns([1, 1])
+                    if c1.button("📥 下载并导入库", key=f"dl_{i}"):
+                        with st.spinner(f"正在下载并导入: {save_name}..."):
+                            if download_arxiv_pdf(res['pdf_url'], save_path):
+                                st.success("下载成功！正在重新扫描目录...")
+                                scan_folders()
+                                st.rerun()
+                            else:
+                                st.error("下载失败，请检查网络连接。")
+                    if res['pdf_url']:
+                        c2.markdown(f"[🔗 查看源文件]({res['pdf_url']})")
+                    else:
+                        c2.write("*(未找到直接 PDF 链接)*")
