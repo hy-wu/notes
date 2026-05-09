@@ -52,7 +52,7 @@ def perform_scan():
         
         shutil.copy('physics_log.txt', f'parameter_scan_results/physics_log_sig_{sig:.4f}.txt')
         log = np.genfromtxt('physics_log.txt', skip_header=1)
-        t_f, p_v = log[-1, 2], log[-1, 6]
+        t_f, p_v = log[-1, 2], log[-1, 3]
         p_th = get_vdw_p(N_TARGET/VOLUME, t_f, EPS_FIXED, sig)
         sig_data.append([sig, EPS_FIXED, t_f, p_v, p_th])
         print(f"  SIG={sig:.3f} | EPS={EPS_FIXED:.4f} | P_meas={p_v:.4f} | P_th={p_th:.4f}", end='\r')
@@ -70,7 +70,7 @@ def perform_scan():
         
         shutil.copy('physics_log.txt', f'parameter_scan_results/physics_log_eps_{eps:.4f}.txt')
         log = np.genfromtxt('physics_log.txt', skip_header=1)
-        t_f, p_v = log[-1, 2], log[-1, 6]
+        t_f, p_v = log[-1, 2], log[-1, 3]
         p_th = get_vdw_p(N_TARGET/VOLUME, t_f, eps, SIG_FIXED)
         eps_data.append([eps, SIG_FIXED, t_f, p_v, p_th])
         print(f"  EPS={eps:.4f} | SIG={SIG_FIXED:.4f} | P_meas={p_v:.4f} | P_th={p_th:.4f}", end='\r')

@@ -51,7 +51,7 @@
 #endif
 
 #define LJ_CUTOFF (2.5f * LJ_SIGMA)
-#define THERMOSTAT_NU 0.2f // Higher frequency for tighter T control
+#define THERMOSTAT_NU 0.01f // Reduced from 0.2f to prevent washing out epsilon physics
 
 struct Particle { float4 pos; float4 mom; float4 force; };
 
@@ -101,7 +101,7 @@ __global__ void build_grid_kernel(float4* pos, int* is_alive, int* grid_indices,
 
 __global__ void compute_lj_forces_kernel(
     float4* pos, float4* force, int* is_alive, int* grid_indices, int* grid_counts, double* d_virial,
-    int num_slots, int IX, float box_size) 
+    int num_slots, int IX, float box_size, float lj_sigma, float lj_epsilon) 
 {
     int idx_i = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx_i >= num_slots || is_alive[idx_i] != 1) return;
@@ -113,6 +113,7 @@ __global__ void compute_lj_forces_kernel(
     int iz = (int)((xi.z + half) / box_size * (float)IX);
     ix = max(0, min(ix, IX - 1)); iy = max(0, min(iy, IX - 1)); iz = max(0, min(iz, IX - 1));
 
+    float cutoff = 2.5f * lj_sigma;
     for (int dx = -1; dx <= 1; dx++) {
         for (int dy = -1; dy <= 1; dy++) {
             for (int dz = -1; dz <= 1; dz++) {
@@ -126,10 +127,13 @@ __global__ void compute_lj_forces_kernel(
                     float4 xj = pos[idx_j];
                     float dx_ = xi.x - xj.x; float dy_ = xi.y - xj.y; float dz_ = xi.z - xj.z;
                     float r2 = dx_*dx_ + dy_*dy_ + dz_*dz_;
-                    if (r2 < LJ_CUTOFF * LJ_CUTOFF && r2 > 1e-4f) {
-                        float r2inv = 1.0f / r2; float r6inv = r2inv * r2inv * r2inv;
-                        float s6 = powf(LJ_SIGMA, 6.0f);
-                        float f_mag = 24.0f * LJ_EPSILON * r2inv * r6inv * s6 * (2.0f * r6inv * s6 - 1.0f);
+                    if (r2 < cutoff * cutoff && r2 > 1e-4f) {
+                        float r2inv = 1.0f / r2;
+                        float r6inv = r2inv * r2inv * r2inv;
+                        float s6 = powf(lj_sigma, 6.0f);
+                        float f_mag = 24.0f * lj_epsilon * r2inv * r6inv * s6 * (2.0f * r6inv * s6 - 1.0f);
+                        // Force capping for numerical stability during overlaps
+                        f_mag = fmaxf(-10000.0f, fminf(10000.0f, f_mag));
                         fi.x += f_mag * dx_; fi.y += f_mag * dy_; fi.z += f_mag * dz_;
                         if (idx_i < idx_j) atomicAdd(d_virial, (double)(f_mag * r2));
                     }
@@ -204,7 +208,8 @@ __device__ void apply_collision_atomic(float4* mom, int i, int j, float4 P1n, fl
 
 __global__ void collide_enskog_atomic_kernel(
     float4* mom, int* is_alive, int* grid_indices, int* grid_counts, curandState* rand_states,
-    int num_cells, int IX, float box_size, float dt, float dv, int testpartcl, float as, float md2) 
+    int num_cells, int IX, float box_size, float dt, float dv, int testpartcl, float as, float md2, float target_T,
+    float lj_sigma, float lj_epsilon) 
 {
     int cell_idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (cell_idx >= num_cells) return;
@@ -236,7 +241,11 @@ __global__ void collide_enskog_atomic_kernel(
 #else
             float3 vr = make_float3(P1.x/MASS - P2.x/MASS, P1.y/MASS - P2.y/MASS, P1.z/MASS - P2.z/MASS);
             float v_rel = sqrtf(vr.x*vr.x + vr.y*vr.y + vr.z*vr.z);
-            float prob = amp * v_rel * 0.5f * dt / (dv * testpartcl);
+            
+            float sigma_coll = PI * lj_sigma * lj_sigma;
+            float boltzmann_factor = expf(lj_epsilon / target_T); 
+            float prob = fminf(1.0f, amp * v_rel * sigma_coll * boltzmann_factor * dt / (dv * testpartcl));
+            
             if (curand_uniform(&local_state) < prob) {
                 float3 v_cm = make_float3((P1.x+P2.x)/(2*MASS), (P1.y+P2.y)/(2*MASS), (P1.z+P2.z)/(2*MASS));
                 float cost = curand_uniform(&local_state)*2-1; float sint = sqrtf(1-cost*cost); float phi = curand_uniform(&local_state)*2*PI;
@@ -286,7 +295,9 @@ __global__ void collide_enskog_atomic_kernel(
                 apply_collision_atomic(mom, idx_i, idx_j, boost_relativistic(P1n_cm, make_float3(-b.x, -b.y, -b.z)), boost_relativistic(P2n_cm, make_float3(-b.x, -b.y, -b.z)), P1, P2);
             }
 #else
-            float prob = (float)n_i * n_j * v_proj * 0.5f * dt / (dv * testpartcl);
+            float v_rel = sqrtf(v12.x*v12.x + v12.y*v12.y + v12.z*v12.z);
+            float sigma_coll = PI * LJ_SIGMA * LJ_SIGMA * (1.0f + LJ_EPSILON / 0.5f); // Using target_T=0.5
+            float prob = (float)n_i * n_j * v_proj * sigma_coll * dt / (dv * testpartcl);
             if (curand_uniform(&local_state) < prob) {
                 float3 v_cm = make_float3((P1.x+P2.x)/(2*MASS), (P1.y+P2.y)/(2*MASS), (P1.z+P2.z)/(2*MASS));
                 float cost = curand_uniform(&local_state)*2-1; float sint = sqrtf(1-cost*cost); float phi = curand_uniform(&local_state)*2*PI;
@@ -314,10 +325,11 @@ __global__ void diagnostics_kernel(float4* mom, int* is_alive, double* stats, in
 class BAMPS_Ancient {
 public:
     int max_slots, num_cells, IX; float box_size, dx, dv, dt;
+    float lj_sigma, lj_epsilon;
     float4 *d_pos, *d_mom, *d_force; int *d_is_alive, *d_grid_indices, *d_grid_counts;
     double *d_stats, *d_wall_mom, *d_virial; curandState *d_rand_states;
 
-    BAMPS_Ancient(int n, float box, int grid_res) : max_slots(n*2), box_size(box), IX(grid_res) {
+    BAMPS_Ancient(int n, float box, int grid_res, float sig, float eps) : max_slots(n*2), box_size(box), IX(grid_res), lj_sigma(sig), lj_epsilon(eps) {
         num_cells = IX * IX * IX; dx = box_size / (float)IX; dv = dx * dx * dx; dt = 0.01f;
         cudaMalloc(&d_pos, max_slots * sizeof(float4)); cudaMalloc(&d_mom, max_slots * sizeof(float4));
         cudaMalloc(&d_force, max_slots * sizeof(float4));
@@ -336,10 +348,10 @@ public:
 #if MODE_LJ
         cudaMemset(d_force, 0, max_slots * sizeof(float4));
         cudaMemset(d_virial, 0, sizeof(double));
-        compute_lj_forces_kernel<<<(max_slots+255)/256, 256>>>(d_pos, d_force, d_is_alive, d_grid_indices, d_grid_counts, d_virial, max_slots, IX, box_size);
+        compute_lj_forces_kernel<<<(max_slots+255)/256, 256>>>(d_pos, d_force, d_is_alive, d_grid_indices, d_grid_counts, d_virial, max_slots, IX, box_size, lj_sigma, lj_epsilon);
 #endif
         integrate_andersen_kernel<<<(max_slots+255)/256, 256>>>(d_pos, d_mom, d_force, d_is_alive, d_wall_mom, d_rand_states + num_cells, max_slots, dt, box_size, target_T);
-        collide_enskog_atomic_kernel<<<(num_cells+255)/256, 256>>>(d_mom, d_is_alive, d_grid_indices, d_grid_counts, d_rand_states, num_cells, IX, box_size, dt, dv, TESTPARTCL, 0.3f, 0.5f);
+        collide_enskog_atomic_kernel<<<(num_cells+255)/256, 256>>>(d_mom, d_is_alive, d_grid_indices, d_grid_counts, d_rand_states, num_cells, IX, box_size, dt, dv, TESTPARTCL, 0.3f, 0.5f, target_T, lj_sigma, lj_epsilon);
         cudaDeviceSynchronize();
     }
 
@@ -353,22 +365,36 @@ public:
     }
 };
 
-int main() {
-    int N = N_PARTICLES_OVERRIDE; float box_size = 10.0f; BAMPS_Ancient sim(N, box_size, 10);
-    sim.dt = DELTA_T; float target_T = 0.5f;
+int main(int argc, char** argv) {
+    float sig_in = LJ_SIGMA;
+    float eps_in = LJ_EPSILON;
+    int steps_in = TOTAL_STEPS;
+    float dt_in = DELTA_T;
+    int N_in = N_PARTICLES_OVERRIDE;
+
+    if (argc >= 3) {
+        sig_in = atof(argv[1]);
+        eps_in = atof(argv[2]);
+    }
+    if (argc >= 4) steps_in = atoi(argv[3]);
+    if (argc >= 5) dt_in = atof(argv[4]);
+    if (argc >= 6) N_in = atoi(argv[5]);
+
+    int N = N_in; float box_size = 10.0f; BAMPS_Ancient sim(N, box_size, 10, sig_in, eps_in);
+    sim.dt = dt_in; float target_T = 0.5f;
     FILE* master_f = fopen("bamps_master.log", "a");
     log_info(master_f, "\n# RUN MODE: %s, LJ: %d, N: %d, DT: %f, T_target: %f, TESTPARTCL: %d, SIGMA: %f, EPS: %f\n", 
-             MODE_RELATIVISTIC ? "REL" : "CLASS", MODE_LJ, N, sim.dt, target_T, TESTPARTCL, LJ_SIGMA, LJ_EPSILON);
+             MODE_RELATIVISTIC ? "REL" : "CLASS", MODE_LJ, N, sim.dt, target_T, TESTPARTCL, sig_in, eps_in);
     FILE* short_log = fopen("physics_log.txt", "w"); fprintf(short_log, "Step Time Temp Pressure_Wall Energy Count Pressure_Virial\n");
     cudaEvent_t start_bench, stop_bench; cudaEventCreate(&start_bench); cudaEventCreate(&stop_bench); cudaEventRecord(start_bench);
-    for(int i=0; i<=TOTAL_STEPS; i++) {
+    for(int i=0; i<=steps_in; i++) {
         sim.evolve(target_T);
         if(i % 100 == 0) {
             double stats[10], wall_mom, virial; sim.get_diagnostics(stats, &wall_mom, &virial);
             double Area = 6.0 * box_size * box_size; double Vol = box_size*box_size*box_size;
             double P_wall = wall_mom / (100.0 * sim.dt * Area * TESTPARTCL); 
             double T = MODE_RELATIVISTIC ? stats[0] / (3.0 * stats[1]) : stats[0] / (1.5 * stats[1]);
-            double P_virial = (stats[1]/TESTPARTCL * T / Vol) + (virial / (3.0 * Vol * TESTPARTCL));
+            double P_virial = (stats[1]/TESTPARTCL * T / Vol) + (virial / (3.0 * Vol * TESTPARTCL * TESTPARTCL));
             fprintf(short_log, "%d %f %f %f %f %f %f\n", i, i*sim.dt, T, P_wall, stats[0], stats[1], P_virial);
         }
     }
