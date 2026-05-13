@@ -29,6 +29,30 @@ def get_vdw_p(n, T, eps, sig):
     a = (16.0/9.0) * np.pi * eps * (sig**3)
     return (n * T) / (1.0 - n * b + 1e-9) - a * (n**2)
 
+def save_energy_spectrum(prefix, val):
+    if not os.path.exists('energies.txt'): return
+    try:
+        energies = np.loadtxt('energies.txt')
+        plt.figure(figsize=(8, 6))
+        plt.hist(energies, bins=200, density=True, color='skyblue', edgecolor='black', alpha=0.7)
+        
+        # Fit Maxwell-Boltzmann-like curve if relevant
+        T_eff = np.mean(energies) / 1.5 # Classical approximation
+        x = np.linspace(0, np.max(energies), 100)
+        # f(E) ~ sqrt(E) * exp(-E/T)
+        y = 2.0 * np.sqrt(x/np.pi) * (1.0/T_eff**1.5) * np.exp(-x/T_eff)
+        plt.plot(x, y, 'r-', lw=2, label=f'M-B Fit (T={T_eff:.3f})')
+
+        plt.title(f'Energy Spectrum: {prefix}={val:.4f}')
+        plt.xlabel('Energy [GeV]')
+        plt.ylabel('Probability Density')
+        plt.legend()
+        plt.grid(True, alpha=0.2)
+        plt.savefig(f'parameter_scan_results/energy_spec_{prefix}_{val:.4f}.png')
+        plt.close()
+    except Exception as e:
+        print(f"  [Error] Could not generate spectrum for {prefix}={val}: {e}")
+
 def perform_fast_scan():
     os.makedirs('validation_results', exist_ok=True)
     os.makedirs('parameter_scan_results', exist_ok=True)
@@ -47,8 +71,9 @@ def perform_fast_scan():
         run_cmd = [f"./{BIN_FILE}", f"{sig:.4f}", f"{EPS_FIXED:.4f}", str(STEPS), f"{DT_VAL:.4f}", str(N_TARGET)]
         if run_command(run_cmd) != 0: continue
         
-        # Archive Log
+        # Archive Log and Spectrum
         shutil.copy('physics_log.txt', f'parameter_scan_results/physics_log_sig_{sig:.4f}.txt')
+        save_energy_spectrum('sig', sig)
         
         log = np.genfromtxt('physics_log.txt', skip_header=1)
         if log.ndim == 1:
@@ -67,8 +92,9 @@ def perform_fast_scan():
         run_cmd = [f"./{BIN_FILE}", f"{SIG_FIXED:.4f}", f"{eps:.4f}", str(STEPS), f"{DT_VAL:.4f}", str(N_TARGET)]
         if run_command(run_cmd) != 0: continue
         
-        # Archive Log
+        # Archive Log and Spectrum
         shutil.copy('physics_log.txt', f'parameter_scan_results/physics_log_eps_{eps:.4f}.txt')
+        save_energy_spectrum('eps', eps)
         
         log = np.genfromtxt('physics_log.txt', skip_header=1)
         if log.ndim == 1:
