@@ -51,7 +51,7 @@
 #endif
 
 #define LJ_CUTOFF (2.5f * LJ_SIGMA)
-#define THERMOSTAT_NU 0.01f // Reduced from 0.2f to prevent washing out epsilon physics
+#define THERMOSTAT_NU 0.1f // User specified probability rate
 
 struct Particle { float4 pos; float4 mom; float4 force; };
 
@@ -126,14 +126,14 @@ __global__ void compute_lj_forces_kernel(
                     if (idx_i == idx_j) continue;
                     float4 xj = pos[idx_j];
                     float dx_ = xi.x - xj.x; float dy_ = xi.y - xj.y; float dz_ = xi.z - xj.z;
+                    
                     float r2 = dx_*dx_ + dy_*dy_ + dz_*dz_;
                     if (r2 < cutoff * cutoff && r2 > 1e-4f) {
                         float r2inv = 1.0f / r2;
                         float r6inv = r2inv * r2inv * r2inv;
                         float s6 = powf(lj_sigma, 6.0f);
                         float f_mag = 24.0f * lj_epsilon * r2inv * r6inv * s6 * (2.0f * r6inv * s6 - 1.0f);
-                        // Force capping for numerical stability during overlaps
-                        f_mag = fmaxf(-10000.0f, fminf(10000.0f, f_mag));
+                        // fi.x += f_mag * dx_; fi.y += f_mag * dy_; fi.z += f_mag * dz_;
                         fi.x += f_mag * dx_; fi.y += f_mag * dy_; fi.z += f_mag * dz_;
                         if (idx_i < idx_j) atomicAdd(d_virial, (double)(f_mag * r2));
                     }
@@ -144,49 +144,59 @@ __global__ void compute_lj_forces_kernel(
     force[idx_i] = make_float4(fi.x, fi.y, fi.z, 0);
 }
 
-__global__ void integrate_andersen_kernel(
+__global__ void integrate_kick_drift_kernel(
     float4* pos, float4* mom, float4* force, int* is_alive,
-    double* d_wall_mom, curandState* rand_states,
-    int num_slots, float dt, float box_size, float target_T) 
+    double* d_wall_mom, int num_slots, float dt, float box_size) 
 {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= num_slots || is_alive[idx] != 1) return;
     
-    curandState local_state = rand_states[idx % 1024];
     float4 p = pos[idx]; float4 m = mom[idx]; float4 f = force[idx];
 
-#if !MODE_RELATIVISTIC
+    // Kick 1: Half-step momentum update
     m.x += f.x * 0.5f * dt; m.y += f.y * 0.5f * dt; m.z += f.z * 0.5f * dt;
-#endif
 
-#if MODE_RELATIVISTIC
-    float vx = m.x/m.w; float vy = m.y/m.w; float vz = m.z/m.w;
-#else
+    // Drift: Position update
     float vx = m.x/MASS; float vy = m.y/MASS; float vz = m.z/MASS;
-#endif
     p.x += vx * dt; p.y += vy * dt; p.z += vz * dt;
 
+    // Reflective Boundary with wall momentum tracking
     float half = box_size / 2.0f; double dp_sum = 0;
-    if (p.x > half) { dp_sum += 2.0 * fabs(m.x); p.x = 2*half - p.x; m.x = -m.x; }
+    if (p.x > half)       { dp_sum += 2.0 * fabs(m.x); p.x = 2*half - p.x; m.x = -m.x; }
     else if (p.x < -half) { dp_sum += 2.0 * fabs(m.x); p.x = -2*half - p.x; m.x = -m.x; }
-    if (p.y > half) { dp_sum += 2.0 * fabs(m.y); p.y = 2*half - p.y; m.y = -m.y; }
+    if (p.y > half)       { dp_sum += 2.0 * fabs(m.y); p.y = 2*half - p.y; m.y = -m.y; }
     else if (p.y < -half) { dp_sum += 2.0 * fabs(m.y); p.y = -2*half - p.y; m.y = -m.y; }
-    if (p.z > half) { dp_sum += 2.0 * fabs(m.z); p.z = 2*half - p.z; m.z = -m.z; }
+    if (p.z > half)       { dp_sum += 2.0 * fabs(m.z); p.z = 2*half - p.z; m.z = -m.z; }
     else if (p.z < -half) { dp_sum += 2.0 * fabs(m.z); p.z = -2*half - p.z; m.z = -m.z; }
+    
     if (dp_sum > 0) atomicAdd(d_wall_mom, dp_sum);
 
-#if !MODE_RELATIVISTIC
-    if (curand_uniform(&local_state) < THERMOSTAT_NU) {
+    pos[idx] = p; mom[idx] = m;
+}
+
+__global__ void integrate_kick_final_kernel(
+    float4* mom, float4* force, int* is_alive, curandState* rand_states,
+    int num_slots, float dt, float target_T) 
+{
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= num_slots || is_alive[idx] != 1) return;
+    
+    float4 m = mom[idx]; float4 f = force[idx];
+    curandState local_state = rand_states[idx % 1024];
+
+    // Kick 2: Final half-step momentum update
+    m.x += f.x * 0.5f * dt; m.y += f.y * 0.5f * dt; m.z += f.z * 0.5f * dt;
+
+    // Andersen Thermostat
+    if (curand_uniform(&local_state) < (THERMOSTAT_NU * dt)) {
         float sig = sqrtf(target_T / MASS);
         m.x = curand_normal(&local_state) * sig * MASS;
         m.y = curand_normal(&local_state) * sig * MASS;
         m.z = curand_normal(&local_state) * sig * MASS;
-    } else {
-        m.x += f.x * 0.5f * dt; m.y += f.y * 0.5f * dt; m.z += f.z * 0.5f * dt;
     }
     m.w = (m.x*m.x + m.y*m.y + m.z*m.z) / (2.0f * MASS);
-#endif
-    pos[idx] = p; mom[idx] = m;
+
+    mom[idx] = m;
     rand_states[idx % 1024] = local_state;
 }
 
@@ -343,15 +353,27 @@ public:
     }
 
     void evolve(float target_T) {
+        // --- Step 1: Kick 1 + Drift ---
+        integrate_kick_drift_kernel<<<(max_slots+255)/256, 256>>>(d_pos, d_mom, d_force, d_is_alive, d_wall_mom, max_slots, dt, box_size);
+        cudaDeviceSynchronize();
+
+        // --- Step 2: Update Grid & Forces ---
         cudaMemset(d_grid_counts, 0, num_cells * sizeof(int));
         build_grid_kernel<<<(max_slots+255)/256, 256>>>(d_pos, d_is_alive, d_grid_indices, d_grid_counts, max_slots, box_size, dx, IX);
+        
 #if MODE_LJ
         cudaMemset(d_force, 0, max_slots * sizeof(float4));
         cudaMemset(d_virial, 0, sizeof(double));
         compute_lj_forces_kernel<<<(max_slots+255)/256, 256>>>(d_pos, d_force, d_is_alive, d_grid_indices, d_grid_counts, d_virial, max_slots, IX, box_size, lj_sigma, lj_epsilon);
 #endif
-        integrate_andersen_kernel<<<(max_slots+255)/256, 256>>>(d_pos, d_mom, d_force, d_is_alive, d_wall_mom, d_rand_states + num_cells, max_slots, dt, box_size, target_T);
+        
+        // --- Step 3: Kick 2 + Thermostat ---
+        integrate_kick_final_kernel<<<(max_slots+255)/256, 256>>>(d_mom, d_force, d_is_alive, d_rand_states + num_cells, max_slots, dt, target_T);
+        
+#if !MODE_LJ
+        // Stochastic collisions (if active) occur at the end of the step
         collide_enskog_atomic_kernel<<<(num_cells+255)/256, 256>>>(d_mom, d_is_alive, d_grid_indices, d_grid_counts, d_rand_states, num_cells, IX, box_size, dt, dv, TESTPARTCL, 0.3f, 0.5f, target_T, lj_sigma, lj_epsilon);
+#endif
         cudaDeviceSynchronize();
     }
 
@@ -371,6 +393,7 @@ int main(int argc, char** argv) {
     int steps_in = TOTAL_STEPS;
     float dt_in = DELTA_T;
     int N_in = N_PARTICLES_OVERRIDE;
+    float target_T = 0.5f;
 
     if (argc >= 3) {
         sig_in = atof(argv[1]);
@@ -379,9 +402,10 @@ int main(int argc, char** argv) {
     if (argc >= 4) steps_in = atoi(argv[3]);
     if (argc >= 5) dt_in = atof(argv[4]);
     if (argc >= 6) N_in = atoi(argv[5]);
+    if (argc >= 7) target_T = atof(argv[6]);
 
     int N = N_in; float box_size = 10.0f; BAMPS_Ancient sim(N, box_size, 10, sig_in, eps_in);
-    sim.dt = dt_in; float target_T = 0.5f;
+    sim.dt = dt_in; 
     FILE* master_f = fopen("bamps_master.log", "a");
     log_info(master_f, "\n# RUN MODE: %s, LJ: %d, N: %d, DT: %f, T_target: %f, TESTPARTCL: %d, SIGMA: %f, EPS: %f\n", 
              MODE_RELATIVISTIC ? "REL" : "CLASS", MODE_LJ, N, sim.dt, target_T, TESTPARTCL, sig_in, eps_in);
@@ -394,7 +418,16 @@ int main(int argc, char** argv) {
             double Area = 6.0 * box_size * box_size; double Vol = box_size*box_size*box_size;
             double P_wall = wall_mom / (100.0 * sim.dt * Area * TESTPARTCL); 
             double T = MODE_RELATIVISTIC ? stats[0] / (3.0 * stats[1]) : stats[0] / (1.5 * stats[1]);
-            double P_virial = (stats[1]/TESTPARTCL * T / Vol) + (virial / (3.0 * Vol * TESTPARTCL * TESTPARTCL));
+            
+            // Tail correction for LJ pressure (rc = 2.5 * sigma)
+            double rho = stats[1] / (Vol * TESTPARTCL);
+            double rc = 2.5 * sig_in;
+            double s_rc = sig_in / rc; // should be 1/2.5 = 0.4
+            double s_rc3 = s_rc * s_rc * s_rc;
+            double s_rc9 = s_rc3 * s_rc3 * s_rc3;
+            double p_tail = (16.0/3.0) * PI * rho * rho * eps_in * pow((double)sig_in, 3.0) * ((2.0/3.0)*s_rc9 - s_rc3);
+            
+            double P_virial = (rho * T) + (virial / (3.0 * Vol * TESTPARTCL * TESTPARTCL)) + p_tail;
             fprintf(short_log, "%d %f %f %f %f %f %f\n", i, i*sim.dt, T, P_wall, stats[0], stats[1], P_virial);
         }
     }
