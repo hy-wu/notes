@@ -45,7 +45,7 @@ To rigorously verify the physical fidelity of the engine, a 4D parameter scan wa
 
 \begin{itemize}
     \item \textbf{Sigma Scan}: Captures the non-linear growth of excluded volume effects, accurately tracking the Carnahan-Starling prediction as $\sigma$ increases.
-    \item \textbf{Epsilon Scan}: Demonstrates the linear reduction in pressure due to mean-field Vlasov attraction.
+    \item \textbf{Epsilon Scan}: Demonstrates the impact of the attractive component of the Lennard-Jones potential. The simulation directly computes pairwise LJ forces, and the observed trend closely follows the theoretical prediction which includes the mean-field Vlasov attraction as an analytical correction.
     \item \textbf{Temperature Scan}: Shows the relative weakening of attractive forces as kinetic energy increases, with $P/T$ asymptotically approaching the hard-sphere limit.
     \item \textbf{Density Scan}: Validates the engine's stability and accuracy from dilute gas ($\rho=1.0$) to high-density liquid ($\rho=8.0$) regimes.
 \end{itemize}
