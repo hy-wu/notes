@@ -180,20 +180,20 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
 }
 
 int main(int argc, char** argv) {
-    if (argc < 3) {
-        std::cerr << "Usage: ./bamps_compare <therm_type> <out_prefix>" << std::endl;
+    if (argc < 8) {
+        std::cerr << "Usage: ./bamps_compare <therm_type> <out_prefix> <sig> <eps> <rho> <T_target> <steps>" << std::endl;
         return 1;
     }
     
     int therm_type = atoi(argv[1]);
     const char* prefix = argv[2];
+    float sig = atof(argv[3]);
+    float eps = atof(argv[4]);
+    float rho = atof(argv[5]);
+    float T_target = atof(argv[6]);
+    int steps = atoi(argv[7]);
     
-    float sig = 0.1f;
-    float eps = 0.4f;
-    float rho = 6.0f;
     float box = 10.0f;
-    float T_target = 1.2f;
-    int steps = 2000;
     int N = (int)(rho * box * box * box);
     
     if (therm_type == 0) run_sim<NullThermostat>(N, box, sig, eps, T_target, steps, prefix);
