@@ -28,26 +28,36 @@ The engine utilizes a C++ template-based policy architecture to eliminate macro-
     \item \textbf{Collisions}: Integrated \texttt{HardSphereCollision} (DSMC) for hybrid MD+DSMC simulations.
 \end{itemize}
 
-\section{Physical Validation}
-\subsection{Thermostat Comparison and Canonical Ensembles}
+\section{Physical Validation: Thermostats and Canonical Ensembles}
 Initial testing revealed a ``numerical heat explosion'' in random initialization at high densities ($\rho=6.0$). This was resolved by implementing a \textbf{Simple Cubic Lattice} initialization. 
-Validation showed that:
-\begin{itemize}
-    \item \textbf{NHC} provides the smoothest global temperature control and maintains dynamical continuity.
-    \item \textbf{Andersen/Langevin} (with updated coupling $\nu, \gamma = 2.0$) successfully recover the target temperature and match the theoretical Maxwell-Boltzmann distribution.
-\end{itemize}
 
-\subsection{Equation of State (EoS) Matching}
-Parameter scans for $\sigma$ and $\epsilon$ were performed. The results for $P/T$ vs. $\sigma$ correctly display the U-shaped competition between mean-field attraction and Carnahan-Starling repulsion. The measured pressure from wall momentum ($P_{wall}$) matches the virial pressure ($P_{virial}$) within statistical margins, confirming simulation self-consistency.
+The performance of different thermostats was compared by tracking the system's relaxation to the target temperature $T=1.2$. As shown in Figure~\ref{fig:therm_comp}, all active thermostats successfully stabilized the system and produced momentum distributions matching the theoretical Maxwell-Boltzmann PDF. NHC provided the most deterministic and smooth control, while Andersen and Langevin showed characteristic fluctuations consistent with their stochastic nature.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.95\textwidth]{comparison_results/thermostat_comparison.png}
-    \caption{Thermostat Comparison Suite: Temperature evolution, Virial/Wall pressure stability, and terminal Momentum distribution vs. Theoretical Maxwell-Boltzmann PDF.}
+    \includegraphics[width=0.9\textwidth]{comparison_results/thermostat_comparison.png}
+    \caption{Thermostat Comparison: Time-series of $T$, $P_{virial}$, and $P_{wall}$ alongside terminal momentum distribution.}
     \label{fig:therm_comp}
 \end{figure}
 
+\section{Equation of State (EoS) Comprehensive Validation}
+To rigorously verify the physical fidelity of the engine, a 4D parameter scan was conducted across $\sigma$, $\epsilon$, $T$, and $\rho$. The results, presented in Figure~\ref{fig:eos_scan}, focus on the $P_{wall}/T$ metric (equivalent to $\rho Z$) to ensure robustness against virial noise.
+
+\begin{itemize}
+    \item \textbf{Sigma Scan}: Captures the non-linear growth of excluded volume effects, accurately tracking the Carnahan-Starling prediction as $\sigma$ increases.
+    \item \textbf{Epsilon Scan}: Demonstrates the linear reduction in pressure due to mean-field Vlasov attraction.
+    \item \textbf{Temperature Scan}: Shows the relative weakening of attractive forces as kinetic energy increases, with $P/T$ asymptotically approaching the hard-sphere limit.
+    \item \textbf{Density Scan}: Validates the engine's stability and accuracy from dilute gas ($\rho=1.0$) to high-density liquid ($\rho=8.0$) regimes.
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{eos_scans/eos_validation_comprehensive.png}
+    \caption{Comprehensive EoS Validation Dashboard: $P_{wall}/T$ vs. physical parameters across multiple thermostats compared against the theoretical EoS (CS + Vlasov).}
+    \label{fig:eos_scan}
+\end{figure}
+
 \section{Conclusion}
-The BAMPS Modern GPU engine is now a robust, publication-grade tool for non-equilibrium fluid dynamics. The modular design allows for seamless extension into specific heavy-ion collision scenarios or dense fluid applications.
+The BAMPS Modern GPU engine is now a robust, publication-grade tool for non-equilibrium fluid dynamics. The combination of NHC thermostats, lattice initialization, and dual-path pressure measurement ensures high physical accuracy across a wide range of thermodynamic states.
 
 \end{document}
