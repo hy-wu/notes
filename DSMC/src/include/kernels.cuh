@@ -43,14 +43,22 @@ __global__ void init_particles_kernel(
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= n) return;
 
-    curandState local_state = states[idx];
-
+    // Initialize on a lattice to avoid overlaps
+    int n_side = (int)ceilf(powf((float)n, 1.0f/3.0f));
+    float spacing = box_size / n_side;
+    
+    int ix = idx % n_side;
+    int iy = (idx / n_side) % n_side;
+    int iz = idx / (n_side * n_side);
+    
+    float half = box_size * 0.5f;
     particles[idx].pos = make_float3(
-        (curand_uniform(&local_state) - 0.5f) * box_size,
-        (curand_uniform(&local_state) - 0.5f) * box_size,
-        (curand_uniform(&local_state) - 0.5f) * box_size
+        ix * spacing - half + spacing * 0.5f,
+        iy * spacing - half + spacing * 0.5f,
+        iz * spacing - half + spacing * 0.5f
     );
 
+    curandState local_state = states[idx];
     float sig = sqrtf(target_T / MASS);
     particles[idx].mom = make_float3(
         curand_normal(&local_state) * sig * MASS,

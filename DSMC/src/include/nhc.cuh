@@ -81,11 +81,12 @@ __inline__ __device__ float warpReduceSum(float val) {
     return val;
 }
 
+template <typename Kinematics>
 __global__ void reduce_ke_kernel(const Particle* particles, int n, double* out_ke) {
     float sum = 0;
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx < n && particles[idx].is_alive) {
-        sum = dot(particles[idx].mom, particles[idx].mom) / (2.0f * MASS);
+        sum = Kinematics::calculate_kinetic_energy(particles[idx].mom);
     }
 
     sum = warpReduceSum(sum);

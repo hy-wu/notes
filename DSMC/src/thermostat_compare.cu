@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 #include <type_traits>
 #include "include/common.cuh"
 #include "include/kernels.cuh"
@@ -37,7 +38,7 @@ public:
     {
         IX = 10;
         num_cells = IX * IX * IX;
-        dt = 0.002f; nu = 0.01f;
+        dt = 0.002f; nu = 2.0f; // Increased coupling from 0.01f to 2.0f
 
         CUDA_CHECK(cudaMalloc(&d_particles, n * sizeof(Particle)));
         CUDA_CHECK(cudaMalloc(&d_forces, n * sizeof(float3)));
@@ -128,56 +129,77 @@ public:
     }
 };
 
+template<typename Therm>
+void run_sim(int N, float box, float sig, float eps, float T_target, int steps, const char* out_prefix) {
+    Simulation<ClassicalKinematics, ReflectiveWall, LennardJones, NullCollision, Therm> sim(N, box, sig, eps, T_target);
+    
+    std::string ts_file = std::string(out_prefix) + "_timeseries.csv";
+    std::ofstream ofs(ts_file);
+    ofs << "Step,T,P_virial,P_wall\n";
+    
+    float Area = 6.0f * box * box;
+    float Vol = box * box * box;
+    
+    sim.reset_accumulators();
+    int record_interval = 10;
+    
+    for (int i = 0; i < steps; ++i) {
+        sim.step();
+        
+        if ((i + 1) % record_interval == 0) {
+            double wall, vir, ke;
+            sim.get_stats(wall, vir, ke);
+            
+            float T_meas = (float)(2.0 * ke / (3.0 * N));
+            float p_tail = LennardJones::calculate_p_tail(N/Vol, eps, sig);
+            
+            double p_wall_inst = wall / (record_interval * sim.dt * Area);
+            float p_vir_inst = (N/Vol * T_meas) + (vir / (3.0 * Vol)) + p_tail;
+            
+            ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << "\n";
+            sim.reset_accumulators();
+        }
+    }
+    ofs.close();
+    
+    std::string mom_file = std::string(out_prefix) + "_momenta.csv";
+    std::ofstream ofsm(mom_file);
+    ofsm << "p_mag\n";
+    
+    Particle* h_particles = new Particle[N];
+    cudaMemcpy(h_particles, sim.d_particles, N * sizeof(Particle), cudaMemcpyDeviceToHost);
+    for(int i=0; i<N; ++i) {
+        float px = h_particles[i].mom.x;
+        float py = h_particles[i].mom.y;
+        float pz = h_particles[i].mom.z;
+        float p_mag = sqrtf(px*px + py*py + pz*pz);
+        ofsm << p_mag << "\n";
+    }
+    delete[] h_particles;
+    std::cout << "Completed " << out_prefix << std::endl;
+}
+
 int main(int argc, char** argv) {
+    if (argc < 3) {
+        std::cerr << "Usage: ./bamps_compare <therm_type> <out_prefix>" << std::endl;
+        return 1;
+    }
+    
+    int therm_type = atoi(argv[1]);
+    const char* prefix = argv[2];
+    
     float sig = 0.1f;
     float eps = 0.4f;
     float rho = 6.0f;
     float box = 10.0f;
     float T_target = 1.2f;
-    int steps = 1000;
-
-    if (argc >= 2) sig = atof(argv[1]);
-    if (argc >= 3) eps = atof(argv[2]);
-    if (argc >= 4) rho = atof(argv[3]);
-    if (argc >= 5) T_target = atof(argv[4]);
-    if (argc >= 6) steps = atoi(argv[5]);
-
+    int steps = 2000;
     int N = (int)(rho * box * box * box);
-    Simulation<ClassicalKinematics, ReflectiveWall, LennardJones, NullCollision, GlobalScalingThermostat> sim(N, box, sig, eps, T_target);
-
-    // 1. Equilibration
-    int eq_steps = (int)(steps * 0.5);
-    for (int i = 0; i < eq_steps; ++i) sim.step();
-    sim.reset_accumulators();
-
-    // 2. Production (Averaging over the rest)
-    double acc_p_virial = 0;
-    double acc_t = 0;
-    int prod_steps = steps - eq_steps;
-
-    for (int i = 0; i < prod_steps; ++i) {
-        sim.step();
-        double wall, vir, ke;
-        sim.get_stats(wall, vir, ke);
-        
-        float Vol = box * box * box;
-        float T_meas = (float)(2.0 * ke / (3.0 * N));
-        float p_tail = LennardJones::calculate_p_tail(rho, eps, sig);
-        
-        acc_p_virial += (rho * T_meas) + (vir / (3.0 * Vol)) + p_tail;
-        acc_t += T_meas;
-    }
     
-    // Independent measurement from Wall Momentum
-    double final_wall_mom, dummy_v, dummy_k;
-    sim.get_stats(final_wall_mom, dummy_v, dummy_k);
+    if (therm_type == 0) run_sim<NullThermostat>(N, box, sig, eps, T_target, steps, prefix);
+    else if (therm_type == 1) run_sim<AndersenThermostat>(N, box, sig, eps, T_target, steps, prefix);
+    else if (therm_type == 2) run_sim<LangevinThermostat>(N, box, sig, eps, T_target, steps, prefix);
+    else if (therm_type == 3) run_sim<GlobalScalingThermostat>(N, box, sig, eps, T_target, steps, prefix);
     
-    float Area = 6.0f * box * box;
-    double P_wall = final_wall_mom / (prod_steps * sim.dt * Area);
-    
-    std::cout << "FINAL_TEMPERATURE: " << acc_t / prod_steps << std::endl;
-    std::cout << "FINAL_P_VIRIAL: " << acc_p_virial / prod_steps << std::endl;
-    std::cout << "FINAL_P_WALL: " << P_wall << std::endl;
-
     return 0;
 }
