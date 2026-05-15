@@ -17,16 +17,24 @@ SRC_FILE = "src/thermostat_compare.cu"
 TARGET_T = 1.2
 MASS = 1.0
 
+# Parameters for the C++ executable (these are fixed for the thermostat comparison)
+BASE_SIG = 0.1
+BASE_EPS = 0.4
+BASE_RHO = 6.0
+STEPS = 2000 # Matching the C++ executable's default
+
 def compile_code():
     print("Compiling comparison harness...")
-    subprocess.run(["nvcc", "-O3", "-arch=sm_89", SRC_FILE, "-o", BIN_FILE], check=True)
+    subprocess.run(["nvcc", "-O3", "-arch=sm_89", "-std=c++17", SRC_FILE, "-o", BIN_FILE], check=True)
 
 def run_simulations():
     os.makedirs("comparison_results", exist_ok=True)
     for tid, name in THERMOSTATS.items():
         prefix = f"comparison_results/{name.split()[0].lower()}"
         print(f"Running simulation: {name}...")
-        subprocess.run([f"./{BIN_FILE}", str(tid), prefix], check=True)
+        # Pass all required parameters to bamps_compare.exe
+        cmd = [f"./{BIN_FILE}", str(tid), prefix, str(BASE_SIG), str(BASE_EPS), str(BASE_RHO), str(TARGET_T), str(STEPS)]
+        subprocess.run(cmd, capture_output=True, text=True, check=True)
 
 def plot_results():
     fig, axes = plt.subplots(2, 2, figsize=(16, 12))

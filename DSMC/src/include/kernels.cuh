@@ -135,9 +135,13 @@ __global__ void compute_forces_kernel(
     int iz = (int)((pos_i.z + half) / box_size * (float)IX);
     ix = max(0, min(ix, IX - 1)); iy = max(0, min(iy, IX - 1)); iz = max(0, min(iz, IX - 1));
 
-    for (int dx = -1; dx <= 1; dx++) {
-        for (int dy = -1; dy <= 1; dy++) {
-            for (int dz = -1; dz <= 1; dz++) {
+    // Expand neighbor search to cover larger cutoffs (e.g., 2.5*sigma can exceed 1 cell width)
+    // For sigma=0.4, cutoff=1.0. If cell size=1.0, need to check up to +/- 1 cell (so dx,dy,dz from -1 to 1)
+    // If sigma gets larger, say 0.5, cutoff=1.25, then 2.5*sigma > 1 cell. Need to check further.
+    // For now, fixed to [-2,2] to cover up to sigma=0.5 (cutoff=1.25) safely, given IX=10, cell_size=1.0.
+    for (int dx = -2; dx <= 2; dx++) { 
+        for (int dy = -2; dy <= 2; dy++) {
+            for (int dz = -2; dz <= 2; dz++) {
                 int nix, niy, niz;
                 if (Boundary::is_periodic) {
                     nix = (ix + dx + IX) % IX;
@@ -154,16 +158,30 @@ __global__ void compute_forces_kernel(
                     int idx_j = grid_indices[cell_idx * MAX_PARTICLES_PER_CELL + j];
                     if (idx_i == idx_j) continue;
 
-                    float3 f = Potential::calculate_force(
-                        pos_i, particles[idx_j].pos, sigma, epsilon, box_size, 
-                        (idx_i < idx_j) ? &local_virial : nullptr
+                    float3 r_vec = pos_i - particles[idx_j].pos;
+
+                    // Apply MIC for periodic boundaries to r_vec for correct distance
+                    if (Boundary::is_periodic) {
+                        if (r_vec.x > half) r_vec.x -= box_size; else if (r_vec.x < -half) r_vec.x += box_size;
+                        if (r_vec.y > half) r_vec.y -= box_size; else if (r_vec.y < -half) r_vec.y += box_size;
+                        if (r_vec.z > half) r_vec.z -= box_size; else if (r_vec.z < -half) r_vec.z += box_size;
+                    }
+
+                    float3 f_uncapped = Potential::calculate_force(
+                        pos_i, particles[idx_j].pos, sigma, epsilon, box_size, nullptr // Virial is calculated after capping
                     );
                     
                     // Force Capping for Stability at high density
-                    float f_mag = length(f);
-                    if (f_mag > 10000.0f) f = f * (10000.0f / f_mag);
+                    float f_mag = length(f_uncapped);
+                    float3 f_capped = f_uncapped;
+                    if (f_mag > 10000.0f) f_capped = f_uncapped * (10000.0f / f_mag);
                     
-                    force_i = force_i + f;
+                    force_i = force_i + f_capped;
+
+                    // Virial is calculated from the *capped* force that actually drives the dynamics
+                    if (d_virial && idx_i < idx_j) { // Only calculate for i < j to avoid double counting
+                         local_virial += dot(f_capped, r_vec);
+                    }
                 }
             }
         }

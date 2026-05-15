@@ -24,7 +24,7 @@ The engine utilizes a C++ template-based policy architecture to eliminate macro-
 \begin{itemize}
     \item \textbf{Kinematics}: \texttt{Classical}, \texttt{Relativistic}, \texttt{Ultrarelativistic} (massless limit).
     \item \textbf{Thermostats}: \texttt{Andersen}, \texttt{Langevin}, and a generic \texttt{Nosé-Hoover Chain (NHC)} supporting all kinematics via generic kinetic energy reduction.
-    \item \textbf{Potentials}: \texttt{LennardJones} with force capping, analytical tail corrections ($P_{tail}$), and mean-field Vlasov attraction $a(T)$.
+    \item \textbf{Potentials}: \texttt{LennardJones} incorporates a numerically stable \textbf{Force Capping} mechanism. It includes analytical tail corrections ($P_{tail}$) and utilizes a constant mean-field Vlasov attraction factor ($a$) in the virial calculation. While \texttt{calculate\_a\_eff(T)} is available in the framework, dynamic temperature-dependent $a(T)$ is not yet actively used in the simulation's pressure measurement but is used for theoretical comparisons.
     \item \textbf{Collisions}: Integrated \texttt{HardSphereCollision} (DSMC) for hybrid MD+DSMC simulations.
 \end{itemize}
 

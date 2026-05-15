@@ -31,7 +31,7 @@ SCAN_RANGES = {
 
 def compile_code():
     print("Compiling comparison harness...")
-    subprocess.run(["nvcc", "-O3", "-arch=sm_89", SRC_FILE, "-o", BIN_FILE], check=True)
+    subprocess.run(["nvcc", "-O3", "-arch=sm_89", "-std=c++17", SRC_FILE, "-o", BIN_FILE], check=True)
 
 def run_sim(tid, prefix, sig, eps, rho, T, steps):
     cmd = [f"./{BIN_FILE}", str(tid), prefix, str(sig), str(eps), str(rho), str(T), str(steps)]
