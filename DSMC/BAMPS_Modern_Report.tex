@@ -29,15 +29,15 @@ The engine utilizes a C++ template-based policy architecture:
 
 \section{Physical Validation: MD Credibility Suite}
 \subsection{Structural Integrity (RDF Control)}
-We performed a benchmark on liquid Argon ($\rho^*=0.8, T^*=1.0$). Figure~\ref{fig:argon} (right) shows the Radial Distribution Function $g(r)$. Our GPU engine results (red) perfectly overlap with the standard \textbf{LAMMPS Reference} (black dashed), confirming correct force and neighbor search implementations.
+We performed an expanded equilibrium benchmark on liquid Argon ($\rho^*=0.8, T^*=1.0$). Figure~\ref{fig:argon} summarizes the NVE energy drift, structural observables ($g(r)$ and $S(k)$), local compressibility diagnostics, and the equilibrium summary table against the \textbf{LAMMPS Reference}.
 
 \subsection{Dynamical Integrity (Self-Diffusion)}
 We calculated the Mean Square Displacement (MSD) over 50,000 steps. Figure~\ref{fig:msd} shows a perfect linear growth ($R^2=0.9996$), following the Einstein relation $MSD = 6Dt$. The extracted diffusion coefficient $D^* \approx 0.066$ matches literature values for the LJ liquid at this state point, verifying the accuracy of the dynamical integrator.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{argon_results/argon_validation.png}
-    \caption{Argon/LJ Benchmark: NVE Energy Drift (left) and RDF $g(r)$ comparison against LAMMPS (right).}
+    \includegraphics[width=0.98\textwidth]{argon_results/argon_equilibrium_validation.png}
+    \caption{Expanded Argon/LJ equilibrium benchmark: energy conservation, RDF and structure-factor comparisons, local compressibility scan, speed-distribution check, and summary metrics against LAMMPS.}
     \label{fig:argon}
 \end{figure}
 
