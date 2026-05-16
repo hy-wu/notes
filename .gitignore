@@ -145,3 +145,9 @@ CMPS297GPU/experiment_results
 
 *.csv
 *.txt
+*.exe
+*.exp
+*.lib
+.deepseek
+
+log.lammps

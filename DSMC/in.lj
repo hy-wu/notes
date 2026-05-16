@@ -10,6 +10,7 @@ create_atoms 1 random 1382 12345 sim_box
 mass 1 1.0
 pair_style lj/cut 2.5
 pair_coeff 1 1 1.0 1.0 2.5
+pair_modify tail yes
 
 # Resolve overlaps
 minimize 1.0e-4 1.0e-6 100 1000
