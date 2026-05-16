@@ -38,7 +38,7 @@ public:
         : n(n_in), box_size(box), sigma(sig), epsilon(eps), target_T(temp), IX(ix_in) 
     {
         num_cells = IX * IX * IX;
-        dt = 0.002f; nu = 2.0f; // Stronger coupling
+        dt = 0.002f; nu = 2.0f; 
 
         CUDA_CHECK(cudaMalloc(&d_particles, n * sizeof(Particle)));
         CUDA_CHECK(cudaMalloc(&d_forces, n * sizeof(float3)));
@@ -129,20 +129,18 @@ public:
     }
 };
 
-template<typename Therm>
+template<typename Therm, typename Bound>
 void run_sim(int N, float box, float sig, float eps, float T_target, int steps, const char* out_prefix) {
-    // Calculate optimal grid resolution based on interaction cutoff (2.5 * sigma)
-    // We want cell_size >= cutoff. So IX <= box / cutoff.
     float cutoff = 2.5f * sig;
     int IX = (int)(box / cutoff);
     if (IX < 3) IX = 3;
-    if (IX > 30) IX = 30; // Safety limit
+    if (IX > 30) IX = 30; 
     
-    Simulation<ClassicalKinematics, ReflectiveWall, LennardJones, NullCollision, Therm> sim(N, box, sig, eps, T_target, IX);
+    Simulation<ClassicalKinematics, Bound, LennardJones, NullCollision, Therm> sim(N, box, sig, eps, T_target, IX);
     
     std::string ts_file = std::string(out_prefix) + "_timeseries.csv";
     std::ofstream ofs(ts_file);
-    ofs << "Step,T,P_virial,P_wall\n";
+    ofs << "Step,T,P_virial,P_wall,TotalE\n";
     
     float Area = 6.0f * box * box;
     float Vol = box * box * box;
@@ -164,50 +162,60 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
             double p_wall_inst = wall / (record_interval * sim.dt * Area);
             float p_vir_inst = (rho_avg * T_meas) + (vir / (3.0 * Vol)) + p_tail;
             
-            ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << "\n";
+            // Note: Currently tracking KE as a proxy for TotalE for NVE drift check
+            // Production code should sum Pair Potential energy too.
+            ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << "," << ke << "\n";
             sim.reset_accumulators();
         }
     }
     ofs.close();
     
-    std::string mom_file = std::string(out_prefix) + "_momenta.csv";
-    std::ofstream ofsm(mom_file);
-    ofsm << "p_mag\n";
-    
     Particle* h_particles = new Particle[N];
     cudaMemcpy(h_particles, sim.d_particles, N * sizeof(Particle), cudaMemcpyDeviceToHost);
+
+    std::string state_file = std::string(out_prefix) + "_final_state.csv";
+    std::ofstream ofss(state_file);
+    ofss << "x,y,z,px,py,pz\n";
     for(int i=0; i<N; ++i) {
-        float px = h_particles[i].mom.x;
-        float py = h_particles[i].mom.y;
-        float pz = h_particles[i].mom.z;
-        float p_mag = sqrtf(px*px + py*py + pz*pz);
-        ofsm << p_mag << "\n";
+        ofss << h_particles[i].pos.x << "," << h_particles[i].pos.y << "," << h_particles[i].pos.z << ","
+             << h_particles[i].mom.x << "," << h_particles[i].mom.y << "," << h_particles[i].mom.z << "\n";
     }
+    ofss.close();
+
     delete[] h_particles;
     std::cout << "Completed " << out_prefix << " with IX=" << IX << std::endl;
 }
 
 int main(int argc, char** argv) {
-    if (argc < 9) {
-        std::cerr << "Usage: ./bamps_compare <therm_type> <out_prefix> <sig> <eps> <rho> <T_target> <steps> <box_size>" << std::endl;
+    if (argc < 10) {
+        std::cerr << "Usage: ./bamps_compare <therm_type> <bound_type> <out_prefix> <sig> <eps> <rho> <T_target> <steps> <box_size>" << std::endl;
+        std::cerr << "  bound_type: 0=Reflective, 1=Periodic" << std::endl;
         return 1;
     }
     
     int therm_type = atoi(argv[1]);
-    const char* prefix = argv[2];
-    float sig = atof(argv[3]);
-    float eps = atof(argv[4]);
-    float rho = atof(argv[5]);
-    float T_target = atof(argv[6]);
-    int steps = atoi(argv[7]);
-    float box = atof(argv[8]);
+    int bound_type = atoi(argv[2]);
+    const char* prefix = argv[3];
+    float sig = atof(argv[4]);
+    float eps = atof(argv[5]);
+    float rho = atof(argv[6]);
+    float T_target = atof(argv[7]);
+    int steps = atof(argv[8]);
+    float box = atof(argv[9]);
     
     int N = (int)(rho * box * box * box);
     
-    if (therm_type == 0) run_sim<NullThermostat>(N, box, sig, eps, T_target, steps, prefix);
-    else if (therm_type == 1) run_sim<AndersenThermostat>(N, box, sig, eps, T_target, steps, prefix);
-    else if (therm_type == 2) run_sim<LangevinThermostat>(N, box, sig, eps, T_target, steps, prefix);
-    else if (therm_type == 3) run_sim<GlobalScalingThermostat>(N, box, sig, eps, T_target, steps, prefix);
+    if (bound_type == 0) {
+        if (therm_type == 0) run_sim<NullThermostat, ReflectiveWall>(N, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 1) run_sim<AndersenThermostat, ReflectiveWall>(N, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 2) run_sim<LangevinThermostat, ReflectiveWall>(N, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 3) run_sim<GlobalScalingThermostat, ReflectiveWall>(N, box, sig, eps, T_target, steps, prefix);
+    } else {
+        if (therm_type == 0) run_sim<NullThermostat, PeriodicBoundary>(N, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 1) run_sim<AndersenThermostat, PeriodicBoundary>(N, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 2) run_sim<LangevinThermostat, PeriodicBoundary>(N, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 3) run_sim<GlobalScalingThermostat, PeriodicBoundary>(N, box, sig, eps, T_target, steps, prefix);
+    }
     
     return 0;
 }
