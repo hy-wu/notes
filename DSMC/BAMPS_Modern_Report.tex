@@ -58,15 +58,23 @@ A 4D parameter scan was conducted ($L=14, N \approx 11000$). Figure~\ref{fig:eos
     \label{fig:eos_scan}
 \end{figure}
 
-\section{Performance Diagnostics}
-Figure~\ref{fig:perf} confirms thermal stability and shows the scaling of execution time (ms/step) across the scan ranges.
+\section{Performance and Stability Diagnostics}
+Thermal equilibrium was monitored across all parameter scans. As shown in Figure~\ref{fig:temp_stab}, all implemented thermostats maintain the target temperature with high precision. For temperature ramp scenarios, the measured values track the target within 1\% relative error, confirming the robustness of the global scaling and local stochastic mechanisms.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.48\textwidth]{eos_scans/temp_stability_comprehensive.png}
-    \includegraphics[width=0.48\textwidth]{eos_scans/performance_benchmarks.png}
-    \caption{Diagnostics: Temperature stability (left) and performance scaling (right).}
-    \label{fig:perf}
+    \includegraphics[width=0.9\textwidth]{eos_scans/temp_stability_comprehensive.png}
+    \caption{Thermal Equilibrium Diagnostics: Normalized temperature stability ($T_{meas}/T_{target}$) across the 4D parameter space.}
+    \label{fig:temp_stab}
+\end{figure}
+
+Computational scalability is presented in Figure~\ref{fig:perf_bench}. The execution time per step exhibits a linear dependence on particle density and interaction range, consistent with the optimized neighbor-list architecture. The Nosé-Hoover Chain (NHC) introduces a measurable but constant overhead due to global synchronization.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{eos_scans/performance_benchmarks.png}
+    \caption{Computational Performance: Mean execution time per step (ms/step) across various thermodynamic regimes.}
+    \label{fig:perf_bench}
 \end{figure}
 
 \section{Conclusion}
