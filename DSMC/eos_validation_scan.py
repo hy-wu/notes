@@ -40,7 +40,7 @@ def compile_code():
 
 def run_sim(tid, prefix, sig, eps, rho, T, steps, box):
     start_time = time.time()
-    cmd = [f"./{BIN_FILE}", str(tid), prefix, str(sig), str(eps), str(rho), str(T), str(steps), str(box)]
+    cmd = [f"./{BIN_FILE}", str(tid), "0", prefix, str(sig), str(eps), str(rho), str(T), str(steps), str(box)]
     try:
         subprocess.run(cmd, capture_output=True, text=True, check=True)
         runtime = time.time() - start_time

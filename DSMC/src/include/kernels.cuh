@@ -12,13 +12,14 @@ struct ReflectiveWall {
     __device__ inline static void apply(float3& pos, float3& mom, float box_size, double* d_wall_mom) {
         float half = box_size * 0.5f;
         auto reflect = [&](float& p, float& m) {
-            if (p > half) { 
+            while (p > half || p < -half) {
                 if (d_wall_mom) atomicAdd(d_wall_mom, (double)(2.0f * fabsf(m)));
-                p = 2.0f * half - p; m = -m; 
-            }
-            else if (p < -half) { 
-                if (d_wall_mom) atomicAdd(d_wall_mom, (double)(2.0f * fabsf(m)));
-                p = -2.0f * half - p; m = -m; 
+                if (p > half) {
+                    p = 2.0f * half - p;
+                } else {
+                    p = -2.0f * half - p;
+                }
+                m = -m;
             }
         };
         reflect(pos.x, mom.x); reflect(pos.y, mom.y); reflect(pos.z, mom.z);
@@ -30,8 +31,14 @@ struct PeriodicBoundary {
     __device__ inline static void apply(float3& pos, float3& mom, float box_size, double* d_wall_mom, int3& image_flags) {
         auto wrap = [&](float& p, int& image) {
             float half = box_size * 0.5f;
-            if (p >  half) { p -= box_size; image++; }
-            else if (p < -half) { p += box_size; image--; }
+            while (p > half) {
+                p -= box_size;
+                image++;
+            }
+            while (p < -half) {
+                p += box_size;
+                image--;
+            }
         };
         wrap(pos.x, image_flags.x); wrap(pos.y, image_flags.y); wrap(pos.z, image_flags.z);
     }
@@ -57,7 +64,6 @@ __global__ void init_particles_kernel(
         iy * spacing - half + spacing * 0.5f,
         iz * spacing - half + spacing * 0.5f
     );
-    
     particles[idx].initial_pos = particles[idx].pos;
     particles[idx].image_flags = make_int3(0, 0, 0);
 
@@ -77,13 +83,14 @@ __global__ void init_particles_kernel(
 __global__ void reset_msd_kernel(Particle* particles, int n) {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= n) return;
+
     particles[idx].initial_pos = particles[idx].pos;
     particles[idx].image_flags = make_int3(0, 0, 0);
 }
 
 __global__ void build_grid_kernel(
     const Particle* particles, int* grid_indices, int* grid_counts, 
-    int n, int IX, float box_size) 
+    int* overflow_count, int n, int IX, float box_size) 
 {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= n || !particles[idx].is_alive) return;
@@ -98,6 +105,8 @@ __global__ void build_grid_kernel(
     int offset = atomicAdd(&grid_counts[cell_idx], 1);
     if (offset < MAX_PARTICLES_PER_CELL) {
         grid_indices[cell_idx * MAX_PARTICLES_PER_CELL + offset] = idx;
+    } else if (overflow_count) {
+        atomicAdd(overflow_count, 1);
     }
 }
 
@@ -111,6 +120,7 @@ __global__ void kick_drift_kernel(
 
     Particle& p = particles[idx];
     p.mom = p.mom + forces[idx] * (0.5f * dt);
+    p.E = Kinematics::calculate_energy(p.mom);
     p.pos = p.pos + Kinematics::get_velocity(p.mom, p.E) * dt;
 
     if constexpr (Boundary::is_periodic) {
@@ -140,12 +150,27 @@ __global__ void compute_forces_kernel(
     int iz = (int)((pos_i.z + half) / box_size * (float)IX);
     ix = max(0, min(ix, IX - 1)); iy = max(0, min(iy, IX - 1)); iz = max(0, min(iz, IX - 1));
 
-    for (int dx = -2; dx <= 2; dx++) { 
-        for (int dy = -2; dy <= 2; dy++) {
-            for (int dz = -2; dz <= 2; dz++) {
+    float cutoff = Potential::cutoff_radius(sigma);
+    float cell_size = box_size / (float)IX;
+    int range = max(1, (int)ceilf(cutoff / cell_size));
+    bool cover_all_cells = Boundary::is_periodic && ((2 * range + 1) >= IX);
+    int begin = cover_all_cells ? 0 : -range;
+    int end = cover_all_cells ? IX - 1 : range;
+
+    for (int dx = begin; dx <= end; dx++) { 
+        for (int dy = begin; dy <= end; dy++) {
+            for (int dz = begin; dz <= end; dz++) {
                 int nix, niy, niz;
                 if (Boundary::is_periodic) {
-                    nix = (ix + dx + IX) % IX; niy = (iy + dy + IX) % IX; niz = (iz + dz + IX) % IX;
+                    if (cover_all_cells) {
+                        nix = dx;
+                        niy = dy;
+                        niz = dz;
+                    } else {
+                        nix = (ix + dx + IX) % IX;
+                        niy = (iy + dy + IX) % IX;
+                        niz = (iz + dz + IX) % IX;
+                    }
                 } else {
                     nix = ix + dx; niy = iy + dy; niz = iz + dz;
                     if (nix < 0 || nix >= IX || niy < 0 || niy >= IX || niz < 0 || niz >= IX) continue;
@@ -165,7 +190,8 @@ __global__ void compute_forces_kernel(
                     }
 
                     float3 f_uncapped = Potential::calculate_force(
-                        pos_i, particles[idx_j].pos, sigma, epsilon, box_size, nullptr, (idx_i < idx_j) ? &local_pe : nullptr
+                        pos_i, particles[idx_j].pos, sigma, epsilon, box_size, nullptr,
+                        (idx_i < idx_j) ? &local_pe : nullptr
                     );
                     
                     float f_mag = length(f_uncapped);
@@ -173,8 +199,9 @@ __global__ void compute_forces_kernel(
                     if (f_mag > 10000.0f) f_capped = f_uncapped * (10000.0f / f_mag);
                     
                     force_i = force_i + f_capped;
+
                     if (d_virial && idx_i < idx_j) {
-                         local_virial += dot(f_capped, r_vec);
+                        local_virial += dot(f_capped, r_vec);
                     }
                 }
             }
@@ -219,7 +246,6 @@ __global__ void calculate_msd_kernel(const Particle* particles, int n, float box
         p.pos.y + p.image_flags.y * box_size,
         p.pos.z + p.image_flags.z * box_size
     );
-
     float3 diff = unwrapped - p.initial_pos;
     double d2 = (double)diff.x*diff.x + (double)diff.y*diff.y + (double)diff.z*diff.z;
     atomicAdd(out_msd, d2);

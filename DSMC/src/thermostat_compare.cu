@@ -1,13 +1,15 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <type_traits>
 #include <cmath>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <type_traits>
+#include <vector>
 #include "include/common.cuh"
+#include "include/kinematics.cuh"
 #include "include/kernels.cuh"
 #include "include/nhc.cuh"
 #include "include/collisions.cuh"
+#include "include/thermostats.cuh"
 
 using namespace bamps;
 
@@ -25,25 +27,32 @@ public:
     float box_size, dt, target_T, nu;
     float sigma, epsilon;
 
-    Particle *d_particles;
-    float3 *d_forces;
-    int *d_grid_indices, *d_grid_counts;
-    curandState *d_states;
-    curandState *d_cell_states;
-    double *d_wall_mom, *d_virial, *d_ke_sum, *d_msd_sum, *d_pe_sum;
+    Particle* d_particles;
+    float3* d_forces;
+    int* d_grid_indices;
+    int* d_grid_counts;
+    int* d_grid_overflow_count;
+    curandState* d_states;
+    curandState* d_cell_states;
+    double* d_wall_mom;
+    double* d_virial;
+    double* d_ke_sum;
+    double* d_msd_sum;
+    double* d_pe_sum;
 
-    NHC_State *nhc;
+    NHC_State* nhc;
 
-    Simulation(int n_in, float box, float sig, float eps, float temp, int ix_in) 
-        : n(n_in), box_size(box), sigma(sig), epsilon(eps), target_T(temp), IX(ix_in) 
-    {
+    Simulation(int n_in, float box, float sig, float eps, float temp, int ix_in)
+        : n(n_in), box_size(box), sigma(sig), epsilon(eps), target_T(temp), IX(ix_in) {
         num_cells = IX * IX * IX;
-        dt = 0.002f; nu = 2.0f; 
+        dt = 0.002f;
+        nu = 2.0f;
 
         CUDA_CHECK(cudaMalloc(&d_particles, n * sizeof(Particle)));
         CUDA_CHECK(cudaMalloc(&d_forces, n * sizeof(float3)));
         CUDA_CHECK(cudaMalloc(&d_grid_indices, num_cells * MAX_PARTICLES_PER_CELL * sizeof(int)));
         CUDA_CHECK(cudaMalloc(&d_grid_counts, num_cells * sizeof(int)));
+        CUDA_CHECK(cudaMalloc(&d_grid_overflow_count, sizeof(int)));
         CUDA_CHECK(cudaMalloc(&d_states, n * sizeof(curandState)));
         CUDA_CHECK(cudaMalloc(&d_cell_states, num_cells * sizeof(curandState)));
         CUDA_CHECK(cudaMalloc(&d_wall_mom, sizeof(double)));
@@ -55,6 +64,7 @@ public:
         CUDA_CHECK(cudaMemset(d_forces, 0, n * sizeof(float3)));
         CUDA_CHECK(cudaMemset(d_wall_mom, 0, sizeof(double)));
         CUDA_CHECK(cudaMemset(d_virial, 0, sizeof(double)));
+        CUDA_CHECK(cudaMemset(d_grid_overflow_count, 0, sizeof(int)));
 
         setup_rng_kernel<<<(n + 255) / 256, 256>>>(d_states, n, 1234ULL);
         setup_rng_kernel<<<(num_cells + 255) / 256, 256>>>(d_cell_states, num_cells, 5678ULL);
@@ -63,15 +73,23 @@ public:
         init_particles_kernel<<<(n + 255) / 256, 256>>>(d_particles, d_states, n, box_size, target_T);
         CUDA_CHECK(cudaDeviceSynchronize());
 
-        nhc = new NHC_State(n, target_T, 0.1f);
+        int ndof = Bound::is_periodic && n > 1 ? (3 * n - 3) : (3 * n);
+        nhc = new NHC_State(n, target_T, 0.1f, ndof);
     }
 
     ~Simulation() {
-        cudaFree(d_particles); cudaFree(d_forces);
-        cudaFree(d_grid_indices); cudaFree(d_grid_counts);
-        cudaFree(d_states); cudaFree(d_cell_states);
-        cudaFree(d_wall_mom); cudaFree(d_virial);
-        cudaFree(d_ke_sum); cudaFree(d_pe_sum); cudaFree(d_msd_sum);
+        cudaFree(d_particles);
+        cudaFree(d_forces);
+        cudaFree(d_grid_indices);
+        cudaFree(d_grid_counts);
+        cudaFree(d_grid_overflow_count);
+        cudaFree(d_states);
+        cudaFree(d_cell_states);
+        cudaFree(d_wall_mom);
+        cudaFree(d_virial);
+        cudaFree(d_ke_sum);
+        cudaFree(d_pe_sum);
+        cudaFree(d_msd_sum);
         delete nhc;
     }
 
@@ -84,14 +102,29 @@ public:
         CUDA_CHECK(cudaDeviceSynchronize());
     }
 
+    void apply_global_scaling_half_step(float dt_scale) {
+        double h_ke;
+        CUDA_CHECK(cudaMemset(d_ke_sum, 0, sizeof(double)));
+        reduce_ke_kernel<Kin><<<(n + 255) / 256, 256>>>(d_particles, n, d_ke_sum);
+        CUDA_CHECK(cudaMemcpy(&h_ke, d_ke_sum, sizeof(double), cudaMemcpyDeviceToHost));
+        float s = nhc->propagate((float)h_ke, dt_scale);
+        apply_global_scaling_kernel<<<(n + 255) / 256, 256>>>(d_particles, n, s);
+    }
+
+    void ensure_grid_capacity() {
+        int h_overflow = 0;
+        CUDA_CHECK(cudaMemcpy(&h_overflow, d_grid_overflow_count, sizeof(int), cudaMemcpyDeviceToHost));
+        if (h_overflow != 0) {
+            std::cerr << "Grid overflow detected: " << h_overflow
+                      << " particles exceeded MAX_PARTICLES_PER_CELL=" << MAX_PARTICLES_PER_CELL
+                      << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+
     void step() {
         if constexpr (std::is_same_v<Therm, GlobalScalingThermostat>) {
-            double h_ke;
-            CUDA_CHECK(cudaMemset(d_ke_sum, 0, sizeof(double)));
-            reduce_ke_kernel<Kin><<<(n + 255) / 256, 256>>>(d_particles, n, d_ke_sum);
-            CUDA_CHECK(cudaMemcpy(&h_ke, d_ke_sum, sizeof(double), cudaMemcpyDeviceToHost));
-            float s = nhc->propagate((float)h_ke, dt);
-            apply_global_scaling_kernel<<<(n + 255) / 256, 256>>>(d_particles, n, s);
+            apply_global_scaling_half_step(0.5f * dt);
         }
 
         kick_drift_kernel<Kin, Bound><<<(n + 255) / 256, 256>>>(
@@ -99,9 +132,11 @@ public:
         );
 
         CUDA_CHECK(cudaMemset(d_grid_counts, 0, num_cells * sizeof(int)));
+        CUDA_CHECK(cudaMemset(d_grid_overflow_count, 0, sizeof(int)));
         build_grid_kernel<<<(n + 255) / 256, 256>>>(
-            d_particles, d_grid_indices, d_grid_counts, n, IX, box_size
+            d_particles, d_grid_indices, d_grid_counts, d_grid_overflow_count, n, IX, box_size
         );
+        ensure_grid_capacity();
 
         if constexpr (Coll::has_collision) {
             collision_kernel<Coll><<<(num_cells + 255) / 256, 256>>>(
@@ -120,16 +155,21 @@ public:
         kick_final_kernel<Kin, Therm><<<(n + 255) / 256, 256>>>(
             d_particles, d_forces, d_states, n, dt, target_T, nu
         );
+
+        if constexpr (std::is_same_v<Therm, GlobalScalingThermostat>) {
+            apply_global_scaling_half_step(0.5f * dt);
+        }
+
         CUDA_CHECK(cudaDeviceSynchronize());
     }
 
-    void get_stats(double& wall, double& vir, double& ke, double& pe) {
-        CUDA_CHECK(cudaMemcpy(&wall, d_wall_mom, sizeof(double), cudaMemcpyDeviceToHost));
-        CUDA_CHECK(cudaMemcpy(&vir, d_virial, sizeof(double), cudaMemcpyDeviceToHost));
-        CUDA_CHECK(cudaMemcpy(&pe, d_pe_sum, sizeof(double), cudaMemcpyDeviceToHost));
+    void get_stats(double& wall_mom, double& virial_sum, double& ke_sum, double& pe_sum) {
+        CUDA_CHECK(cudaMemcpy(&wall_mom, d_wall_mom, sizeof(double), cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(&virial_sum, d_virial, sizeof(double), cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(&pe_sum, d_pe_sum, sizeof(double), cudaMemcpyDeviceToHost));
         CUDA_CHECK(cudaMemset(d_ke_sum, 0, sizeof(double)));
         reduce_ke_kernel<Kin><<<(n + 255) / 256, 256>>>(d_particles, n, d_ke_sum);
-        CUDA_CHECK(cudaMemcpy(&ke, d_ke_sum, sizeof(double), cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(&ke_sum, d_ke_sum, sizeof(double), cudaMemcpyDeviceToHost));
     }
 
     double get_msd() {
@@ -141,29 +181,29 @@ public:
     }
 };
 
-template<typename Therm, typename Bound>
+template <typename Therm, typename Bound>
 void run_sim(int N, float box, float sig, float eps, float T_target, int steps, const char* out_prefix) {
     float cutoff = 2.5f * sig;
     int IX = (int)(box / cutoff);
     if (IX < 3) IX = 3;
-    if (IX > 30) IX = 30; 
-    
-    Simulation<ClassicalKinematics, Bound, LennardJones, NullCollision, Therm> sim(N, box, sig, eps, T_target, IX);
-    
+    if (IX > 30) IX = 30;
+
+    Simulation<ClassicalKinematics, Bound, LennardJones, NullCollision, Therm> sim(
+        N, box, sig, eps, T_target, IX
+    );
+
     std::string ts_file = std::string(out_prefix) + "_timeseries.csv";
     std::ofstream ofs(ts_file);
     ofs << "Step,T,P_virial,P_wall,KE,PE,TotalE,MSD\n";
-    
-    float Area = 6.0f * box * box;
-    float Vol = box * box * box;
-    float rho_avg = (float)N / Vol;
-    
-    // Equilibrium Phase (Always use Thermostat)
+
+    float area = 6.0f * box * box;
+    float volume = box * box * box;
+    float rho_avg = (float)N / volume;
+
     int equil_steps = 5000;
     std::cout << "Equilibrating for " << equil_steps << " steps..." << std::endl;
-    for(int i=0; i<equil_steps; ++i) sim.step();
-    
-    // Reset Origin for Production
+    for (int i = 0; i < equil_steps; ++i) sim.step();
+
     sim.reset_msd();
     sim.reset_accumulators();
     std::cout << "Starting Production for " << steps << " steps..." << std::endl;
@@ -178,24 +218,25 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
             double wall, vir, ke, pe;
             sim.get_stats(wall, vir, ke, pe);
             double msd = sim.get_msd();
-            
+
             float T_meas = (float)(2.0 * ke / (3.0 * N));
-            double p_wall_inst = wall / (record_interval * sim.dt * Area);
-            float p_vir_inst = (rho_avg * T_meas) + (vir / (3.0 * Vol)) + p_tail;
+            double p_wall_inst = wall / (record_interval * sim.dt * area);
+            float p_vir_inst = (rho_avg * T_meas) + (vir / (3.0 * volume)) + p_tail;
             double total_e = ke + pe + u_tail;
-            
-            ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << "," << ke << "," << (pe + u_tail) << "," << total_e << "," << msd << "\n";
+
+            ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << ","
+                << ke << "," << (pe + u_tail) << "," << total_e << "," << msd << "\n";
             sim.reset_accumulators();
         }
     }
     ofs.close();
-    
+
     Particle* h_particles = new Particle[N];
-    cudaMemcpy(h_particles, sim.d_particles, N * sizeof(Particle), cudaMemcpyDeviceToHost);
+    CUDA_CHECK(cudaMemcpy(h_particles, sim.d_particles, N * sizeof(Particle), cudaMemcpyDeviceToHost));
     std::string state_file = std::string(out_prefix) + "_final_state.csv";
     std::ofstream ofss(state_file);
     ofss << "x,y,z,px,py,pz\n";
-    for(int i=0; i<N; ++i) {
+    for (int i = 0; i < N; ++i) {
         ofss << h_particles[i].pos.x << "," << h_particles[i].pos.y << "," << h_particles[i].pos.z << ","
              << h_particles[i].mom.x << "," << h_particles[i].mom.y << "," << h_particles[i].mom.z << "\n";
     }
@@ -205,9 +246,12 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
 
 int main(int argc, char** argv) {
     if (argc < 10) {
-        std::cerr << "Usage: ./bamps_compare <therm_type> <bound_type> <out_prefix> <sig> <eps> <rho> <T_target> <steps> <box_size>" << std::endl;
+        std::cerr
+            << "Usage: ./bamps_compare <therm_type> <bound_type> <out_prefix> <sig> <eps> <rho> "
+            << "<T_target> <steps> <box_size>" << std::endl;
         return 1;
     }
+
     int therm_type = atoi(argv[1]);
     int bound_type = atoi(argv[2]);
     const char* prefix = argv[3];
@@ -215,19 +259,21 @@ int main(int argc, char** argv) {
     float eps = atof(argv[5]);
     float rho = atof(argv[6]);
     float T_target = atof(argv[7]);
-    int steps = atof(argv[8]);
+    int steps = atoi(argv[8]);
     float box = atof(argv[9]);
-    
+
+    int n = (int)(rho * box * box * box);
+
     if (bound_type == 0) {
-        if (therm_type == 0) run_sim<NullThermostat, ReflectiveWall>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 1) run_sim<AndersenThermostat, ReflectiveWall>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 2) run_sim<LangevinThermostat, ReflectiveWall>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 3) run_sim<GlobalScalingThermostat, ReflectiveWall>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
+        if (therm_type == 0) run_sim<NullThermostat, ReflectiveWall>(n, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 1) run_sim<AndersenThermostat, ReflectiveWall>(n, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 2) run_sim<LangevinThermostat, ReflectiveWall>(n, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 3) run_sim<GlobalScalingThermostat, ReflectiveWall>(n, box, sig, eps, T_target, steps, prefix);
     } else {
-        if (therm_type == 0) run_sim<NullThermostat, PeriodicBoundary>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 1) run_sim<AndersenThermostat, PeriodicBoundary>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 2) run_sim<LangevinThermostat, PeriodicBoundary>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 3) run_sim<GlobalScalingThermostat, PeriodicBoundary>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
+        if (therm_type == 0) run_sim<NullThermostat, PeriodicBoundary>(n, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 1) run_sim<AndersenThermostat, PeriodicBoundary>(n, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 2) run_sim<LangevinThermostat, PeriodicBoundary>(n, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 3) run_sim<GlobalScalingThermostat, PeriodicBoundary>(n, box, sig, eps, T_target, steps, prefix);
     }
     return 0;
 }

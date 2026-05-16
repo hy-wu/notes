@@ -4,6 +4,7 @@
 #include <vector_types.h>
 #include <vector_functions.h>
 #include <cstdio>
+#include <cstdlib>
 
 namespace bamps {
 
@@ -13,7 +14,7 @@ constexpr float HBARC = 0.197327f;
 constexpr float MASS = 1.0f;
 
 // Limits
-constexpr int MAX_PARTICLES_PER_CELL = 64; // Optimized from 256
+constexpr int MAX_PARTICLES_PER_CELL = 256;
 
 // CUDA Error Checking
 #define CUDA_CHECK(call) \
@@ -32,10 +33,10 @@ struct Particle {
     float3 mom;
     float E; // Energy/Mass-energy
     int is_alive;
-    
+
     // Unwrapped coordinate tracking
     int3 image_flags;
-    float3 initial_pos; 
+    float3 initial_pos;
 };
 
 // Math Helpers
