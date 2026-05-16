@@ -30,7 +30,7 @@ public:
     int *d_grid_indices, *d_grid_counts;
     curandState *d_states;
     curandState *d_cell_states;
-    double *d_wall_mom, *d_virial, *d_ke_sum;
+    double *d_wall_mom, *d_virial, *d_ke_sum, *d_msd_sum;
 
     NHC_State *nhc;
 
@@ -49,6 +49,7 @@ public:
         CUDA_CHECK(cudaMalloc(&d_wall_mom, sizeof(double)));
         CUDA_CHECK(cudaMalloc(&d_virial, sizeof(double)));
         CUDA_CHECK(cudaMalloc(&d_ke_sum, sizeof(double)));
+        CUDA_CHECK(cudaMalloc(&d_msd_sum, sizeof(double)));
 
         CUDA_CHECK(cudaMemset(d_forces, 0, n * sizeof(float3)));
         CUDA_CHECK(cudaMemset(d_wall_mom, 0, sizeof(double)));
@@ -74,6 +75,7 @@ public:
         cudaFree(d_wall_mom);
         cudaFree(d_virial);
         cudaFree(d_ke_sum);
+        cudaFree(d_msd_sum);
         delete nhc;
     }
 
@@ -127,7 +129,33 @@ public:
         reduce_ke_kernel<Kin><<<(n + 255) / 256, 256>>>(d_particles, n, d_ke_sum);
         CUDA_CHECK(cudaMemcpy(&ke_sum, d_ke_sum, sizeof(double), cudaMemcpyDeviceToHost));
     }
+
+    double get_msd() {
+        CUDA_CHECK(cudaMemset(d_msd_sum, 0, sizeof(double)));
+        calculate_msd_kernel<<<(n + 255) / 256, 256>>>(d_particles, n, box_size, d_msd_sum);
+        double h_msd;
+        CUDA_CHECK(cudaMemcpy(&h_msd, d_msd_sum, sizeof(double), cudaMemcpyDeviceToHost));
+        return h_msd / n;
+    }
 };
+
+__global__ void calculate_msd_kernel(const Particle* particles, int n, float box_size, double* out_msd) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= n || !particles[idx].is_alive) return;
+
+    const Particle& p = particles[idx];
+    // Reconstruct unwrapped position
+    float3 unwrapped = make_float3(
+        p.pos.x + p.image_flags.x * box_size,
+        p.pos.y + p.image_flags.y * box_size,
+        p.pos.z + p.image_flags.z * box_size
+    );
+
+    float3 diff = unwrapped - p.initial_pos;
+    double d2 = (double)diff.x*diff.x + (double)diff.y*diff.y + (double)diff.z*diff.z;
+
+    atomicAdd(out_msd, d2);
+}
 
 template<typename Therm, typename Bound>
 void run_sim(int N, float box, float sig, float eps, float T_target, int steps, const char* out_prefix) {
@@ -140,7 +168,7 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
     
     std::string ts_file = std::string(out_prefix) + "_timeseries.csv";
     std::ofstream ofs(ts_file);
-    ofs << "Step,T,P_virial,P_wall,TotalE\n";
+    ofs << "Step,T,P_virial,P_wall,TotalE,MSD\n";
     
     float Area = 6.0f * box * box;
     float Vol = box * box * box;
@@ -155,6 +183,7 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
         if ((i + 1) % record_interval == 0) {
             double wall, vir, ke;
             sim.get_stats(wall, vir, ke);
+            double msd = sim.get_msd();
             
             float T_meas = (float)(2.0 * ke / (3.0 * N));
             float p_tail = LennardJones::calculate_p_tail(rho_avg, eps, sig);
@@ -162,9 +191,7 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
             double p_wall_inst = wall / (record_interval * sim.dt * Area);
             float p_vir_inst = (rho_avg * T_meas) + (vir / (3.0 * Vol)) + p_tail;
             
-            // Note: Currently tracking KE as a proxy for TotalE for NVE drift check
-            // Production code should sum Pair Potential energy too.
-            ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << "," << ke << "\n";
+            ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << "," << ke << "," << msd << "\n";
             sim.reset_accumulators();
         }
     }

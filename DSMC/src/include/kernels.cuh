@@ -27,12 +27,13 @@ struct ReflectiveWall {
 
 struct PeriodicBoundary {
     static constexpr bool is_periodic = true;
-    __device__ inline static void apply(float3& pos, float3& mom, float box_size, double* d_wall_mom) {
-        auto wrap = [&](float& p) {
-            while (p >  box_size * 0.5f) p -= box_size;
-            while (p < -box_size * 0.5f) p += box_size;
+    __device__ inline static void apply(float3& pos, float3& mom, float box_size, double* d_wall_mom, int3& image_flags) {
+        auto wrap = [&](float& p, int& image) {
+            float half = box_size * 0.5f;
+            while (p >  half) { p -= box_size; image++; }
+            while (p < -half) { p += box_size; image--; }
         };
-        wrap(pos.x); wrap(pos.y); wrap(pos.z);
+        wrap(pos.x, image_flags.x); wrap(pos.y, image_flags.y); wrap(pos.z, image_flags.z);
     }
 };
 
@@ -57,6 +58,10 @@ __global__ void init_particles_kernel(
         iy * spacing - half + spacing * 0.5f,
         iz * spacing - half + spacing * 0.5f
     );
+    
+    // Store initial positions for MSD calculation
+    particles[idx].initial_pos = particles[idx].pos;
+    particles[idx].image_flags = make_int3(0, 0, 0);
 
     curandState local_state = states[idx];
     float sig = sqrtf(target_T / MASS);
@@ -70,6 +75,7 @@ __global__ void init_particles_kernel(
     particles[idx].E = dot(particles[idx].mom, particles[idx].mom) * (0.5f / MASS);
     states[idx] = local_state;
 }
+
 
 __global__ void build_grid_kernel(
     const Particle* particles, int* grid_indices, int* grid_counts, 
@@ -113,7 +119,11 @@ __global__ void kick_drift_kernel(
     p.pos = p.pos + v * dt;
 
     // Boundary
-    Boundary::apply(p.pos, p.mom, box_size, d_wall_mom);
+    if constexpr (Boundary::is_periodic) {
+        Boundary::apply(p.pos, p.mom, box_size, d_wall_mom, p.image_flags);
+    } else {
+        Boundary::apply(p.pos, p.mom, box_size, d_wall_mom);
+    }
 }
 
 template <typename Potential, typename Boundary>

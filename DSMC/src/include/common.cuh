@@ -32,6 +32,10 @@ struct Particle {
     float3 mom;
     float E; // Energy/Mass-energy
     int is_alive;
+    
+    // Unwrapped coordinate tracking
+    int3 image_flags;
+    float3 initial_pos; 
 };
 
 // Math Helpers
