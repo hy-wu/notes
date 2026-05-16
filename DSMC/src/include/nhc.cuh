@@ -13,7 +13,8 @@ struct NHC_State {
     float target_T, dt;
     int ndof;
 
-    NHC_State(int n, float T, float tau) : target_T(T), ndof(3 * n) {
+    NHC_State(int n, float T, float tau, int ndof_in = -1)
+        : target_T(T), ndof(ndof_in > 0 ? ndof_in : 3 * n) {
         float kbT = target_T; 
         // Masses for the thermostat variables
         Q[0] = (float)ndof * kbT * tau * tau;

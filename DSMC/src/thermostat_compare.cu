@@ -5,9 +5,11 @@
 #include <type_traits>
 #include <cmath>
 #include "include/common.cuh"
+#include "include/kinematics.cuh"
 #include "include/kernels.cuh"
 #include "include/nhc.cuh"
 #include "include/collisions.cuh"
+#include "include/thermostats.cuh"
 
 using namespace bamps;
 
@@ -28,6 +30,7 @@ public:
     Particle *d_particles;
     float3 *d_forces;
     int *d_grid_indices, *d_grid_counts;
+    int *d_grid_overflow_count;
     curandState *d_states;
     curandState *d_cell_states;
     double *d_wall_mom, *d_virial, *d_ke_sum, *d_msd_sum, *d_pe_sum;
@@ -44,6 +47,7 @@ public:
         CUDA_CHECK(cudaMalloc(&d_forces, n * sizeof(float3)));
         CUDA_CHECK(cudaMalloc(&d_grid_indices, num_cells * MAX_PARTICLES_PER_CELL * sizeof(int)));
         CUDA_CHECK(cudaMalloc(&d_grid_counts, num_cells * sizeof(int)));
+        CUDA_CHECK(cudaMalloc(&d_grid_overflow_count, sizeof(int)));
         CUDA_CHECK(cudaMalloc(&d_states, n * sizeof(curandState)));
         CUDA_CHECK(cudaMalloc(&d_cell_states, num_cells * sizeof(curandState)));
         CUDA_CHECK(cudaMalloc(&d_wall_mom, sizeof(double)));
@@ -55,6 +59,7 @@ public:
         CUDA_CHECK(cudaMemset(d_forces, 0, n * sizeof(float3)));
         CUDA_CHECK(cudaMemset(d_wall_mom, 0, sizeof(double)));
         CUDA_CHECK(cudaMemset(d_virial, 0, sizeof(double)));
+        CUDA_CHECK(cudaMemset(d_grid_overflow_count, 0, sizeof(int)));
 
         setup_rng_kernel<<<(n + 255) / 256, 256>>>(d_states, n, 1234ULL);
         setup_rng_kernel<<<(num_cells + 255) / 256, 256>>>(d_cell_states, num_cells, 5678ULL);
@@ -63,12 +68,17 @@ public:
         init_particles_kernel<<<(n + 255) / 256, 256>>>(d_particles, d_states, n, box_size, target_T);
         CUDA_CHECK(cudaDeviceSynchronize());
 
-        nhc = new NHC_State(n, target_T, 0.1f);
+        int ndof = Bound::is_periodic && n > 1 ? (3 * n - 3) : (3 * n);
+        nhc = new NHC_State(n, target_T, 0.1f, ndof);
     }
 
     ~Simulation() {
         cudaFree(d_particles); cudaFree(d_forces);
         cudaFree(d_grid_indices); cudaFree(d_grid_counts);
+<<<<<<< HEAD
+=======
+        cudaFree(d_grid_overflow_count);
+>>>>>>> 2152a85 (fix: apply code review fixes to DSMC/src)
         cudaFree(d_states); cudaFree(d_cell_states);
         cudaFree(d_wall_mom); cudaFree(d_virial);
         cudaFree(d_ke_sum); cudaFree(d_pe_sum); cudaFree(d_msd_sum);
@@ -84,14 +94,32 @@ public:
         CUDA_CHECK(cudaDeviceSynchronize());
     }
 
+<<<<<<< HEAD
+=======
+    void apply_global_scaling_half_step(float dt_scale) {
+        double h_ke;
+        CUDA_CHECK(cudaMemset(d_ke_sum, 0, sizeof(double)));
+        reduce_ke_kernel<Kin><<<(n + 255) / 256, 256>>>(d_particles, n, d_ke_sum);
+        CUDA_CHECK(cudaMemcpy(&h_ke, d_ke_sum, sizeof(double), cudaMemcpyDeviceToHost));
+        float s = nhc->propagate((float)h_ke, dt_scale);
+        apply_global_scaling_kernel<<<(n + 255) / 256, 256>>>(d_particles, n, s);
+    }
+
+    void ensure_grid_capacity() {
+        int h_overflow = 0;
+        CUDA_CHECK(cudaMemcpy(&h_overflow, d_grid_overflow_count, sizeof(int), cudaMemcpyDeviceToHost));
+        if (h_overflow != 0) {
+            std::cerr << "Grid overflow detected: " << h_overflow
+                      << " particles exceeded MAX_PARTICLES_PER_CELL=" << MAX_PARTICLES_PER_CELL
+                      << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+
+>>>>>>> 2152a85 (fix: apply code review fixes to DSMC/src)
     void step() {
         if constexpr (std::is_same_v<Therm, GlobalScalingThermostat>) {
-            double h_ke;
-            CUDA_CHECK(cudaMemset(d_ke_sum, 0, sizeof(double)));
-            reduce_ke_kernel<Kin><<<(n + 255) / 256, 256>>>(d_particles, n, d_ke_sum);
-            CUDA_CHECK(cudaMemcpy(&h_ke, d_ke_sum, sizeof(double), cudaMemcpyDeviceToHost));
-            float s = nhc->propagate((float)h_ke, dt);
-            apply_global_scaling_kernel<<<(n + 255) / 256, 256>>>(d_particles, n, s);
+            apply_global_scaling_half_step(0.5f * dt);
         }
 
         kick_drift_kernel<Kin, Bound><<<(n + 255) / 256, 256>>>(
@@ -99,9 +127,11 @@ public:
         );
 
         CUDA_CHECK(cudaMemset(d_grid_counts, 0, num_cells * sizeof(int)));
+        CUDA_CHECK(cudaMemset(d_grid_overflow_count, 0, sizeof(int)));
         build_grid_kernel<<<(n + 255) / 256, 256>>>(
-            d_particles, d_grid_indices, d_grid_counts, n, IX, box_size
+            d_particles, d_grid_indices, d_grid_counts, d_grid_overflow_count, n, IX, box_size
         );
+        ensure_grid_capacity();
 
         if constexpr (Coll::has_collision) {
             collision_kernel<Coll><<<(num_cells + 255) / 256, 256>>>(
@@ -120,6 +150,7 @@ public:
         kick_final_kernel<Kin, Therm><<<(n + 255) / 256, 256>>>(
             d_particles, d_forces, d_states, n, dt, target_T, nu
         );
+<<<<<<< HEAD
         CUDA_CHECK(cudaDeviceSynchronize());
     }
 
@@ -127,9 +158,31 @@ public:
         CUDA_CHECK(cudaMemcpy(&wall, d_wall_mom, sizeof(double), cudaMemcpyDeviceToHost));
         CUDA_CHECK(cudaMemcpy(&vir, d_virial, sizeof(double), cudaMemcpyDeviceToHost));
         CUDA_CHECK(cudaMemcpy(&pe, d_pe_sum, sizeof(double), cudaMemcpyDeviceToHost));
+=======
+
+        if constexpr (std::is_same_v<Therm, GlobalScalingThermostat>) {
+            apply_global_scaling_half_step(0.5f * dt);
+        }
+        
+        CUDA_CHECK(cudaDeviceSynchronize());
+    }
+
+    void get_stats(double& wall_mom, double& virial_sum, double& ke_sum, double& pe_sum) {
+        CUDA_CHECK(cudaMemcpy(&wall_mom, d_wall_mom, sizeof(double), cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(&virial_sum, d_virial, sizeof(double), cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(&pe_sum, d_pe_sum, sizeof(double), cudaMemcpyDeviceToHost));
+>>>>>>> 2152a85 (fix: apply code review fixes to DSMC/src)
         CUDA_CHECK(cudaMemset(d_ke_sum, 0, sizeof(double)));
         reduce_ke_kernel<Kin><<<(n + 255) / 256, 256>>>(d_particles, n, d_ke_sum);
         CUDA_CHECK(cudaMemcpy(&ke, d_ke_sum, sizeof(double), cudaMemcpyDeviceToHost));
+    }
+
+    double get_msd() {
+        CUDA_CHECK(cudaMemset(d_msd_sum, 0, sizeof(double)));
+        calculate_msd_kernel<<<(n + 255) / 256, 256>>>(d_particles, n, box_size, d_msd_sum);
+        double h_msd;
+        CUDA_CHECK(cudaMemcpy(&h_msd, d_msd_sum, sizeof(double), cudaMemcpyDeviceToHost));
+        return h_msd / n;
     }
 
     double get_msd() {
@@ -157,11 +210,26 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
     float Area = 6.0f * box * box;
     float Vol = box * box * box;
     float rho_avg = (float)N / Vol;
+<<<<<<< HEAD
     
     // Equilibrium Phase (Always use Thermostat)
     int equil_steps = 5000;
     std::cout << "Equilibrating for " << equil_steps << " steps..." << std::endl;
     for(int i=0; i<equil_steps; ++i) sim.step();
+=======
+
+    int equil_steps = 5000;
+    std::cout << "Equilibrating for " << equil_steps << " steps..." << std::endl;
+    for(int i = 0; i < equil_steps; ++i) sim.step();
+
+    sim.reset_msd();
+    sim.reset_accumulators();
+    std::cout << "Starting Production for " << steps << " steps..." << std::endl;
+
+    int record_interval = 10;
+    float u_tail = LennardJones::calculate_u_tail(rho_avg, eps, sig) * N;
+    float p_tail = LennardJones::calculate_p_tail(rho_avg, eps, sig);
+>>>>>>> 2152a85 (fix: apply code review fixes to DSMC/src)
     
     // Reset Origin for Production
     sim.reset_msd();
@@ -184,7 +252,12 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
             float p_vir_inst = (rho_avg * T_meas) + (vir / (3.0 * Vol)) + p_tail;
             double total_e = ke + pe + u_tail;
             
+<<<<<<< HEAD
             ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << "," << ke << "," << (pe + u_tail) << "," << total_e << "," << msd << "\n";
+=======
+            ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << ","
+                << ke << "," << (pe + u_tail) << "," << total_e << "," << msd << "\n";
+>>>>>>> 2152a85 (fix: apply code review fixes to DSMC/src)
             sim.reset_accumulators();
         }
     }
@@ -215,7 +288,7 @@ int main(int argc, char** argv) {
     float eps = atof(argv[5]);
     float rho = atof(argv[6]);
     float T_target = atof(argv[7]);
-    int steps = atof(argv[8]);
+    int steps = atoi(argv[8]);
     float box = atof(argv[9]);
     
     if (bound_type == 0) {

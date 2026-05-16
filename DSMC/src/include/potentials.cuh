@@ -10,6 +10,10 @@ struct NullPotential {
     {
         return make_float3(0, 0, 0);
     }
+
+    __host__ __device__ inline static float cutoff_radius(float sigma) {
+        return 0.0f;
+    }
 };
 
 struct LennardJones {
@@ -33,7 +37,7 @@ struct LennardJones {
         if (r2 < cutoff * cutoff && r2 > 1e-6f) {
             float r2inv = 1.0f / r2;
             float s2 = sigma * sigma;
-            float r6inv = (s2 * r2inv);
+            float r6inv = s2 * r2inv;
             r6inv = r6inv * r6inv * r6inv;
             
             // F = 24 * eps * [ 2*(s/r)^12 - (s/r)^6 ] / r^2 * vec(r)
@@ -48,6 +52,10 @@ struct LennardJones {
             return make_float3(f_mag * dx, f_mag * dy, f_mag * dz);
         }
         return make_float3(0, 0, 0);
+    }
+
+    __host__ __device__ inline static float cutoff_radius(float sigma) {
+        return 2.5f * sigma;
     }
 
     __host__ __device__ inline static float calculate_p_tail(float rho, float epsilon, float sigma) {
@@ -65,7 +73,7 @@ struct LennardJones {
         float s_rc3 = s_rc * s_rc * s_rc;
         float s_rc9 = s_rc3 * s_rc3 * s_rc3;
         // Analytical tail correction for potential energy per particle
-        return (8.0f / 3.0f) * PI * rho * epsilon * (sigma * sigma * sigma) * 
+        return (8.0f / 3.0f) * PI * rho * epsilon * (sigma * sigma * sigma) *
                ((1.0f / 3.0f) * s_rc9 - s_rc3);
     }
 };

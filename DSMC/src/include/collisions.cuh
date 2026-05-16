@@ -23,7 +23,7 @@ __global__ void collision_kernel(
     int cell_idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (cell_idx >= num_cells) return;
 
-    int count = grid_counts[cell_idx];
+    int count = min(grid_counts[cell_idx], MAX_PARTICLES_PER_CELL);
     if (count < 2) return;
     
     // Only process if it's a real collision model
