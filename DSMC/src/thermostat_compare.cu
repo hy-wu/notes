@@ -30,7 +30,7 @@ public:
     int *d_grid_indices, *d_grid_counts;
     curandState *d_states;
     curandState *d_cell_states;
-    double *d_wall_mom, *d_virial, *d_ke_sum, *d_msd_sum;
+    double *d_wall_mom, *d_virial, *d_ke_sum, *d_msd_sum, *d_pe_sum;
 
     NHC_State *nhc;
 
@@ -49,6 +49,7 @@ public:
         CUDA_CHECK(cudaMalloc(&d_wall_mom, sizeof(double)));
         CUDA_CHECK(cudaMalloc(&d_virial, sizeof(double)));
         CUDA_CHECK(cudaMalloc(&d_ke_sum, sizeof(double)));
+        CUDA_CHECK(cudaMalloc(&d_pe_sum, sizeof(double)));
         CUDA_CHECK(cudaMalloc(&d_msd_sum, sizeof(double)));
 
         CUDA_CHECK(cudaMemset(d_forces, 0, n * sizeof(float3)));
@@ -66,21 +67,21 @@ public:
     }
 
     ~Simulation() {
-        cudaFree(d_particles);
-        cudaFree(d_forces);
-        cudaFree(d_grid_indices);
-        cudaFree(d_grid_counts);
-        cudaFree(d_states);
-        cudaFree(d_cell_states);
-        cudaFree(d_wall_mom);
-        cudaFree(d_virial);
-        cudaFree(d_ke_sum);
-        cudaFree(d_msd_sum);
+        cudaFree(d_particles); cudaFree(d_forces);
+        cudaFree(d_grid_indices); cudaFree(d_grid_counts);
+        cudaFree(d_states); cudaFree(d_cell_states);
+        cudaFree(d_wall_mom); cudaFree(d_virial);
+        cudaFree(d_ke_sum); cudaFree(d_pe_sum); cudaFree(d_msd_sum);
         delete nhc;
     }
 
     void reset_accumulators() {
         CUDA_CHECK(cudaMemset(d_wall_mom, 0, sizeof(double)));
+    }
+
+    void reset_msd() {
+        reset_msd_kernel<<<(n + 255) / 256, 256>>>(d_particles, n);
+        CUDA_CHECK(cudaDeviceSynchronize());
     }
 
     void step() {
@@ -110,24 +111,25 @@ public:
 
         CUDA_CHECK(cudaMemset(d_forces, 0, n * sizeof(float3)));
         CUDA_CHECK(cudaMemset(d_virial, 0, sizeof(double)));
+        CUDA_CHECK(cudaMemset(d_pe_sum, 0, sizeof(double)));
         compute_forces_kernel<Pot, Bound><<<(n + 255) / 256, 256>>>(
-            d_particles, d_forces, d_grid_indices, d_grid_counts, d_virial,
+            d_particles, d_forces, d_grid_indices, d_grid_counts, d_virial, d_pe_sum,
             n, IX, box_size, sigma, epsilon
         );
 
         kick_final_kernel<Kin, Therm><<<(n + 255) / 256, 256>>>(
             d_particles, d_forces, d_states, n, dt, target_T, nu
         );
-        
         CUDA_CHECK(cudaDeviceSynchronize());
     }
 
-    void get_stats(double& wall_mom, double& virial_sum, double& ke_sum) {
-        CUDA_CHECK(cudaMemcpy(&wall_mom, d_wall_mom, sizeof(double), cudaMemcpyDeviceToHost));
-        CUDA_CHECK(cudaMemcpy(&virial_sum, d_virial, sizeof(double), cudaMemcpyDeviceToHost));
+    void get_stats(double& wall, double& vir, double& ke, double& pe) {
+        CUDA_CHECK(cudaMemcpy(&wall, d_wall_mom, sizeof(double), cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(&vir, d_virial, sizeof(double), cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(&pe, d_pe_sum, sizeof(double), cudaMemcpyDeviceToHost));
         CUDA_CHECK(cudaMemset(d_ke_sum, 0, sizeof(double)));
         reduce_ke_kernel<Kin><<<(n + 255) / 256, 256>>>(d_particles, n, d_ke_sum);
-        CUDA_CHECK(cudaMemcpy(&ke_sum, d_ke_sum, sizeof(double), cudaMemcpyDeviceToHost));
+        CUDA_CHECK(cudaMemcpy(&ke, d_ke_sum, sizeof(double), cudaMemcpyDeviceToHost));
     }
 
     double get_msd() {
@@ -138,24 +140,6 @@ public:
         return h_msd / n;
     }
 };
-
-__global__ void calculate_msd_kernel(const Particle* particles, int n, float box_size, double* out_msd) {
-    int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx >= n || !particles[idx].is_alive) return;
-
-    const Particle& p = particles[idx];
-    // Reconstruct unwrapped position
-    float3 unwrapped = make_float3(
-        p.pos.x + p.image_flags.x * box_size,
-        p.pos.y + p.image_flags.y * box_size,
-        p.pos.z + p.image_flags.z * box_size
-    );
-
-    float3 diff = unwrapped - p.initial_pos;
-    double d2 = (double)diff.x*diff.x + (double)diff.y*diff.y + (double)diff.z*diff.z;
-
-    atomicAdd(out_msd, d2);
-}
 
 template<typename Therm, typename Bound>
 void run_sim(int N, float box, float sig, float eps, float T_target, int steps, const char* out_prefix) {
@@ -168,30 +152,39 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
     
     std::string ts_file = std::string(out_prefix) + "_timeseries.csv";
     std::ofstream ofs(ts_file);
-    ofs << "Step,T,P_virial,P_wall,TotalE,MSD\n";
+    ofs << "Step,T,P_virial,P_wall,KE,PE,TotalE,MSD\n";
     
     float Area = 6.0f * box * box;
     float Vol = box * box * box;
     float rho_avg = (float)N / Vol;
     
-    sim.reset_accumulators();
-    int record_interval = 10;
+    // Equilibrium Phase (Always use Thermostat)
+    int equil_steps = 5000;
+    std::cout << "Equilibrating for " << equil_steps << " steps..." << std::endl;
+    for(int i=0; i<equil_steps; ++i) sim.step();
     
+    // Reset Origin for Production
+    sim.reset_msd();
+    sim.reset_accumulators();
+    std::cout << "Starting Production for " << steps << " steps..." << std::endl;
+
+    int record_interval = 10;
+    float u_tail = LennardJones::calculate_u_tail(rho_avg, eps, sig) * N;
+    float p_tail = LennardJones::calculate_p_tail(rho_avg, eps, sig);
+
     for (int i = 0; i < steps; ++i) {
         sim.step();
-        
         if ((i + 1) % record_interval == 0) {
-            double wall, vir, ke;
-            sim.get_stats(wall, vir, ke);
+            double wall, vir, ke, pe;
+            sim.get_stats(wall, vir, ke, pe);
             double msd = sim.get_msd();
             
             float T_meas = (float)(2.0 * ke / (3.0 * N));
-            float p_tail = LennardJones::calculate_p_tail(rho_avg, eps, sig);
-            
             double p_wall_inst = wall / (record_interval * sim.dt * Area);
             float p_vir_inst = (rho_avg * T_meas) + (vir / (3.0 * Vol)) + p_tail;
+            double total_e = ke + pe + u_tail;
             
-            ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << "," << ke << "," << msd << "\n";
+            ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << "," << ke << "," << (pe + u_tail) << "," << total_e << "," << msd << "\n";
             sim.reset_accumulators();
         }
     }
@@ -199,7 +192,6 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
     
     Particle* h_particles = new Particle[N];
     cudaMemcpy(h_particles, sim.d_particles, N * sizeof(Particle), cudaMemcpyDeviceToHost);
-
     std::string state_file = std::string(out_prefix) + "_final_state.csv";
     std::ofstream ofss(state_file);
     ofss << "x,y,z,px,py,pz\n";
@@ -208,18 +200,14 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
              << h_particles[i].mom.x << "," << h_particles[i].mom.y << "," << h_particles[i].mom.z << "\n";
     }
     ofss.close();
-
     delete[] h_particles;
-    std::cout << "Completed " << out_prefix << " with IX=" << IX << std::endl;
 }
 
 int main(int argc, char** argv) {
     if (argc < 10) {
         std::cerr << "Usage: ./bamps_compare <therm_type> <bound_type> <out_prefix> <sig> <eps> <rho> <T_target> <steps> <box_size>" << std::endl;
-        std::cerr << "  bound_type: 0=Reflective, 1=Periodic" << std::endl;
         return 1;
     }
-    
     int therm_type = atoi(argv[1]);
     int bound_type = atoi(argv[2]);
     const char* prefix = argv[3];
@@ -230,19 +218,16 @@ int main(int argc, char** argv) {
     int steps = atof(argv[8]);
     float box = atof(argv[9]);
     
-    int N = (int)(rho * box * box * box);
-    
     if (bound_type == 0) {
-        if (therm_type == 0) run_sim<NullThermostat, ReflectiveWall>(N, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 1) run_sim<AndersenThermostat, ReflectiveWall>(N, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 2) run_sim<LangevinThermostat, ReflectiveWall>(N, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 3) run_sim<GlobalScalingThermostat, ReflectiveWall>(N, box, sig, eps, T_target, steps, prefix);
+        if (therm_type == 0) run_sim<NullThermostat, ReflectiveWall>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 1) run_sim<AndersenThermostat, ReflectiveWall>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 2) run_sim<LangevinThermostat, ReflectiveWall>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 3) run_sim<GlobalScalingThermostat, ReflectiveWall>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
     } else {
-        if (therm_type == 0) run_sim<NullThermostat, PeriodicBoundary>(N, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 1) run_sim<AndersenThermostat, PeriodicBoundary>(N, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 2) run_sim<LangevinThermostat, PeriodicBoundary>(N, box, sig, eps, T_target, steps, prefix);
-        else if (therm_type == 3) run_sim<GlobalScalingThermostat, PeriodicBoundary>(N, box, sig, eps, T_target, steps, prefix);
+        if (therm_type == 0) run_sim<NullThermostat, PeriodicBoundary>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 1) run_sim<AndersenThermostat, PeriodicBoundary>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 2) run_sim<LangevinThermostat, PeriodicBoundary>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
+        else if (therm_type == 3) run_sim<GlobalScalingThermostat, PeriodicBoundary>(rho*box*box*box, box, sig, eps, T_target, steps, prefix);
     }
-    
     return 0;
 }
