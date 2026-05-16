@@ -1,0 +1,27 @@
+units lj
+atom_style atomic
+dimension 3
+boundary p p p
+
+region sim_box block -6.0 6.0 -6.0 6.0 -6.0 6.0
+create_box 1 sim_box
+create_atoms 1 random 1382 12345 sim_box
+
+mass 1 1.0
+pair_style lj/cut 2.5
+pair_coeff 1 1 1.0 1.0 2.5
+
+# Resolve overlaps
+minimize 1.0e-4 1.0e-6 100 1000
+reset_timestep 0
+
+velocity all create 1.0 87287 loop geom
+fix 1 all nvt temp 1.0 1.0 0.1
+
+thermo 1000
+run 5000
+
+compute myRDF all rdf 150
+fix 2 all ave/time 10 100 1000 c_myRDF[*] file lammps_rdf.txt mode vector
+
+run 10000
