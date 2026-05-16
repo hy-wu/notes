@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <type_traits>
+#include <cmath>
 #include "include/common.cuh"
 #include "include/kernels.cuh"
 #include "include/nhc.cuh"
@@ -33,12 +34,11 @@ public:
 
     NHC_State *nhc;
 
-    Simulation(int n_in, float box, float sig, float eps, float temp) 
-        : n(n_in), box_size(box), sigma(sig), epsilon(eps), target_T(temp) 
+    Simulation(int n_in, float box, float sig, float eps, float temp, int ix_in) 
+        : n(n_in), box_size(box), sigma(sig), epsilon(eps), target_T(temp), IX(ix_in) 
     {
-        IX = 10;
         num_cells = IX * IX * IX;
-        dt = 0.002f; nu = 2.0f; // Increased coupling from 0.01f to 2.0f
+        dt = 0.002f; nu = 2.0f; // Stronger coupling
 
         CUDA_CHECK(cudaMalloc(&d_particles, n * sizeof(Particle)));
         CUDA_CHECK(cudaMalloc(&d_forces, n * sizeof(float3)));
@@ -131,7 +131,14 @@ public:
 
 template<typename Therm>
 void run_sim(int N, float box, float sig, float eps, float T_target, int steps, const char* out_prefix) {
-    Simulation<ClassicalKinematics, ReflectiveWall, LennardJones, NullCollision, Therm> sim(N, box, sig, eps, T_target);
+    // Calculate optimal grid resolution based on interaction cutoff (2.5 * sigma)
+    // We want cell_size >= cutoff. So IX <= box / cutoff.
+    float cutoff = 2.5f * sig;
+    int IX = (int)(box / cutoff);
+    if (IX < 3) IX = 3;
+    if (IX > 30) IX = 30; // Safety limit
+    
+    Simulation<ClassicalKinematics, ReflectiveWall, LennardJones, NullCollision, Therm> sim(N, box, sig, eps, T_target, IX);
     
     std::string ts_file = std::string(out_prefix) + "_timeseries.csv";
     std::ofstream ofs(ts_file);
@@ -139,6 +146,7 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
     
     float Area = 6.0f * box * box;
     float Vol = box * box * box;
+    float rho_avg = (float)N / Vol;
     
     sim.reset_accumulators();
     int record_interval = 10;
@@ -151,10 +159,10 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
             sim.get_stats(wall, vir, ke);
             
             float T_meas = (float)(2.0 * ke / (3.0 * N));
-            float p_tail = LennardJones::calculate_p_tail(N/Vol, eps, sig);
+            float p_tail = LennardJones::calculate_p_tail(rho_avg, eps, sig);
             
             double p_wall_inst = wall / (record_interval * sim.dt * Area);
-            float p_vir_inst = (N/Vol * T_meas) + (vir / (3.0 * Vol)) + p_tail;
+            float p_vir_inst = (rho_avg * T_meas) + (vir / (3.0 * Vol)) + p_tail;
             
             ofs << (i + 1) << "," << T_meas << "," << p_vir_inst << "," << p_wall_inst << "\n";
             sim.reset_accumulators();
@@ -176,12 +184,12 @@ void run_sim(int N, float box, float sig, float eps, float T_target, int steps, 
         ofsm << p_mag << "\n";
     }
     delete[] h_particles;
-    std::cout << "Completed " << out_prefix << std::endl;
+    std::cout << "Completed " << out_prefix << " with IX=" << IX << std::endl;
 }
 
 int main(int argc, char** argv) {
-    if (argc < 8) {
-        std::cerr << "Usage: ./bamps_compare <therm_type> <out_prefix> <sig> <eps> <rho> <T_target> <steps>" << std::endl;
+    if (argc < 9) {
+        std::cerr << "Usage: ./bamps_compare <therm_type> <out_prefix> <sig> <eps> <rho> <T_target> <steps> <box_size>" << std::endl;
         return 1;
     }
     
@@ -192,8 +200,8 @@ int main(int argc, char** argv) {
     float rho = atof(argv[5]);
     float T_target = atof(argv[6]);
     int steps = atoi(argv[7]);
+    float box = atof(argv[8]);
     
-    float box = 10.0f;
     int N = (int)(rho * box * box * box);
     
     if (therm_type == 0) run_sim<NullThermostat>(N, box, sig, eps, T_target, steps, prefix);
