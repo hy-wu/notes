@@ -17,47 +17,54 @@
 \maketitle
 
 \section{Executive Summary}
-This report details the completion and validation of the modern BAMPS GPU engine. The architecture has been refactored into a high-performance, template-based policy framework supporting Classical, Relativistic, and Ultrarelativistic regimes. Key physical corrections, including Vlasov-corrected Lennard-Jones potentials and dual-path pressure validation (Virial vs. Wall), have been successfully implemented and verified.
+This report details the completion and validation of the modern BAMPS GPU engine. The architecture utilizes a high-performance, template-based policy framework supporting Classical, Relativistic, and Ultrarelativistic regimes. Key physical corrections, including Vlasov-corrected Lennard-Jones potentials and dual-path pressure validation (Virial vs. Wall), have been successfully implemented and verified.
 
 \section{Architecture Design}
-The engine utilizes a C++ template-based policy architecture to eliminate macro-dependency and ensure type-safe physical combinations:
+The engine utilizes a C++ template-based policy architecture to ensure type-safe physical combinations:
 \begin{itemize}
     \item \textbf{Kinematics}: \texttt{Classical}, \texttt{Relativistic}, \texttt{Ultrarelativistic} (massless limit).
     \item \textbf{Thermostats}: \texttt{Andersen}, \texttt{Langevin}, and a generic \texttt{Nosé-Hoover Chain (NHC)} supporting all kinematics via generic kinetic energy reduction.
-    \item \textbf{Potentials}: \texttt{LennardJones} incorporates a numerically stable \textbf{Force Capping} mechanism. It includes analytical tail corrections ($P_{tail}$) and utilizes a constant mean-field Vlasov attraction factor ($a$) in the virial calculation. While \texttt{calculate\_a\_eff(T)} is available in the framework, dynamic temperature-dependent $a(T)$ is not yet actively used in the simulation's pressure measurement but is used for theoretical comparisons.
-    \item \textbf{Collisions}: Integrated \texttt{HardSphereCollision} (DSMC) for hybrid MD+DSMC simulations.
+    \item \textbf{Potentials}: \texttt{LennardJones} incorporates a numerically stable \textbf{Force Capping} mechanism. It includes analytical tail corrections ($P_{tail}$) and pairwise force integration.
+    \item \textbf{Collisions}: Integrated \texttt{HardSphereCollision} (DSMC) for hybrid simulations. Note: Current validation runs utilize \texttt{NullCollision} (pure MD) to establish a baseline for LJ potential effects.
 \end{itemize}
 
 \section{Physical Validation: Thermostats and Canonical Ensembles}
-Initial testing revealed a ``numerical heat explosion'' in random initialization at high densities ($\rho=6.0$). This was resolved by implementing a \textbf{Simple Cubic Lattice} initialization. 
+Initial testing revealed a ``numerical heat explosion'' in random initialization at high densities. This was resolved by implementing a \textbf{Simple Cubic Lattice} initialization. 
 
-The performance of different thermostats was compared by tracking the system's relaxation to the target temperature $T=1.2$. As shown in Figure~\ref{fig:therm_comp}, all active thermostats successfully stabilized the system and produced momentum distributions matching the theoretical Maxwell-Boltzmann PDF. NHC provided the most deterministic and smooth control, while Andersen and Langevin showed characteristic fluctuations consistent with their stochastic nature.
+Thermal equilibrium was verified across all scans. Figure~\ref{fig:temp_stab} demonstrates that NHC, Andersen, and Langevin thermostats successfully maintain target temperatures (or follow target temperature ramps) with high precision, with NHC providing the most deterministic control.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{comparison_results/thermostat_comparison.png}
-    \caption{Thermostat Comparison: Time-series of $T$, $P_{virial}$, and $P_{wall}$ alongside terminal momentum distribution.}
-    \label{fig:therm_comp}
+    \includegraphics[width=0.95\textwidth]{eos_scans/temp_stability_comprehensive.png}
+    \caption{Thermal Equilibrium Dashboard: Measured temperature (or normalized $T_{meas}/T_{target}$) across $\sigma$, $\epsilon$, $T$, and $\rho$ scans.}
+    \label{fig:temp_stab}
 \end{figure}
 
 \section{Equation of State (EoS) Comprehensive Validation}
-To rigorously verify the physical fidelity of the engine, a 4D parameter scan was conducted across $\sigma$, $\epsilon$, $T$, and $\rho$. The results, presented in Figure~\ref{fig:eos_scan}, focus on the $P_{wall}/T$ metric (equivalent to $\rho Z$) to ensure robustness against virial noise.
-
-\begin{itemize}
-    \item \textbf{Sigma Scan}: Captures the non-linear growth of excluded volume effects, accurately tracking the Carnahan-Starling prediction as $\sigma$ increases.
-    \item \textbf{Epsilon Scan}: Demonstrates the impact of the attractive component of the Lennard-Jones potential. The simulation directly computes pairwise LJ forces, and the observed trend closely follows the theoretical prediction which includes the mean-field Vlasov attraction as an analytical correction.
-    \item \textbf{Temperature Scan}: Shows the relative weakening of attractive forces as kinetic energy increases, with $P/T$ asymptotically approaching the hard-sphere limit.
-    \item \textbf{Density Scan}: Validates the engine's stability and accuracy from dilute gas ($\rho=1.0$) to high-density liquid ($\rho=8.0$) regimes.
-\end{itemize}
+A 4D parameter scan was conducted across $\sigma$, $\epsilon$, $T$, and $\rho$ ($L=14, N \approx 11000$). The results in Figure~\ref{fig:eos_scan} compare experimental data against two theoretical models:
+\begin{enumerate}
+    \item \textbf{Mean-Field Theory}: A zero-order attraction correction ($Z_{CS} - a\rho/T$).
+    \item \textbf{Theory (CS + B2 Integral)}: A more rigorous model utilizing the numerical integration of the Second Virial Coefficient $B_2(T)$ for the LJ potential.
+\end{enumerate}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\textwidth]{eos_scans/eos_validation_comprehensive.png}
-    \caption{Comprehensive EoS Validation Dashboard: $P_{wall}/T$ vs. physical parameters across multiple thermostats compared against the theoretical EoS (CS + Vlasov).}
+    \caption{Comprehensive EoS Validation Dashboard: $P_{wall}/T$ (or $P_{wall}/\rho T$ for density scan) compared against Mean-Field and Rigorous B2 theories.}
     \label{fig:eos_scan}
 \end{figure}
 
+\section{Performance Benchmarks}
+Computational scalability was measured for all thermostats. Figure~\ref{fig:perf_bench} shows the mean runtime per step (ms) as a function of the scanned parameters. NHC exhibits a consistent overhead due to global kinetic energy reduction and host-synchronization.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{eos_scans/performance_benchmarks.png}
+    \caption{Execution Performance Benchmarks: Scaling of ms/step across various thermodynamic states.}
+    \label{fig:perf_bench}
+\end{figure}
+
 \section{Conclusion}
-The BAMPS Modern GPU engine is now a robust, publication-grade tool for non-equilibrium fluid dynamics. The combination of NHC thermostats, lattice initialization, and dual-path pressure measurement ensures high physical accuracy across a wide range of thermodynamic states.
+The BAMPS Modern GPU engine demonstrates high physical fidelity. The use of rigorous $B_2$ integration provides a superior theoretical benchmark, confirming that the engine accurately captures both hard-sphere repulsion and attractive LJ dynamics.
 
 \end{document}
