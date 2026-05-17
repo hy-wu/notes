@@ -1,3 +1,4 @@
+#include <chrono>
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
@@ -97,6 +98,7 @@ int main(int argc, char** argv) {
     int n = (int)std::round(rho * box * box * box);
     int num_cells = IX * IX * IX;
     float cell_volume = (box * box * box) / (float)num_cells;
+    float cell_size = box / (float)IX;
     float actual_rho = (float)n / (box * box * box);
     float eta = HardSphereCollision::packing_fraction(actual_rho, diameter);
 
@@ -135,6 +137,7 @@ int main(int argc, char** argv) {
     std::ofstream ts(prefix + "_timeseries.csv");
     ts << "Step,Time,Tx,Ty,Tz,T,KE,Anisotropy,AcceptedCollisions,Trials,Capped\n";
 
+    auto loop_start = std::chrono::steady_clock::now();
     for (int step = 0; step < steps; ++step) {
         drift_periodic_kernel<<<(n + 255) / 256, 256>>>(d_particles, n, dt, box);
         CUDA_CHECK(cudaMemset(d_grid_counts, 0, num_cells * sizeof(int)));
@@ -159,6 +162,7 @@ int main(int argc, char** argv) {
                << KE << "," << A << "," << counts[0] << "," << counts[2] << "," << counts[3] << "\n";
         }
     }
+    auto loop_end = std::chrono::steady_clock::now();
     ts.close();
 
     auto final = read_stats(d_particles, n, d_stats);
@@ -176,16 +180,20 @@ int main(int argc, char** argv) {
     double theory_rate_inf_cs = theory_rate_0 * chi_inf_cs;
     double theory_rate_inf_ev = theory_rate_0 * chi_inf_ev;
     double measured_rate = (double)counts[0] / (steps * dt);
+    double runtime_sec = std::chrono::duration<double>(loop_end - loop_start).count();
+    double mean_step_ms = 1000.0 * runtime_sec / (double)steps;
+    double particle_steps_per_sec = ((double)n * (double)steps) / runtime_sec;
 
     std::ofstream summary(prefix + "_summary.csv");
     summary << std::setprecision(12);
-    summary << "N,Rho,Eta,T_initial,T_final,Diameter,Order,ChiTrunc,ChiResummedCS,ChiResummedEV,";
+    summary << "N,Box,IX,CellSize,Rho,Eta,T_initial,T_final,Diameter,Order,ChiTrunc,ChiResummedCS,ChiResummedEV,";
     summary << "TheoryRate0,TheoryRateTrunc,TheoryRateInfCS,TheoryRateInfEV,MeasuredRate,AcceptedCollisions,Trials,Capped,";
-    summary << "PxInitial,PyInitial,PzInitial,PxFinal,PyFinal,PzFinal,KEInitial,KEFinal\n";
-    summary << n << "," << actual_rho << "," << eta << "," << T_initial << "," << T_final << "," << diameter << "," << order << ",";
+    summary << "RuntimeSec,MeanStepMs,ParticleStepsPerSec,PxInitial,PyInitial,PzInitial,PxFinal,PyFinal,PzFinal,KEInitial,KEFinal\n";
+    summary << n << "," << box << "," << IX << "," << cell_size << "," << actual_rho << "," << eta << "," << T_initial << "," << T_final << "," << diameter << "," << order << ",";
     summary << chi_trunc << "," << chi_inf_cs << "," << chi_inf_ev << ",";
     summary << theory_rate_0 << "," << theory_rate_trunc << "," << theory_rate_inf_cs << "," << theory_rate_inf_ev << ",";
     summary << measured_rate << "," << counts[0] << "," << counts[2] << "," << counts[3] << ",";
+    summary << runtime_sec << "," << mean_step_ms << "," << particle_steps_per_sec << ",";
     summary << initial[0] << "," << initial[1] << "," << initial[2] << "," << final[0] << "," << final[1] << "," << final[2] << ",";
     summary << initial[3] << "," << final[3] << "\n";
     summary.close();
@@ -208,6 +216,8 @@ int main(int argc, char** argv) {
     std::cout << "THEORY_RATE_TRUNC: " << theory_rate_trunc << "\n";
     std::cout << "THEORY_RATE_INF_CS: " << theory_rate_inf_cs << "\n";
     std::cout << "THEORY_RATE_INF_EV: " << theory_rate_inf_ev << "\n";
+    std::cout << "MEAN_STEP_MS: " << mean_step_ms << "\n";
+    std::cout << "PARTICLE_STEPS_PER_SEC: " << particle_steps_per_sec << "\n";
 
     cudaFree(d_particles);
     cudaFree(d_grid_indices);
