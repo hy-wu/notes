@@ -1,0 +1,36 @@
+{
+  "name": "dsmc_validation_suite",
+  "description": "Top-level validation suite registry. Individual cases can be summarized independently or run in sequence.",
+  "cases": [
+    {
+      "name": "lj_argon_baseline",
+      "config": "cases/lj_argon_baseline.json",
+      "status": "active",
+      "purpose": "Classical LJ/Argon baseline against LAMMPS with RDF, S(k), NVE drift, speed distribution, and MSD."
+    },
+    {
+      "name": "enskog_hard_sphere",
+      "config": null,
+      "status": "planned",
+      "purpose": "Hard-sphere/Enskog DSMC validation for EOS, collision frequency, anisotropy relaxation, and runtime scaling."
+    },
+    {
+      "name": "lj_state_grid",
+      "config": null,
+      "status": "planned",
+      "purpose": "Multi-state LJ reduced-unit grid over density and temperature with LAMMPS references."
+    },
+    {
+      "name": "transport_nonequilibrium",
+      "config": null,
+      "status": "planned",
+      "purpose": "Non-equilibrium transport validation: diffusion, viscosity, heat conduction, and Couette/thermal-gradient cases."
+    },
+    {
+      "name": "relativistic_ideal_gas",
+      "config": null,
+      "status": "planned",
+      "purpose": "Relativistic and ultrarelativistic limits: ideal EOS, Juttner-like momentum distribution, and stress tensor checks."
+    }
+  ]
+}

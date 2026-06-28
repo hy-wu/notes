@@ -1,0 +1,197 @@
+{
+  "name": "lj_argon_baseline",
+  "description": "Liquid Argon/LJ credibility baseline with BAMPS vs LAMMPS structure, thermodynamics, energy drift, and MSD checks.",
+  "working_dir": "../..",
+  "result_dirs": {
+    "argon": "argon_results",
+    "diffusion": "diffusion_results"
+  },
+  "run_steps": [
+    {
+      "name": "argon_lammps_reference",
+      "command": ["python", "argon_lammps_verify.py"],
+      "produces": [
+        "argon_results/argon_equilibrium_validation.png",
+        "argon_results/argon_equilibrium_summary.csv",
+        "argon_results/argon_structure_factor.csv"
+      ],
+      "notes": "Requires nvcc and LAMMPS executable lmp on PATH."
+    },
+    {
+      "name": "diffusion_msd",
+      "command": ["python", "diffusion_verify.py"],
+      "produces": [
+        "diffusion_results/msd_plot.png",
+        "diffusion_results/diff_timeseries.csv"
+      ],
+      "notes": "Requires nvcc."
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "argon_validation_figure",
+      "path": "argon_results/argon_equilibrium_validation.png",
+      "required": true
+    },
+    {
+      "name": "argon_summary_table",
+      "path": "argon_results/argon_equilibrium_summary.csv",
+      "required": false
+    },
+    {
+      "name": "argon_structure_factor_table",
+      "path": "argon_results/argon_structure_factor.csv",
+      "required": false
+    },
+    {
+      "name": "argon_speed_distribution_table",
+      "path": "argon_results/argon_speed_distribution.csv",
+      "required": false
+    },
+    {
+      "name": "msd_figure",
+      "path": "diffusion_results/msd_plot.png",
+      "required": true
+    }
+  ],
+  "metrics": [
+    {
+      "name": "nve_energy_relative_drift_max",
+      "type": "csv_column",
+      "path": "argon_results/nve_timeseries.csv",
+      "column": "TotalE",
+      "stat": "relative_drift_abs_max",
+      "threshold": {"max": 0.01},
+      "required": true,
+      "description": "Maximum absolute relative drift of total energy during NVE production."
+    },
+    {
+      "name": "nvt_temperature_mean",
+      "type": "csv_column",
+      "path": "argon_results/nvt_timeseries.csv",
+      "column": "T",
+      "window": "second_half",
+      "stat": "mean",
+      "threshold": {"target": 1.0, "max_abs_error": 0.05},
+      "required": true,
+      "description": "NVT steady-state temperature should remain close to the target LJ temperature."
+    },
+    {
+      "name": "nvt_pressure_mean",
+      "type": "csv_column",
+      "path": "argon_results/nvt_timeseries.csv",
+      "column": "P_virial",
+      "window": "second_half",
+      "stat": "mean",
+      "threshold": {"min": -5.0, "max": 10.0},
+      "required": true,
+      "description": "Coarse sanity bound for virial pressure before reference comparison."
+    },
+    {
+      "name": "diffusion_msd_r2",
+      "type": "msd_fit",
+      "path": "diffusion_results/diff_timeseries.csv",
+      "step_column": "Step",
+      "msd_column": "MSD",
+      "dt": 0.002,
+      "window": "last_80_percent",
+      "outputs": ["D", "r2"],
+      "threshold": {"r2_min": 0.99, "D_min": 0.02, "D_max": 0.15},
+      "required": true,
+      "description": "Late-time MSD should be linear and give a plausible LJ self-diffusion coefficient."
+    },
+    {
+      "name": "rdf_peak_position_error",
+      "type": "summary_observable",
+      "path": "argon_results/argon_equilibrium_summary.csv",
+      "observable": "rdf_peak_r",
+      "error_column": "rel_error_pct",
+      "threshold": {"max": 5.0},
+      "required": false,
+      "description": "First RDF peak position relative error against LAMMPS."
+    },
+    {
+      "name": "rdf_peak_height_error",
+      "type": "summary_observable",
+      "path": "argon_results/argon_equilibrium_summary.csv",
+      "observable": "rdf_peak_g",
+      "error_column": "rel_error_pct",
+      "threshold": {"max": 15.0},
+      "required": false,
+      "description": "First RDF peak height relative error against LAMMPS."
+    },
+    {
+      "name": "sk_peak_position_error",
+      "type": "summary_observable",
+      "path": "argon_results/argon_equilibrium_summary.csv",
+      "observable": "sk_peak_q",
+      "error_column": "rel_error_pct",
+      "threshold": {"max": 8.0},
+      "required": false,
+      "description": "Static-structure-factor main peak position relative error against LAMMPS."
+    },
+    {
+      "name": "pressure_error_vs_lammps",
+      "type": "summary_observable",
+      "path": "argon_results/argon_equilibrium_summary.csv",
+      "observable": "P_mean",
+      "error_column": "rel_error_pct",
+      "threshold": {"max": 10.0},
+      "required": false,
+      "description": "Mean pressure relative error against LAMMPS."
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "argon_lammps_summary",
+      "type": "summary_table",
+      "path": "argon_results/argon_equilibrium_summary.csv",
+      "required": false,
+      "observables": [
+        {"name": "T_mean", "threshold": {"rel_error_pct_max": 2.0}},
+        {"name": "P_mean", "threshold": {"rel_error_pct_max": 10.0}},
+        {"name": "Z_mean", "threshold": {"rel_error_pct_max": 10.0}},
+        {"name": "PE_per_particle", "threshold": {"rel_error_pct_max": 10.0}},
+        {"name": "TotalE_per_particle", "threshold": {"rel_error_pct_max": 10.0}},
+        {"name": "rdf_peak_r", "threshold": {"rel_error_pct_max": 5.0}},
+        {"name": "rdf_peak_g", "threshold": {"rel_error_pct_max": 15.0}},
+        {"name": "rdf_first_min_r", "threshold": {"rel_error_pct_max": 8.0}},
+        {"name": "coordination_number", "threshold": {"rel_error_pct_max": 15.0}},
+        {"name": "sk_peak_q", "threshold": {"rel_error_pct_max": 8.0}},
+        {"name": "sk_peak_value", "threshold": {"rel_error_pct_max": 15.0}},
+        {"name": "S0_lowq", "threshold": {"rel_error_pct_max": 25.0}},
+        {"name": "kappa_T_from_S0", "threshold": {"rel_error_pct_max": 30.0}},
+        {"name": "kappa_T_from_EOS", "threshold": {"rel_error_pct_max": 30.0}},
+        {"name": "v_rms", "threshold": {"rel_error_pct_max": 5.0}},
+        {"name": "mb_rmse", "threshold": {"rel_error_pct_max": 50.0}}
+      ],
+      "description": "Primary BAMPS GPU vs LAMMPS comparison table generated by argon_lammps_verify.py."
+    },
+    {
+      "name": "thermo_timeseries_temperature",
+      "type": "paired_csv_column",
+      "bamps_path": "argon_results/nvt_timeseries.csv",
+      "bamps_column": "T",
+      "lammps_path": "argon_results/lammps_timeseries.csv",
+      "lammps_column": "T",
+      "window": "second_half",
+      "stat": "mean",
+      "required": false,
+      "threshold": {"rel_error_pct_max": 2.0},
+      "description": "Fallback direct comparison of steady-state temperature if LAMMPS timeseries is present."
+    },
+    {
+      "name": "thermo_timeseries_pressure",
+      "type": "paired_csv_column",
+      "bamps_path": "argon_results/nvt_timeseries.csv",
+      "bamps_column": "P_virial",
+      "lammps_path": "argon_results/lammps_timeseries.csv",
+      "lammps_column": "P",
+      "window": "second_half",
+      "stat": "mean",
+      "required": false,
+      "threshold": {"rel_error_pct_max": 10.0},
+      "description": "Fallback direct comparison of steady-state pressure if LAMMPS timeseries is present."
+    }
+  ]
+}
