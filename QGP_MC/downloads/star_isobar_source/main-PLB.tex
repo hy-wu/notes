@@ -1,0 +1,546 @@
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times,authoryear]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn,authoryear]{elsarticle}
+%% \documentclass[final,3p,times,authoryear]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn,authoryear]{elsarticle}
+%% \documentclass[final,5p,times,authoryear]{elsarticle}
+
+%\documentclass[final,5p,times,twocolumn]{elsarticle}
+\documentclass[preprint,5p,times,twocolumn]{elsarticle}
+\biboptions{sort&compress}
+
+
+\usepackage{amssymb}
+\usepackage{lipsum}
+%\usepackage[number,sort&compress]{natbib}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers.
+%% \usepackage{lineno}
+
+%% You might want to define your own abbreviated commands for common used terms, e.g.:
+\newcommand{\kms}{km\,s$^{-1}$}
+\newcommand{\msun}{$M_\odot}
+
+\journal{Physics Letters B}
+
+\input{macro}
+%\linenumbers
+
+\begin{document}
+
+\begin{frontmatter}
+
+
+\title{Hyperon global polarization in isobar Ru+Ru and Zr+Zr collisions at \snn = 200 GeV}
+%\title{Hyperon global polarization in Ru+Ru and Zr+Zr collisions at \snn = 200 GeV}
+
+%\author[first]{Author name}
+\author{The STAR Collaboration}
+
+\begin{abstract}
+% Before English QA
+% Polarization of $\Lambda$, $\bar\Lambda$, $\Xi^-$, and $\bar{\Xi}^+$ hyperons along the system angular momentum has been measured in isobar Ru+Ru and Zr+Zr collisions at \snn = 200 GeV recorded with the STAR detector at RHIC. 
+% The polarization measurements are performed as a function of collision centrality for both species, and as a function of hyperons' transverse momentum $p_{\rm T}$ and pseudorapidity $\eta$ in collision centrality range 20\%--60\% for $\Lambda$ ($\bar\Lambda$) hyperons. 
+% The polarization increases towards peripheral collisions, but do not show significant neither p_{\rm T} or $\eta$ dependence. 
+% No significant difference in the polarization of \lam and \alam, and between the two isobar collisions, collisions, has been observed.
+% Furthermore, the polarization dependence on azimuthal angle relative to the second harmonic event plane was studied for the first time in the isobar collisions, showing a hint of larger polarization in the in-plane direction than in the out-pf-plane direction with 2.0$\sigma$ significance. 
+% Comparisons to the results in Au+Au collisions at \snn = 200 GeV reveal no obvious system size dependence. 
+% The results for \lam hyperons are quantitatively explained by hydrodynamic calculations with contributions from the shear-induced polarization and thermal vorticity. 
+% For $\Xi$ hyperons, the result via measuring daughter \lam polarization shows positive value with $2.9\sigma$ significance for 20-50\% centrality, slightly larger than the inclusive \lam polarization for which the trend is consistent with our previous measurement in Au+Au collisions.
+%
+% Suggestion by English QA
+The polarization of $\Lambda$, $\bar{\Lambda}$, $\Xi^-$, and $\bar{\Xi}^+$ hyperons along the angular momentum of the system has been measured in isobar collisions of Ru+Ru and Zr+Zr at \snn = 200 GeV with the STAR detector at RHIC. 
+The polarization dependence on collision centrality is explored and found to show an increasing trend in more peripheral collisions. 
+Dependencies on transverse momentum and pseudorapidity are investigated for $\Lambda$ and $\bar{\Lambda}$ hyperons, but no significant dependence has been observed. 
+The polarization measurements for $\Lambda$ and $\bar{\Lambda}$ are consistent with each other, indicating little contribution of the spin-magnetic coupling in the observed polarization. %and show no obvious system size dependence in comparison with previous results in Au+Au collisions. 
+%The polarization measurements for $\Lambda$ and $\bar{\Lambda}$ are consistent with each other, consistent with no magnetic-field-driven effects within present statistical precision. The results also show no obvious dependence on species or system size. 
+The results for $\Lambda$ hyperons measurements are qualitatively consistent with hydrodynamic calculations incorporating effects from shear-induced polarization and thermal vorticity, and show no obvious system size dependence in comparison with previous results in Au+Au collisions. 
+For the first time, the dependence of the polarization on the hyperon's emission azimuthal angle with respect to the second harmonic event plane is extracted and shows stronger polarization for the in-plane emitted hyperons at the level of 2.4$\sigma$ significance in 20-50\% centrality. 
+The measurements of $\Xi$ hyperons polarization via the polarization transfer analysis exhibit a finite positive polarization, 2.9$\sigma$ significance in 20-50\% centrality, slightly enhanced compared to the inclusive $\Lambda$ polarization.
+\end{abstract}
+
+
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword, up to a maximum of 6 keywords
+global polarization \sep hyperon \sep vorticity
+
+%% PACS codes here, in the form: \PACS code \sep code
+\PACS 25.75.-q \sep 25.75.Ld \sep 24.70.+s
+\end{keyword}
+
+
+\end{frontmatter}
+
+%\tableofcontents
+
+%% \linenumbers
+
+%% main text
+
+%\clearpage % for length check
+\section{Introduction}
+\label{introduction}
+
+Spin, as a fundamental property of particles, has played a very important role in the development of different fields of physics, such as spintronics, shell structure in nuclear physics, and many others. 
+%In recent years, spin-related studies have also drawn great attention in high-energy nuclear physics, especially after the global polarization of hyperons and vector mesons proposed in non-central nucleus-nucleus collisions~\cite{1,Voloshin:2004ha,Liang:2004xn,2,Gao:2007bc} were confirmed by experimental measurements in heavy-ion collisions~\cite{STAR:2017ckg,STAR:2022fan}.
+In recent years, spin-related studies have also drawn great attention in high-energy nuclear physics. This interest was triggered particularly after the global polarization of hyperons and vector meson spin alignment in non-central nucleus-nucleus collisions~\cite{1,Voloshin:2004ha,Liang:2004xn,2,Gao:2007bc} were observed by experimental measurements in heavy-ion collisions~\cite{STAR:2017ckg,STAR:2022fan}.
+The global polarization is a phenomenon referring to non-zero spin particles being polarized on average along the initial orbital angular momentum of the system, due to spin-orbit coupling.
+Since the first observations, the study of the polarization effects in nucleus-nucleus collisions has opened up new avenues for exploring the properties of nuclear matter.
+
+
+Measurements of the global polarization of \lam hyperons have been extended to heavier hyperons such as $\Xi$ and $\Omega$~\cite{STAR:2020xbm}, and to collision energies from a few GeVs up to TeVs~\cite{STAR:2007ccu,STAR:2018gyt,ALICE:2019onw,STAR:2021beb,STAR:2023nvo,HADES:2022enx}.
+The energy dependence of the global polarization can be well described by theoretical models based on thermal vorticity~\cite{Deng:2016gyh,Wei:2018zfb,Guo:2021udq,Bozek:2010bi,Ivanov:2018eej,Wu:2019eyi,Ivanov:2019ern,Ivanov:2020wak,Liang:2019pst,Jiang:2016woz}.  
+%
+Despite the significant progress, additional measurements are needed to probe unexplored effects and answer remaining questions, such as the splitting of the \lam and \alam global polarization in a strong magnetic field induced by the two charged ions at nearly speed of light~\cite{McLerran:2013hla,Becattini:2016gvu,Muller:2018ibh}, and testing the predicted rapidity and system size dependencies~\cite{Wu:2019eyi,Xie:2019jun,Liang:2019pst,Shi:2017wpk,Alzhrani:2022dpi}. 
+The observed azimuthal angle dependence of the hyperon polarization along the beam direction~\cite{STAR:2019erd,ALICE:2021pzu,STAR:2023eck} also remains a puzzle that needs to be unraveled (see recent reviews for more details~\cite{Becattini:2020ngo,Becattini:2024uha,Niida:2024ntm,Chen:2024aom}).
+
+
+Data from the isobar collisions, $^{96}_{44}$Ru+$^{96}_{44}$Ru and $^{96}_{40}$Zr+$^{96}_{40}$Zr, at \snn = 200 GeV have been collected by the STAR experiment for the study of the chiral magnetic effect~\cite{STAR:2021mii}.  
+These species were chosen to allow for an difference in electric charge while keeping the total number of nucleons in each nucleus the same. 
+As a result the square of the initial magnetic field is expected to be $\sim$15\% higher in Ru+Ru than in Zr+Zr collisions~\cite{Voloshin:2010ut,Deng:2016knn}.
+These high-statistics isobar collision data can be a good tool to explore a possible effect of spin-magnetic coupling, 
+which manifest as a difference in the global polarization of particles and antiparticles, owing to the opposite sign of their magnetic moments. 
+Furthermore, theoretical model predicts larger polarization in smaller systems. This is because of the shorter lifetime of smaller system since the system vorticity is expected to be diluted with time~\cite{Shi:2017wpk,Alzhrani:2022dpi}. Thus the isobar collisions also provide an opportunity to study the possible system size dependence of the polarization by comparing to previous results in Au+Au collisions.
+
+In this letter, we report precision measurements of $\Lambda$ and $\bar\Lambda$ global polarization in Ru+Ru and Zr+Zr collisions at \snn = 200 GeV with data collected by the STAR experiment at RHIC. 
+We present differential measurements, including the dependence of the polarization on transverse momentum, pseudorapidity, and for the first time on azimuthal angle of hyperons.
+In addition, we also report the global polarization measurements of $\Xi^-$ and $\bar \Xi^+$ hyperons.
+%These measurements provide an opportunity to study the collision system dependence of vorticity and global polarization by comparing to the previous results in Au+Au collisions. 
+
+%============================================================
+\section{STAR Experiment}
+
+The subsystems of the STAR detector used in this analysis are the time projection chamber (TPC)~\cite{Anderson:2003ur}, the time-of-flight (TOF) detector~\cite{Llope:2012zz},  the zero degree calorimeters (ZDCs)~\cite{Adler:2001fq}, and vertex position detectors (VPDs)~\cite{Llope:2014nva}. 
+The TPC is the main tracking detector of the STAR experiment and is capable of measuring charged particles within the pseudorapidity range of $|\eta|<1$, and with full azimuthal coverage. 
+The momentum of charged tracks can be determined based on their curvature in a constant magnetic field (0.5 Tesla) inside the TPC. The TPC also measures the specific ionization energy loss $dE/dx$ of the charged particles~\cite{Anderson:2003ur} which can be used for particle identification. 
+%($N\sigma_{dE/dx}<3$). 
+The TOF detector extends the capability of particle identification up to the tranverse momentum $p_T$ = 3 GeV/$c$, located outside the TPC covering the full azimuth and a pseudorapidity range of $|\eta| < 0.9$~\cite{Llope:2012zz}. 
+The ZDCs are forward/backward ($|\eta| > 6.3$) detectors that are used to measure the spectator neutrons~\cite{Adler:2001fq}. 
+They are positioned 18 meters from the center of the interaction region, downstream of the return dipole magnets.
+The installation of the Shower Maximum Detectors (SMDs)~\cite{SMD} with the ZDC capture the energy deposition and spatial transverse distribution of spectator neutrons. %allows for the determination of the deflection angle of spectator neutrons in the transverse plane.
+The VPDs are comprised of two identical detectors that encircle the beam pipe and cover \(4.24 < |\eta| < 5.1\), providing the information about the collision time and the collision vertex position along the beamline. 
+The minimum-bias trigger used in this analysis is based on VPD coincidences.
+
+
+%============================================================
+\section{Data analysis}
+
+This analysis is based on minimum-bias triggered events from Ru+Ru and Zr+Zr collisions at \snn = 200 GeV  collected in the year 2018. 
+The collision vertices were reconstructed using charged-particle tracks measured in the TPC. 
+Events were selected to have the collision vertex position within the asymmetric range of (-35, 25)~cm from the center of the TPC in the beam direction, and within $\pm$2~cm in the radial direction relative to the beam center. 
+Due to online vertex selection, the vertex distribution was found to be asymmetric with a peak around $\text{-}5$ cm. 
+Therefore the asymmetric cut was applied to maximize the statistics.
+%Pile-up events were suppressed by requiring the difference between the TPC and the VPD vertices along the beam direction to be less than 5 cm.
+Pile-up events were suppressed by requiring the difference between the TPC and VPD vertices along the beam direction to be less than 5 cm, and also by excluding outliers in the correlation between the number of TPC tracks and the number of those tracks matched to hits in the TOF.
+In total, 1.8 (2.0) billion minimum-bias events for Ru+Ru (Zr+Zr) collisions were used in the analysis. 
+The centrality of each collision was determined by measuring event charged particle multiplicity and interpreting the measurement with a tuned Monte Carlo Glauber calculation~\cite{STAR:2021mii,Miller:2007ri}. 
+
+
+%---------------------------------------------
+\subsection{Track selection}
+
+Charged tracks reconstructed from the TPC hit information were selected based on the following criteria.  
+The number of hit points used in the reconstruction was required to be greater than 15 to ensure good quality of tracks. 
+The ratio of the number of hit points to the maximum possible number of hit points (45 at most depending on the track trajectory inside the TPC) was also required to be larger than 0.52 to avoid split tracks.
+Charged tracks within the transverse momentum range of $0.15 < p_{\rm T} < 10$ GeV/$c$ and $|\eta| < 1$ were analyzed in this study. 
+
+
+%----------------------------------------------
+\subsection{Hyperon reconstruction}
+
+$\Lambda$ and $\Bar{\Lambda}$ hyperons were reconstructed from their weak decay topology, $\Lambda \rightarrow p+\pi^{-}$ and $\Bar{\Lambda} \rightarrow \Bar{p} + \pi^{+}$. 
+The parent $\Xi^{-}$/$\Bar{\Xi}^{+}$ and their daughter $\Lambda$/$\Bar{\Lambda}$ were reconstructed utilizing the decay channels of $\Xi^{-} \rightarrow \Lambda+\pi^{-}$ and $\Bar{\Xi}^{+} \rightarrow \Bar{\Lambda} + \pi^{+}$.
+The identification of the $p$ ($\Bar{p}$ ) and $\pi^{-}$ ($\pi^{+}$) candidates is based on their electric charge and energy loss, $dE/dx$, in the TPC. 
+Furthermore, the TOF detector was utilized if the track hits the TOF, which allows to identify the particles to higher $p_{\rm T}$.  
+The invariant mass was calculated for all proton-pion pairs to find \lam candidates, and the optimized selection criteria based on the decay topology were applied to suppress combinatorial background.
+These criteria include a maximum cut (0.85 cm) on the closest distance of approach (DCA) between the helical tracks of the proton and pion, a minimum requirement (0.35 cm for $p$, 1.1 cm for $\pi$) on the DCA between each track and the primary vertex, an upper limit (1.1 cm) on the DCA between the $\Lambda$ hyperon candidate and the primary vertex, and a lower threshold (4.0 cm) on the decay length of the $\Lambda$ hyperon. 
+The reconstruction of $\Xi^{-}$($\bar\Xi^+$) hyperon was performed using the KF Particle Finder package, based on the Kalman Filter method initially developed for the CBM and ALICE experiments~\cite{Gorbunov:2013yvt,Zyzak:2016exl,Kisel:2018nvd}, to enhance $\Xi$ hyperon yield with a good purity.
+This methodology leverages the track fit quality and decay topology to optimize the selection process.
+Figure~\ref{fig:LambdaMass} shows the invariant mass distributions for $\Lambda$, $\Bar{\Lambda}$, $\Xi^{-}$, and $\Bar{\Xi}^{+}$ in the 20-50\% centrality bin as an example. 
+The combinatorial background under the mass peak was estimated using off-peak regions and the background fraction is found to be smaller than 10\% (2\%) for \lam ($\Xi$) in 20-50\% centrality.
+
+
+\begin{figure}[htb]
+    \centering
+    \hspace{-2mm}
+    \subfigure
+    {
+    \includegraphics[width=0.49\linewidth]{Figs/AllLambdaAntiLambdaMass.pdf}
+    }\hspace{-3mm}
+    \subfigure
+    {
+    \includegraphics[width=0.49\linewidth]{Figs/AllXiAntiXiMass.pdf}
+    }\vspace{-3mm}
+    \caption{Invariant mass distributions for $\Lambda$ and $\bar{\Lambda}$ (left) and for $\Xi^{-}$ and $\Bar{\Xi}^{+}$ (right) for 20-50\% centrality in Ru+Ru and Zr+Zr collisions at \snn = 200 GeV.}
+    \label{fig:LambdaMass}
+\end{figure}
+
+
+%---------------------------------------------------------
+\subsection{Event plane determination}
+ 
+In order to reconstruct the direction of the initial orbital angular momentum of the system, one needs to determine the azimuthal angle of the impact parameter vector, which is defined as a vector connecting the centers of the two nuclei and orthogonal to the system angular momentum direction.
+%The first-order event plane angle $\Psi_{1}$ serves as an experimental estimate of the impact parameter direction and is reconstructed from the energy and spatial distribution of spectator neutrons~\cite{Voloshin:2016ppr} detected in the ZDCs equipped with the Shower Maximum Detectors (SMD)~\cite{SMD}.
+%The first-order event plane angle $\Psi_{1}$ serves as an experimental estimate of the impact parameter direction. It is reconstructed from the energy and spatial distribution of spectator neutrons~\cite{Voloshin:2016ppr} detected in the ZDCs, which are equipped with the Shower Maximum Detectors (SMD)~\cite{SMD}.
+The first-order event plane angle $\Psi_{1}$ as an experimental estimate of the impact parameter direction~\cite{Voloshin:2016ppr} was reconstructed by using the ZDC-SMDs, which determine the deflection angle of spectator neutrons in the transverse plane.
+Also, to study azimuthal angle dependence of the polarization, the second-order event plane angle $\Psi_{2}$ was reconstructed based on the azimuthal distribution of charged tracks from the TPC within $0.2<p_{\rm T}<2$ GeV/$c$ and $|\eta|<1$.
+
+
+The event plane resolution, Res($\Psi_{n}$)\,=\,$\langle \cos[n(\Psi_{n}^{\rm obs}-\Psi_{n})]\rangle$, was estimated by correlating two angles from forward and backward regions called the two-sub event method~\cite{Poskanzer:1998yz}, where $\Psi_{n}^{\rm obs}$ denotes a measured $n$th harmonic event plane. 
+Figure~\ref{fig:ZDCPsi1Resolution} demonstrates the first- and second-order event plane resolutions as a function of collision centrality. 
+The resolutions are very similar for the two isobar systems, with peaks at approximately 0.24 and 0.60 for the first- and second-order event planes, respectively. 
+%Note that the resolution for the first-order (second-order) event plane is slightly larger in Zr+Zr (Ru+Ru) collisions, 
+%which can be understood by more neutrons (larger multiplicity at midrapidity~\cite{STAR:2021mii}) in that nucleus.
+%which can be understood by the greater number of neutrons contributing to $\Psi_{1}$ in Zr+Zr and the larger multiplicity at midrapidity contributing to $\Psi_{2}$ in Ru+Ru~\cite{STAR:2021mii}.
+Note that the resolution for the first-order event plane ($\Psi_1$) is slightly larger in Zr+Zr collisions due to the greater number of neutrons contributing to $\Psi_1$. In contrast, the resolution for the second-order event plane ($\Psi_2$) is slightly larger in Ru+Ru collisions, which can be explained by the larger multiplicity of charged particles at midrapidity contributing to $\Psi_2$~\cite{STAR:2021mii}.
+
+
+\begin{figure}[htb]
+    \centering
+    \hspace{-2mm}
+    \subfigure
+    {
+    \includegraphics[width=0.49\linewidth,clip]{Figs/ZDCPsi1Resolution.pdf}
+    }\hspace{-3mm}
+    \subfigure
+    {
+    \includegraphics[width=0.49\linewidth,clip]{Figs/TPCPsi2Resolution.pdf}
+    }\vspace{-3mm}
+    \caption{Resolution of the first-order event plane from ZDC-SMDs (left) and the second-order event plane from TPC (right) as a function of collision centrality in Ru+Ru and Zr+Zr collisions at \snn = 200 GeV.}
+    \label{fig:ZDCPsi1Resolution}
+\end{figure}
+
+
+%-----------------------------------------------$
+\subsection{Polarization measurement}
+\label{Polarization_measurement}
+
+The polarization along the initial angular momentum direction, perpendicular to the impact parameter vector, %and projected onto the transverse planes, 
+can be defined as~\cite{STAR:2007ccu},
+\begin{equation}
+    P_{\rm H} = \frac{8}{\pi\alpha_{\rm H}} \frac{1}{A_0} \frac{\langle\sin(\Psi_1-\phi_{\rm B}^{\ast})\rangle}{\rm Res(\Psi_1)}.
+    \label{eq:PH}
+\end{equation}
+%
+Here $P_{\rm H}$ is the polarization of hyperon, $\phi_{\rm B}^\ast$ is the azimuthal angle of the daughter baryon in the hyperon rest frame.
+The decay parameters for $\Lambda$ and $\Xi$ hyperons are set to $\alpha_{\Lambda}$\,=\,$-\alpha_{\Bar{\Lambda}}$\,=\,0.732$\pm$0.014 and $\alpha_{\Xi^{-}}$\,=\,-$\alpha_{\Bar{\Xi}^{+}}$\,=\,-0.401$\pm$0.058~\cite{ParticleDataGroup:2022pth}, assuming the charge conjugation parity symmetry.
+The acceptance correction factor $A_0$ is estimated from the data (see Eq.~\eqref{eq:A0}). Due to uniformity of the STAR detector, $A_0$ is very close to unity, with only a few \% deviation depending on the centrality, $p_{\rm T}$, and $\eta$.
+Owing to the overall system vorticity, the polarization becomes non-zero even for taking average over all hyperons in the phase-space, referred to as global polarization.
+
+The polarization signal was extracted using the invariant mass method~\cite{STAR:2018gyt}.  
+This requires measuring the mean value of $\sin(\Psi_{1}-\phi_{\rm B}^{\ast})$ as a function of the invariant mass $M_{\rm inv}$:
+%
+\begin{equation}
+\begin{split}
+\langle \sin(\Psi_{1}-\phi_{\rm B}^{*}) \rangle^{\rm obs}  =  (1-f^{\rm Bg}(M_{\rm inv})) \langle\sin(\Psi_{1}-\phi_{\rm B}^{\ast})\rangle^{\rm Sg} \\ 
+~+~f^{\rm Bg}(M_{\rm inv})\langle\sin(\Psi_{1}-\phi_{\rm B}^{\ast})\rangle^{\rm Bg}.
+\end{split}\label{eq:IMmethod}
+\end{equation} 
+%
+This method needs a measurement of the background fraction $f^{\rm Bg}(M_{inv})$ in both the signal (``Sg") and background (``Bg") regions. 
+The $f^{\rm Bg}(M_{\rm inv})$ was estimated by fitting off-peak region of the invariant mass distribution with the second-order polynomial function.
+In principle, the protons and pions used to reconstruct $\Lambda$s in the background region should not originate from the $\Lambda$ and therefore should not be correlated with the $\Lambda$ spin. 
+However, an improper pairing, e.g. of daughter protons matched with pions that did not come from the $\Lambda$ decay, could result in a non-zero background contribution. 
+The signal for the $\Lambda$ polarization could leak into the off-mass-peak region via protons which are real $\Lambda$ daughters being paired with pions that are not from the decay.
+The data were also fitted assuming the background signal being zero. 
+The contribution from the background to the polarization is found to be small and is considered as a source of systematic uncertainty in this analysis (see section~\ref{syst}). 
+
+
+Although the invariant mass method was used as the default method in this analysis, the event plane method was also tested as a systematic check~\cite{STAR:2013ayu,Borghini:2004ra}. 
+In the event plane method, the numbers of $\Lambda$ and $\bar{\Lambda}$ were counted in each bin of ($\Psi_{1}-\phi_{\rm B}^{\ast}$) after subtracting the combinatorial background. 
+Then the yields of $\Lambda$ and $\bar{\Lambda}$ as a function of $\Psi_{1}-\phi_{\rm B}^{\ast}$ were fitted with a sine function to obtain $\langle\sin(\Psi_{1}-\phi_{\rm B}^{\ast})\rangle^{\rm Sg}$. 
+Alternatively, the $\langle\sin(\Psi_{1}-\phi_{\rm B}^{\ast})\rangle^{\rm Sg}$ can be directly extracted by measuring an average of the distribution in the hyperon mass window and then correcting for the purity (profile method). 
+The results from these three methods are found to be consistent within uncertainties and the difference is taken as a systematic uncertainty.
+
+
+%\subsubsection{Azimuthal angle dependence}
+\label{Pyc2section}
+
+The polarization component along the system angular momentum direction could depend on the azimuthal angle of the hyperon relative to the reaction plane. 
+Considering the symmetry of the system geometry, the polarization can be written as a function of the hyperon's azimuthal angle relative to the reaction plane angle $\phi_{\rm H}-\Psi_{\rm RP}$ as follows~\cite{Niida:2024ntm}:
+%
+\begin{eqnarray}    
+\!\!\!\!\!\! P_{\rm H}(\phi_{\rm H}-\Psi_{\rm RP})
+    \!\!\!\! &=& \!\!\!\! P_{y,c0}+2\sum_{n=1}^{\infty} P_{y,c(2n)}\cos[2n(\phi_{\rm H}-\Psi_{\rm RP})] \\
+    \label{equ:Pyc2}
+    \!\!\!\! &\approx& \!\!\!\! P_{y,c0}  + 2P_{y,c2}\cos[2(\phi_{\rm H}-\Psi_{\rm RP})] \label{eq:Pyc0c2}.
+\end{eqnarray}
+%
+Study of the coefficient $P_{y,2}$ is of particular interest as theoretical models predict differently the azimuthal modulation of $P_y$ (see more discussion in Sec.~\ref{sec:Pycn}). 
+
+By considering the effect of detector acceptance as well as elliptic flow, the polarization coefficients $P_{y,c0}$ and $P_{y,c2}$, coupled with elliptic flow $v_2$ of hyperons, can be written as~\cite{Niida:2024ntm}:
+%
+\begin{eqnarray}
+& &\hspace{-35pt} \langle\sin(\Psi_1-\phi_{\rm B}^{\ast})\rangle \nonumber \\
+& &\hspace{-15pt} = \dfrac{\alpha_{\rm H}\pi}{8}\left[A_{0}\left(P_{y,c0}+2P_{y,c2}v_{2}\right)-A_{2}\left(P_{y,c2}+P_{y,c0}v_{2}\right)\right], \label{eq:Pyc0} \\
+& &\hspace{-35pt} \langle\sin(\Psi_1-\phi_{\rm B}^{\ast})\cos[2(\phi_{\rm H}-\Psi_{RP})]\rangle \nonumber \\
+& &\hspace{-15pt} = \dfrac{\alpha_{\rm H}\pi}{8}\left[A_{0}(P_{y,c2}+P_{y,c0}v_{2})-\dfrac{1}{2}A_{2}(P_{y,c0}+3P_{y,c2}v_{2})\right],\label{eq:Pyc2}
+\end{eqnarray}
+where $A_{0}$ and $A_{2}$ are acceptance correction factors defined as
+\begin{eqnarray}
+&&\hspace{-20pt} A_{0} = \dfrac{4}{\pi} \!\!\int\! \dfrac{d\Omega^{\ast}}{4\pi} \dfrac{d\phi_{\rm H}}{2\pi} A(\boldsymbol{p}_{\rm H}, \boldsymbol{p}^{\ast})\sin\theta_{\rm B}^{\ast}, \label{eq:A0}\\
+%
+&&\hspace{-20pt} A_{2} = \dfrac{4}{\pi} \!\!\int\! \dfrac{d\Omega^{\ast}}{4\pi} \dfrac{d\phi_{\rm H}}{2\pi} A(\boldsymbol{p}_{\rm H},\boldsymbol{p}^{\ast})\sin\theta_{\rm B}^{\ast}\cos[2(\phi_{\rm H}-\phi_{\rm B}^{\ast})].
+\end{eqnarray}
+The function $A(\boldsymbol{p}_{\rm H}, \boldsymbol{p}^{\ast})$ accounts for the detector acceptance and $\theta_{\rm B}^{\ast}$ is defined as the angle between the momentum of the decay baryon in the hyperon rest frame and the beam direction.
+The factors $A_{0}$ and $A_{2}$ are extracted directly from the data. By solving Eqs.~\eqref{eq:Pyc0} and \eqref{eq:Pyc2} with the measurement of $v_2$, one can obtain the dependence of the polarization on the hyperon’s emission azimuthal angle with respect to the second harmonic event plane, the polarization coefficients $P_{y,c0}$ and $P_{y,c2}$ (method-1). 
+
+
+If the higher-order acceptance correction information on $\theta^{\ast}_{\rm B}$ is included in the measurement, one obtains another set of equations (method-2):
+% \begin{equation}
+%     \begin{split}
+%      &\left<\sin(\Psi_1-\phi_B^{\ast})\sin\theta^{\ast}\right> = \dfrac{\alpha_{H}}{3}\left[A_{0}\left(P_{0}+2P_{2}v_{2}\right)-A_{2}\left(P_{2}+P_{0}v_{2}\right)\right]\\
+%      &\left<\sin(\Psi_1-\phi_B^{\ast})\sin\theta^{\ast}\cos[n(\phi_H-\Psi_{RP})]\right> = 
+%      \dfrac{\alpha_{H}}{3}\left[A_{0}(P_{2}+P_{0}v_{2})-\dfrac{1}{2}A_{2}(P_{0}+3P_{2}v_{2})\right]
+%     \end{split}
+% \end{equation}
+%
+\begin{eqnarray}
+& & \hspace{-35pt} \langle \sin(\Psi_1-\phi_{\rm B}^{\ast})\sin\theta_{\rm B}^{\ast}\rangle \nonumber \\
+& & \hspace{-15pt} = \dfrac{\alpha_{\rm H}}{3}\left[\tilde{A}_{0}\left(P_{y,c0}+2P_{y,c2}v_{2}\right)-\tilde{A}_{2}\left(P_{y,c2}+P_{y,c0}v_{2}\right)\right], \label{eq:Pyc0tl}\\
+& & \hspace{-35pt} \langle \sin(\Psi_1-\phi_{\rm B}^{\ast})\sin\theta_{\rm B}^{\ast}\cos[2(\phi_{\rm H}-\Psi_{RP})]\rangle \nonumber \\
+& & \hspace{-15pt} = \dfrac{\alpha_{\rm H}}{3}\left[\tilde{A}_{0}(P_{y,c2}+P_{y,c0}v_{2})-\dfrac{1}{2}\tilde{A}_{2}(P_{y,c0}+3P_{y,c2}v_{2})\right] \label{eq:Pyc2tl},
+\end{eqnarray}
+with acceptance correction factors as follows:
+\begin{eqnarray}
+&&\hspace{-20pt} \tilde{A}_{0} \!=\! \dfrac{4}{\pi} \!\!\int\! \dfrac{d\Omega^{\ast}}{4\pi} \dfrac{d\phi_{\rm H}}{2\pi} A(\boldsymbol{p}_{\rm H}, \boldsymbol{p}^{\ast})\sin^2\theta_{\rm B}^{\ast}, \\
+%
+&&\hspace{-20pt} \tilde{A}_{2} \!=\! \dfrac{4}{\pi} \!\!\int\! \dfrac{d\Omega^{\ast}}{4\pi} \dfrac{d\phi_{\rm H}}{2\pi} A(\boldsymbol{p}_{\rm H},\boldsymbol{p}^{\ast})\sin^2\theta_{\rm B}^{\ast}\cos[2(\phi_{\rm H}-\phi_{\rm B}^{\ast})].
+\end{eqnarray}
+These two methods were tested to measure the polarization coefficient as presented in the following section.
+
+%The polarization coefficients $P_{y,c2}$ provide important insights into the polarization mechanism, thermal vorticity and shear-induced polarization~\cite{Palermo:2024tza}.
+In Eqs.~\eqref{eq:Pyc2} and \eqref{eq:Pyc2tl}, the second-order event plane determined by the TPC was used as a proxy of $\Psi_{\rm RP}$. Note that the tracks used for \lam (\alam) reconstruction were excluded from the event plane calculation to avoid a self-correlation.
+
+%----------------------------------------------$
+\subsection{Systematic uncertainties}
+\label{syst}
+
+The systematic uncertainties were estimated by comparing the results obtained with different methods for the signal extraction and background contribution. 
+Below, we describe each systematic source and provide typical values of relative uncertainty.
+
+
+As mentioned in Sec.~\ref{Polarization_measurement}, three different techniques were used to extract the polarization signal. 
+We use the results obtained with the invariant mass method as the default for $\Lambda$ global polarization. 
+The difference in results from the event plane method was found to be 8\% and used in the evaluation  of the systematic uncertainty of the measurement. 
+For the $\Xi^{-}$ global polarization, the event plane method was used as the default, and the difference in results from the profile method was found to be 15\%.
+
+
+The uncertainty related to the background contribution was studied by changing the nonzero background assumption (used as the default) in Eq.~\ref{eq:IMmethod}. 
+The difference of the zero-background assumption from the default in the invariant method was included in the systematic uncertainty ($\sim$7\% for \lam).
+The difference in results under variation of the mass window for particles of interest from 3$\sigma$ to 2$\sigma$ in event plane method, was also included in the systematic uncertainty ($\sim$12\% for $\Xi$).
+%
+The uncertainty in the decay parameter $\alpha_{\rm H}$ was propagated through the analysis, resulting in a systematic uncertainty of $\sim$1.9\% for \lam and $\sim$2.6\% for $\Xi$, respectively~\cite{ParticleDataGroup:2022pth}.
+The systematic uncertainties from the event plane resolution and acceptance effect are found to be small (below 0.1\%). 
+The final systematic uncertainties were calculated by taking the square root of quadratic sum of the differences between the default condition and each systematic source. 
+
+We note that the feed-down contributions reduce the polarization for primary \lam polarization by $\sim$10-15\% and enhance that for primary $\Xi$ by $\sim$25\%~\cite{Becattini:2016gvu,Karpenko:2016jyx,Xia:2019fjf,Becattini:2019ntv,Li:2021zwq}. 
+As the correction for the feed-down contribution is model-dependent, we have chosen to present the polarization for the inclusive \lam and $\Xi$ samples in this study.
+
+
+%=================================================================
+\section{Results and Discussions}
+
+\subsection{$\Lambda$ global polarization}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{Figs/ForPaper_Figure3_TN_v2.pdf}
+    \vspace{-3mm}
+    \caption{Global polarization of $\Lambda$ and $\bar\Lambda$ and their difference as a function of centrality in Ru+Ru and Zr+Zr collisions at \snn = 200 GeV in the left panel. 
+    Right panel shows results for 20-50\% centrality window. Shaded boxes and vertical lines represent systematic and statistical uncertainties. 
+    The data points are slightly shifted along the horizontal axis for visibility. }
+    \label{fig:GlobalP_Lam_AntiLam}
+\end{figure}
+%The global polarization was measured in Ru+Ru and Zr+Zr systems separately: $P_{\Lambda}^{\rm Ru} = 0.247\pm0.071({\rm stat.})\pm0.028({\rm syst.})$, $P_{\bar\Lambda}^{\rm Ru} = 0.277\pm0.078({\rm stat.})\pm0.031({\rm syst.})$, $P_{\Lambda}^{\rm Zr} = 0.368\pm0.066({\rm stat.})\pm0.040({\rm syst.})$, $P_{\bar\Lambda}^{\rm Zr} = 0.264\pm0.072({\rm stat.})\pm0.031({\rm syst.})$ in 20-50\% centrality. The results in Ru+Ru and Zr+Zr collisions are combined as no significant difference between them has been observed. 
+
+
+Figure~\ref{fig:GlobalP_Lam_AntiLam} presents the global polarization of $\Lambda$ and $\bar\Lambda$ and their difference as a function of centrality in Ru+Ru and Zr+Zr collisions at \snn = 200 GeV in the left panel, where the two system are combined.
+The global polarization increases from central to peripheral collisions, following an increase of the thermal vorticity as expected. In the right panel, the results averaged over 20-50\% centrality interval are plotted: $P_{\Lambda} (\%) = 0.310\pm0.048({\rm stat.})\pm0.036({\rm syst.})$, $P_{\bar\Lambda} (\%) = 0.270\pm0.053({\rm stat.})\pm0.030({\rm syst.})$ for the two systems combined. The global polarization was also checked in Ru+Ru and Zr+Zr systems separately for 20-50\% centrality as shown in the right panel of Fig.~\ref{fig:GlobalP_Lam_AntiLam} and found be consistent with each other.
+%$P_{\Lambda}^{\rm Ru} = 0.247\pm0.071({\rm stat.})\pm0.028({\rm syst.})$, $P_{\bar\Lambda}^{\rm Ru} = 0.277\pm0.078({\rm stat.})\pm0.031({\rm syst.})$, $P_{\Lambda}^{\rm Zr} = 0.368\pm0.066({\rm stat.})\pm0.040({\rm syst.})$, $P_{\bar\Lambda}^{\rm Zr} = 0.264\pm0.072({\rm stat.})\pm0.031({\rm syst.})$ in 20-50\% centrality. The results in Ru+Ru and Zr+Zr collisions are combined as no significant difference between them has been observed. 
+
+The difference in global polarization between \lam and \alam, $\Delta P_{\Lambda} = P_{\bar\Lambda}$ - $P_{\Lambda}$, can be used to study a possible contribution from the magnetic field. 
+Assuming local thermal equilibrium, the late-stage magnetic field can be estimated as $B \approx T_f \Delta P_{\Lambda}/(2|\mu_{\Lambda}|)$~\cite{Becattini:2016gvu,Muller:2018ibh} where $T_f$ is the temperature when {\lam}s are emitted and $\mu_{\Lambda}$ is the magnetic moment of \lam. 
+Our measurements show no significant difference between $\Lambda$ and $\bar\Lambda$ in the Ru+Ru and Zr+Zr collisions as well as the combined results. 
+The baseline of the polarization difference without the magnetic field effect may not be zero, since other factors such as different space-time distributions, freeze-out conditions, the chemical potential, %and 
+%the strong-interaction Zeeman effect of $\Lambda$ and $\bar{\Lambda}$, 
+could contribute to the polarization difference in either positive or negative ways~\cite{STAR:2023nvo,Becattini:2016gvu,Fang:2016vpj,Csernai:2018yok,Vitiuk:2019rfv}.
+One could expect larger $\Delta P_{\Lambda}$ in Ru+Ru than in Zr+Zr, if there is any contribution of the spin-magnetic coupling. 
+The $\Delta P_{\Lambda}$ from each isobar collisions is found to be consistent with zero within the current precision, $\Delta P_{\Lambda}^{\rm Ru}-\Delta %P_{\Lambda}^{\rm Zr} = 0.134\pm0.144({\rm stat.})\pm0.067({\rm syst.})$.
+P_{\Lambda}^{\rm Zr}~(\%) = 0.133\pm0.143({\rm stat.})\pm0.066({\rm syst.})$.
+%, but with a hint of positive value which is expected owing to larger magnetic field in Ru+Ru than in Zr+Zr.
+Thus, in the following discussion, the two isobars were combined to increase the statistical precision.
+\begin{figure}[htb]
+    \centering
+    %\includegraphics[width=0.75\linewidth]{Figs/ForPaper_Fig2.pdf}
+    \includegraphics[width=0.85\linewidth]{Figs/ForPaper_Figure4_TN_v2.pdf}
+    \vspace{-3mm}
+    \caption{ Global polarization of $\Lambda$+$\bar\Lambda$ as a function of centrality in combined Ru+Ru and Zr+Zr collisions at \snn = 200 GeV (left panel) and results averaged over 20-50\% centrality (right panel). 
+    Results for $\Lambda$+$\bar\Lambda$ measurements in Au+Au collisions at \snn = 200 GeV~\cite{STAR:2018gyt} are shown for comparison. 
+    The inset presents the same data plotted as a function of the average number of participants $\langle N_{\rm part} \rangle$. 
+    Solid and dashed-dotted lines show calculations from the hydrodynamic model (MUSIC) with the AMPT initial condition~\cite{Fu:2021pok} for the isobar collisions with two different scenarios (see texts). The data points are slightly shifted along the horizontal axis for visibility.}
+    \label{fig:GlobalP_SystemSize}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    %\includegraphics[width=0.75\linewidth]{Figs/ForPaper_Fig3.pdf}
+    \includegraphics[width=0.85\linewidth]{Figs/ForPaper_Figure5_TN_v2.pdf}
+    \vspace{-3mm}
+    \caption{ Global polarization of $\Lambda$+$\bar\Lambda$ as a function of $p_{\rm T}$ for 20\%-60\% centrality in combined Ru+Ru and Zr+Zr collisions at \snn = 200 GeV, comparing with results for Au+Au collisions at \snn = 200 GeV~\cite{STAR:2018gyt}. 
+    Shaded boxes and vertical lines show systematic and statistical uncertainties, respectively.  
+    See Fig.~\ref{fig:GlobalP_SystemSize} caption for the lines.}
+    \label{fig:GlobalP_PtinRuZr}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    %\includegraphics[width=0.75\linewidth]{Figs/ForPaper_Fig4.pdf}
+    \includegraphics[width=0.85\linewidth]{Figs/ForPaper_Figure6_TN_v2.pdf}
+    \vspace{-3mm}
+    \caption{ Global polarization of $\Lambda$+$\bar\Lambda$ as a function of $\eta$ for 20\%-60\% centrality in combined Ru+Ru and Zr+Zr collisions at \snn = 200 GeV, comparing with results for Au+Au collisions at \snn = 200 GeV~\cite{STAR:2018gyt}. Shaded boxes and vertical lines show systematic and statistical uncertainties, respectively. 
+    See Fig.~\ref{fig:GlobalP_SystemSize} caption for the lines.}
+    \label{fig:GlobalP_EtainRuZr}
+\end{figure}
+
+%The polarization difference was also checked for each isobar systems and is found to be $P_{\Lambda}^{\rm Ru} = 0.247\pm0.071({\rm stat.})\pm0.028({\rm syst.})$, $P_{\bar\Lambda}^{\rm Ru} = 0.277\pm0.078({\rm stat.})\pm0.031({\rm syst.})$, $P_{\Lambda}^{\rm Zr} = 0.368\pm0.066({\rm stat.})\pm0.040({\rm syst.})$, $P_{\bar\Lambda}^{\rm Zr} = 0.264\pm0.072({\rm stat.})\pm0.031({\rm syst.})$ in 20-50\% centrality. 
+
+
+Hydrodynamic calculations performed for different colliding systems reveal a larger global polarization in smaller systems at the same centrality~\cite{Shi:2017wpk,Alzhrani:2022dpi}.
+This system-size dependence is attributed to a shorter fireball lifetime in smaller collision systems, where \lam hyperons are produced earlier when the vorticity is stronger before its dilution with time.
+In Fig.~\ref{fig:GlobalP_SystemSize}, the comparison of $\Lambda$+$\bar\Lambda$ global polarization between isobar and Au+Au collisions at \snn = 200 GeV is shown.  
+The results are comparable for the entire centrality range, with a hint for a slightly larger polarization in isobar collisions in mid centrality. 
+Calculations of primary \lam polarization from a (3+1)D hydrodynamic model (MUSIC)~\cite{Fu:2021pok} with the initial condition from the AMPT model are compared to the data. 
+Two scenarios are shown - ``\lam equilibrium" and ``s-quark memory", depending on the mass that is used to set the spin relaxation time along with the shear-induced polarization~\cite{Fu:2021pok,Becattini:2021iol}.
+The former assumes that the spin of \lam immediately responds to the hydrodynamic gradients, while the latter considers that the \lam inherits the polarization from its constituent strange quark and is frozen since the hadronization.
+The calculation with the s-quark memory describes the data better. 
+%The model shows $\sim$20-30\% larger polarization in isobar collisions than in Au+Au collisions, a difference that is comparable to the current statistical precision of the isobar results in whole centrality.
+%The model shows an indication of a larger polarization in isobar collisions than in Au+Au collisions.
+%, a difference that is comparable to the current statistical precision of the isobar results in whole centrality.
+The model shows a slight larger polarization in isobar collisions than in Au+Au collisions, and the difference  is comparable to the current statistical precision of the isobar results.
+In the inset of Fig.~\ref{fig:GlobalP_SystemSize}, the data are plotted as a function of the average number of nucleon participants $\langle N_{\rm part}\rangle$ estimated from the Glauber model, where $N_{\rm part}$ averaged over the two systems were used.
+The data seem to scale better with $N_{\rm part}$, possibly pointing to the significance of the system size in vorticity formation.
+
+Figures~\ref{fig:GlobalP_PtinRuZr} and~\ref{fig:GlobalP_EtainRuZr} show $\Lambda+\bar\Lambda$ polarization dependence on $p_{\rm T}$ and $\eta$ for 20-60\% collision centrality. 
+There is no obvious $p_{\rm T}$ or $\eta$ dependence, which is similar to the Au+Au results.
+The calculation with the $s$-quark memory scenario shows a stronger $p_{\rm T}$ dependence in smaller collisions than the \lam equilibrium scenario.
+The current precision of the measurement is not sufficient to constrain the models.
+Although the theoretical models show substantial dependence on (pseudo)rapidity, especially in the far forward (backward) regions~\cite{Wu:2019eyi,Xie:2019jun,Liang:2019pst}, the data do not show any significant $\eta$ dependence within limited pseudorapidity region studied in this analysis.
+
+
+
+
+%-------------------------------------------------------
+\subsection{Azimuthal angle dependence}\label{sec:Pycn}
+
+
+\begin{figure}[htb]
+    \centering
+    %\includegraphics[width=0.75\linewidth]{Figs/ForPaper_Fig5_1.pdf}
+    \includegraphics[width=0.85\linewidth]{Figs/ForPaper_Figure7_TN_v2.pdf}
+    \vspace{-3mm}
+    \caption{The polarization coefficients $P_{y,c0}$ of \lam+\alam obtained as a function of centrality (left panel) and for 20-50\% centrality (right panel) in isobar Ru+Ru and Zr+Zr collisions at \snn = 200 GeV, from the two methods (see texts). Azimuthally integrated results of the $P_{H}$ are shown for comparison. 
+    The data points are slightly shifted along the horizontal axis for visibility.}
+    \label{fig:Pyc0-cent}
+\end{figure}
+\vspace{3mm}
+\vspace{-4mm}
+\begin{figure}[thb]
+    \centering
+    %\includegraphics[width=0.75\linewidth]{Figs/ForPaper_Fig5_2.pdf}
+    \includegraphics[width=0.85\linewidth]{Figs/ForPaper_Figure8_TN_v2.pdf}
+    \vspace{-3mm}
+    \caption{The polarization coefficients $P_{y,c2}$ of \lam+\alam obtained from the two methods as a function of centrality in isobar Ru+Ru and Zr+Zr collisions at \snn = 200 GeV. 
+    The data points are slightly shifted along the horizontal axis for visibility.}
+    \label{fig:Pyc2-cent}
+\end{figure}
+
+According to theoretical calculations in hydrodynamics and transport models, the polarization along the initial angular momentum direction of the system is expected to depend on azimuthal angle of hyperon emission. 
+Calculations based on the thermal vorticity predict larger polarization in the out-of-plane direction~\cite{Becattini:2015ska,Russo:2016ueu,Wei:2018zfb,Fu:2020oxj}, while the sign of the modulation could be flipped, i.e. larger polarization along the in-plane direction, by incorporation of the thermal shear contribution. 
+The latter depends on the detailed implementation of the calculations~\cite{Becattini:2021iol,Fu:2021pok,Yi:2021ryh,Alzhrani:2022dpi}. 
+This situation is similar to a spin sign puzzle in measurements of polarization along the beam direction~\cite{STAR:2019erd,STAR:2023eck,ALICE:2021pzu}.
+
+
+Figure~\ref{fig:Pyc0-cent} shows the coefficient $P_{y,c0}$ as defined in Eq.~\eqref{eq:Pyc0c2} and obtained with the two acceptance correction methods described in Eqs.~\eqref{eq:Pyc0} and \eqref{eq:Pyc0tl}. 
+Both descriptions include the effect of the elliptic flow. 
+In this study, the elliptic flow of \lam was measured with the same criteria as the polarization measurement, but it is confirmed that the results presented in another paper~\cite{strangev2} which applies different analysis criteria are consistent with the results used in this analysis.
+%
+%Although the elliptic flow of \lam was measured with different analysis criteria (the same conditions as the polarization measurement),
+%it is confirmed that the results of \lam $v_2$ used in this analysis are consistent with results presented in another paper~\cite{strangev2}.
+%
+The polarization results from the two methods are consistent with each other and agree with the $P_{\rm H}$ calculated using Eq.~\eqref{eq:PH}, where the polarization is extracted in the azimuthally-integrated fashion.
+%The polarization results from the two methods are consistent with each other and agree with the $P_H$ calculated using Eq.~\eqref{eq:PH}, where the polarization is extracted as an azimuthally-integrated fashion, similar to the method used for $P_{y,c0}$.
+
+In Fig.~\ref{fig:Pyc2-cent}, the second-order Fourier cosine coefficient of the polarization $P_{y,c2}$ for \lam and \alam (see Eqs.~\eqref{eq:Pyc2} and \eqref{eq:Pyc2tl}) is presented as a function of centrality. 
+The coefficient $P_{y.c2}$ is found to be positive at the 2.4$\sigma$ significance level, $P_{y.c2} (\%) = 0.138\pm0.038({\rm stat.})\pm0.058({\rm syst.})$, for mid-central collisions (20-50\%). 
+This points to a larger polarization of hyperons emitted in-plane rather of those out-of-plane. 
+Recent theoretical study shows the sensitivity of the azimuthal dependence of the polarization to the initial condition and bulk viscosity of the medium~\cite{Palermo:2024tza}. 
+These results provide important new information for theoretical models aiming to model the polarization mechanism and to disentangle the contributions from thermal vorticity and shear-induced polarization.
+
+
+
+%-----------------------------------------------------------
+\subsection{$\Xi^{-}+\bar\Xi^{+}$ global polarization}
+
+The global polarization of charged $\Xi$ hyperons was studied by utilizing the two-step decay of $\Xi\rightarrow \Lambda\pi \rightarrow p\pi\pi$.
+Two independent methods were used to measure $\Xi^{-}$($\bar\Xi^{+}$) polarization~\cite{STAR:2020xbm}. 
+The first measures the $\Xi$ polarization directly by analyzing the daughter \lam distribution in the $\Xi$ rest frame.
+The second method uses the granddaughter proton distribution in the daughter \lam rest frame to determine the \lam polarization and then uses polarization transfer coefficient ${\bm P}^\ast_{\Lambda}=C_{\Xi\Lambda}{\bm P}^\ast_{\Xi}$ to extract the parent $\Xi$ polarization. The polarization transfer coefficient from $\Xi$ to daughter $\Lambda$, $C_{\Xi\Lambda}$, is known to be $C_{\Xi\Lambda}=+0.944$~\cite{ParticleDataGroup:2022pth,STAR:2020xbm}.
+
+\begin{figure}[htb]
+    \centering
+    %\includegraphics[width=0.75\linewidth]{Figs/ForPaper_Fig6.pdf}
+    \includegraphics[width=0.85\linewidth]{Figs/ForPaper_Figure9_TN_v2.pdf}
+    \vspace{-3mm}
+    \caption{ Global polarization of $\Xi^{-}$+$\bar\Xi^{+}$ as a function of centrality in combined Ru+Ru and Zr+Zr collisions at \snn = 200 GeV. Results for the inclusive $\Lambda$+$\bar\Lambda$ measurements are shown for comparison. The data points are slightly shifted along the horizontal axis for visibility.}
+    \label{fig:XiGlobalP}
+\end{figure}
+
+
+The combined $\Xi^{-}$ and $\bar\Xi^{+}$ global polarization results are shown in Fig.~\ref{fig:XiGlobalP}, with the inclusive \lam results for comparison.
+The global polarization of $\Xi^{-}+\bar\Xi^{+}$ determined from the polarization transfer analysis is positive and found to be $P_{\Xi^{-}+\bar\Xi^{+}} (\%) = 0.61\pm0.21(\rm stat.)\pm0.04(\rm syst.)$ for 20-50\% centrality.
+The $\Xi^{-}$+$\bar\Xi^{+}$ polarization determined from 
+ the analysis of the daughter \lam distribution is found to be $P_{\Xi}(\%) = -0.32\pm0.39({\rm stat.})\pm0.08({\rm syst.})$ with large uncertainty in part due to a smaller value of $|\alpha_{\Xi}|$ compared to $|\alpha_{\Lambda}|$, which leads to smaller sensitivity of the measurement.
+The results between the two methods are expected to be the same and the difference is $\sim2\sigma$ level for 20-50\% centrality. %, not significant considering their large uncertainties. 
+%The $P_{\Xi}$ from the polarization transfer analysis seems to be larger than the polarization of inclusive \lam, $P_{\Lambda} = 0.29\pm0.04({\rm stat.})\pm0.03({\rm syst.})$ measured at same energy for 20-50\% centrality, although the difference is not significant. 
+Considering the better sensitivity of the measurement with the polarization transfer, $P_\Xi$ results show a hint of larger polarization than the inclusive \lam.
+The possible hierarchy of $P_{\Xi}>P_{\Lambda}$ is consistent with our previous measurement in Au+Au collisions~\cite{STAR:2020xbm} and could be explained by the thermal vorticity picture for spin-1/2 particles and feed-down effects~\cite{Li:2021zwq}.
+
+
+%=============================================================
+\section{Summary}
+
+We presented the results of global polarization measurements for $\Lambda$, $\bar\Lambda$, $\Xi^-$, and $\Xi^+$ hyperons in Ru+Ru and Zr+Zr collisions at \snn = 200 GeV. 
+Global polarization of $\Lambda$+$\bar\Lambda$ shows no significant difference between isobar and Au+Au collisions, indicating no obvious collision system size dependence. 
+Within the uncertainties, our results agree with calculations from hydrodynamic models incorporating the shear-induced polarization. 
+No significant difference between $\Lambda$ and $\bar\Lambda$ global polarization in Ru+Ru and Zr+Zr collisions is observed, consistent with little contribution of the magnetic-field-driven effect on the observed hyperon polarization within present statistical precision. 
+The polarization was also studied as a function of the collision centrality, the hyperon's transverse momentum, pseudorapidity, and azimuthal angle. 
+The polarization was found to increase towards peripheral collisions, as expected from theoretical calculations, but shows no significant dependence on pseudorapidity or transverse momentum. 
+The results on azimuthal angle dependence indicates larger polarization in the in-plane direction with 2.4$\sigma$ significance, which is an important input to understand the contribution of the shear-induced polarization.
+Furthermore, $\Xi^-$ and $\Xi^+$ hyperon global polarization via the measurement of daughter \lam polarization indicates positive polarization (2.9$\sigma$ significance in 20-50\% centrality) as expected from the global vorticity picture. 
+
+%================================================================
+\section*{Acknowledgements}
+\input{acknowledgment}
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as ormal sections
+%\appendix
+
+%\section{Appendix title 1}
+%% \label{}
+
+%\bibliographystyle{unsrt}
+%\bibliographystyle{elsarticle-harv}
+\bibliographystyle{elsarticle-num}
+%\bibliographystyle{els-mynum.bst}
+\bibliography{refs}
+
+
+\end{document}
+
+\endinput
+%%
+%% End of file `elsarticle-template-harv.tex'.

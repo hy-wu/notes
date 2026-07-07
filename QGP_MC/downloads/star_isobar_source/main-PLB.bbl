@@ -1,0 +1,279 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{1}
+Z.-T. Liang, X.-N. Wang, {Globally polarized quark-gluon plasma in non-central A+A collisions}, Phys. Rev. Lett. 94 (2005) 102301, [Erratum: Phys.Rev.Lett. 96, 039901 (2006)].
+\newblock \href {http://arxiv.org/abs/nucl-th/0410079} {\path{arXiv:nucl-th/0410079}}, \href {https://doi.org/10.1103/PhysRevLett.94.102301} {\path{doi:10.1103/PhysRevLett.94.102301}}.
+
+\bibitem{Voloshin:2004ha}
+S.~A. Voloshin, {Polarized secondary particles in unpolarized high energy hadron-hadron collisions? }\href {http://arxiv.org/abs/nucl-th/0410089} {\path{arXiv:nucl-th/0410089}}.
+
+\bibitem{Liang:2004xn}
+Z.-T. Liang, X.-N. Wang, {Spin alignment of vector mesons in non-central A+A collisions}, Phys. Lett. B 629 (2005) 20--26.
+\newblock \href {http://arxiv.org/abs/nucl-th/0411101} {\path{arXiv:nucl-th/0411101}}, \href {https://doi.org/10.1016/j.physletb.2005.09.060} {\path{doi:10.1016/j.physletb.2005.09.060}}.
+
+\bibitem{2}
+F.~Becattini, F.~Piccinini, J.~Rizzo, {Angular momentum conservation in heavy ion collisions at very high energy}, Phys. Rev. C 77 (2008) 024906.
+\newblock \href {http://arxiv.org/abs/0711.1253} {\path{arXiv:0711.1253}}, \href {https://doi.org/10.1103/PhysRevC.77.024906} {\path{doi:10.1103/PhysRevC.77.024906}}.
+
+\bibitem{Gao:2007bc}
+J.-H. Gao, S.-W. Chen, W.-T. Deng, Z.-T. Liang, Q.~Wang, X.-N. Wang, {Global quark polarization in non-central A+A collisions}, Phys. Rev. C 77 (2008) 044902.
+\newblock \href {http://arxiv.org/abs/0710.2943} {\path{arXiv:0710.2943}}, \href {https://doi.org/10.1103/PhysRevC.77.044902} {\path{doi:10.1103/PhysRevC.77.044902}}.
+
+\bibitem{STAR:2017ckg}
+L.~Adamczyk, et~al., {Global $\Lambda$ hyperon polarization in nuclear collisions: evidence for the most vortical fluid}, Nature 548 (2017) 62--65.
+\newblock \href {http://arxiv.org/abs/1701.06657} {\path{arXiv:1701.06657}}, \href {https://doi.org/10.1038/nature23004} {\path{doi:10.1038/nature23004}}.
+
+\bibitem{STAR:2022fan}
+M.~S. Abdallah, et~al., {Pattern of global spin alignment of \ensuremath{\phi} and K$^{*0}$ mesons in heavy-ion collisions}, Nature 614~(7947) (2023) 244--248.
+\newblock \href {http://arxiv.org/abs/2204.02302} {\path{arXiv:2204.02302}}, \href {https://doi.org/10.1038/s41586-022-05557-5} {\path{doi:10.1038/s41586-022-05557-5}}.
+
+\bibitem{STAR:2020xbm}
+J.~Adam, et~al., {Global Polarization of $\Xi$ and $\Omega$ Hyperons in Au+Au Collisions at $\sqrt {s_{NN}}$ = 200 GeV}, Phys. Rev. Lett. 126~(16) (2021) 162301.
+\newblock \href {http://arxiv.org/abs/2012.13601} {\path{arXiv:2012.13601}}, \href {https://doi.org/10.1103/PhysRevLett.126.162301} {\path{doi:10.1103/PhysRevLett.126.162301}}.
+
+\bibitem{STAR:2007ccu}
+B.~I. Abelev, et~al., {Global polarization measurement in Au+Au collisions}, Phys. Rev. C 76 (2007) 024915, [Erratum: Phys.Rev.C 95, 039906 (2017)].
+\newblock \href {http://arxiv.org/abs/0705.1691} {\path{arXiv:0705.1691}}, \href {https://doi.org/10.1103/PhysRevC.76.024915} {\path{doi:10.1103/PhysRevC.76.024915}}.
+
+\bibitem{STAR:2018gyt}
+J.~Adam, et~al., {Global polarization of $\Lambda$ hyperons in Au+Au collisions at $\sqrt{s_{_{NN}}}$ = 200 GeV}, Phys. Rev. C 98 (2018) 014910.
+\newblock \href {http://arxiv.org/abs/1805.04400} {\path{arXiv:1805.04400}}, \href {https://doi.org/10.1103/PhysRevC.98.014910} {\path{doi:10.1103/PhysRevC.98.014910}}.
+
+\bibitem{ALICE:2019onw}
+S.~Acharya, et~al., {Global polarization of $\Lambda \bar \Lambda$ hyperons in Pb-Pb collisions at $\sqrt {s_{NN}}$ = 2.76 and 5.02 TeV}, Phys. Rev. C 101~(4) (2020) 044611, [Erratum: Phys.Rev.C 105, 029902 (2022)].
+\newblock \href {http://arxiv.org/abs/1909.01281} {\path{arXiv:1909.01281}}, \href {https://doi.org/10.1103/PhysRevC.101.044611} {\path{doi:10.1103/PhysRevC.101.044611}}.
+
+\bibitem{STAR:2021beb}
+M.~S. Abdallah, et~al., {Global $\Lambda$-hyperon polarization in Au+Au collisions at $\sqrt {s_{NN}}$=3~GeV}, Phys. Rev. C 104~(6) (2021) L061901.
+\newblock \href {http://arxiv.org/abs/2108.00044} {\path{arXiv:2108.00044}}, \href {https://doi.org/10.1103/PhysRevC.104.L061901} {\path{doi:10.1103/PhysRevC.104.L061901}}.
+
+\bibitem{STAR:2023nvo}
+M.~I. Abdulhamid, et~al., {Global polarization of \ensuremath{\Lambda} and \ensuremath{\Lambda}\textasciimacron{} hyperons in Au+Au collisions at sNN=19.6 and 27 GeV}, Phys. Rev. C 108~(1) (2023) 014910.
+\newblock \href {http://arxiv.org/abs/2305.08705} {\path{arXiv:2305.08705}}, \href {https://doi.org/10.1103/PhysRevC.108.014910} {\path{doi:10.1103/PhysRevC.108.014910}}.
+
+\bibitem{HADES:2022enx}
+R.~Abou~Yassine, et~al., {Measurement of global polarization of \ensuremath{\Lambda} hyperons in few-GeV heavy-ion collisions}, Phys. Lett. B 835 (2022) 137506.
+\newblock \href {http://arxiv.org/abs/2207.05160} {\path{arXiv:2207.05160}}, \href {https://doi.org/10.1016/j.physletb.2022.137506} {\path{doi:10.1016/j.physletb.2022.137506}}.
+
+\bibitem{Deng:2016gyh}
+W.-T. Deng, X.-G. Huang, {Vorticity in Heavy-Ion Collisions}, Phys. Rev. C 93~(6) (2016) 064907.
+\newblock \href {http://arxiv.org/abs/1603.06117} {\path{arXiv:1603.06117}}, \href {https://doi.org/10.1103/PhysRevC.93.064907} {\path{doi:10.1103/PhysRevC.93.064907}}.
+
+\bibitem{Wei:2018zfb}
+D.-X. Wei, W.-T. Deng, X.-G. Huang, {Thermal vorticity and spin polarization in heavy-ion collisions}, Phys. Rev. C 99~(1) (2019) 014905.
+\newblock \href {http://arxiv.org/abs/1810.00151} {\path{arXiv:1810.00151}}, \href {https://doi.org/10.1103/PhysRevC.99.014905} {\path{doi:10.1103/PhysRevC.99.014905}}.
+
+\bibitem{Guo:2021udq}
+Y.~Guo, J.~Liao, E.~Wang, H.~Xing, H.~Zhang, {Hyperon polarization from the vortical fluid in low-energy nuclear collisions}, Phys. Rev. C 104~(4) (2021) L041902.
+\newblock \href {http://arxiv.org/abs/2105.13481} {\path{arXiv:2105.13481}}, \href {https://doi.org/10.1103/PhysRevC.104.L041902} {\path{doi:10.1103/PhysRevC.104.L041902}}.
+
+\bibitem{Bozek:2010bi}
+P.~Bozek, I.~Wyskiel, {Directed flow in ultrarelativistic heavy-ion collisions}, Phys. Rev. C 81 (2010) 054902.
+\newblock \href {http://arxiv.org/abs/1002.4999} {\path{arXiv:1002.4999}}, \href {https://doi.org/10.1103/PhysRevC.81.054902} {\path{doi:10.1103/PhysRevC.81.054902}}.
+
+\bibitem{Ivanov:2018eej}
+Y.~B. Ivanov, A.~A. Soldatov, {Vortex rings in fragmentation regions in heavy-ion collisions at $\sqrt{s_{NN}}=$ 39 GeV}, Phys. Rev. C 97~(4) (2018) 044915.
+\newblock \href {http://arxiv.org/abs/1803.01525} {\path{arXiv:1803.01525}}, \href {https://doi.org/10.1103/PhysRevC.97.044915} {\path{doi:10.1103/PhysRevC.97.044915}}.
+
+\bibitem{Wu:2019eyi}
+H.-Z. Wu, L.-G. Pang, X.-G. Huang, Q.~Wang, {Local spin polarization in high energy heavy ion collisions}, Phys. Rev. Research. 1 (2019) 033058.
+\newblock \href {http://arxiv.org/abs/1906.09385} {\path{arXiv:1906.09385}}, \href {https://doi.org/10.1103/PhysRevResearch.1.033058} {\path{doi:10.1103/PhysRevResearch.1.033058}}.
+
+\bibitem{Ivanov:2019ern}
+Y.~B. Ivanov, V.~D. Toneev, A.~A. Soldatov, {Estimates of hyperon polarization in heavy-ion collisions at collision energies $\sqrt{s_{NN}}=$ 4--40 GeV}, Phys. Rev. C 100~(1) (2019) 014908.
+\newblock \href {http://arxiv.org/abs/1903.05455} {\path{arXiv:1903.05455}}, \href {https://doi.org/10.1103/PhysRevC.100.014908} {\path{doi:10.1103/PhysRevC.100.014908}}.
+
+\bibitem{Ivanov:2020wak}
+Y.~B. Ivanov, A.~A. Soldatov, {Correlation between global polarization, angular momentum, and flow in heavy-ion collisions}, Phys. Rev. C 102~(2) (2020) 024916.
+\newblock \href {http://arxiv.org/abs/2004.05166} {\path{arXiv:2004.05166}}, \href {https://doi.org/10.1103/PhysRevC.102.024916} {\path{doi:10.1103/PhysRevC.102.024916}}.
+
+\bibitem{Liang:2019pst}
+Z.-T. Liang, J.~Song, I.~Upsal, Q.~Wang, Z.-B. Xu, {Rapidity dependence of global polarization in heavy ion collisions}, Chin. Phys. C 45~(1) (2021) 014102.
+\newblock \href {http://arxiv.org/abs/1912.10223} {\path{arXiv:1912.10223}}, \href {https://doi.org/10.1088/1674-1137/abc065} {\path{doi:10.1088/1674-1137/abc065}}.
+
+\bibitem{Jiang:2016woz}
+Y.~Jiang, Z.-W. Lin, J.~Liao, {Rotating quark-gluon plasma in relativistic heavy ion collisions}, Phys. Rev. C 94~(4) (2016) 044910, [Erratum: Phys.Rev.C 95, 049904 (2017)].
+\newblock \href {http://arxiv.org/abs/1602.06580} {\path{arXiv:1602.06580}}, \href {https://doi.org/10.1103/PhysRevC.94.044910} {\path{doi:10.1103/PhysRevC.94.044910}}.
+
+\bibitem{McLerran:2013hla}
+L.~McLerran, V.~Skokov, {Comments About the Electromagnetic Field in Heavy-Ion Collisions}, Nucl. Phys. A 929 (2014) 184--190.
+\newblock \href {http://arxiv.org/abs/1305.0774} {\path{arXiv:1305.0774}}, \href {https://doi.org/10.1016/j.nuclphysa.2014.05.008} {\path{doi:10.1016/j.nuclphysa.2014.05.008}}.
+
+\bibitem{Becattini:2016gvu}
+F.~Becattini, I.~Karpenko, M.~Lisa, I.~Upsal, S.~Voloshin, {Global hyperon polarization at local thermodynamic equilibrium with vorticity, magnetic field and feed-down}, Phys. Rev. C 95~(5) (2017) 054902.
+\newblock \href {http://arxiv.org/abs/1610.02506} {\path{arXiv:1610.02506}}, \href {https://doi.org/10.1103/PhysRevC.95.054902} {\path{doi:10.1103/PhysRevC.95.054902}}.
+
+\bibitem{Muller:2018ibh}
+B.~M\"uller, A.~Sch\"afer, {Chiral magnetic effect and an experimental bound on the late time magnetic field strength}, Phys. Rev. D 98~(7) (2018) 071902.
+\newblock \href {http://arxiv.org/abs/1806.10907} {\path{arXiv:1806.10907}}, \href {https://doi.org/10.1103/PhysRevD.98.071902} {\path{doi:10.1103/PhysRevD.98.071902}}.
+
+\bibitem{Xie:2019jun}
+Y.~Xie, D.~Wang, L.~P. Csernai, {Fluid dynamics study of the $\varLambda $ polarization for Au + Au collisions at $\sqrt{s_{NN}}=200$ GeV}, Eur. Phys. J. C 80~(1) (2020) 39.
+\newblock \href {http://arxiv.org/abs/1907.00773} {\path{arXiv:1907.00773}}, \href {https://doi.org/10.1140/epjc/s10052-019-7576-8} {\path{doi:10.1140/epjc/s10052-019-7576-8}}.
+
+\bibitem{Shi:2017wpk}
+S.~Shi, K.~Li, J.~Liao, {Searching for the Subatomic Swirls in the CuCu and CuAu Collisions}, Phys. Lett. B 788 (2019) 409--413.
+\newblock \href {http://arxiv.org/abs/1712.00878} {\path{arXiv:1712.00878}}, \href {https://doi.org/10.1016/j.physletb.2018.09.066} {\path{doi:10.1016/j.physletb.2018.09.066}}.
+
+\bibitem{Alzhrani:2022dpi}
+S.~Alzhrani, S.~Ryu, C.~Shen, {\ensuremath{\Lambda} spin polarization in event-by-event relativistic heavy-ion collisions}, Phys. Rev. C 106~(1) (2022) 014905.
+\newblock \href {http://arxiv.org/abs/2203.15718} {\path{arXiv:2203.15718}}, \href {https://doi.org/10.1103/PhysRevC.106.014905} {\path{doi:10.1103/PhysRevC.106.014905}}.
+
+\bibitem{STAR:2019erd}
+J.~Adam, et~al., {Polarization of $\Lambda$ ($\bar{\Lambda}$) hyperons along the beam direction in Au+Au collisions at $\sqrt{s_{_{NN}}}$ = 200 GeV}, Phys. Rev. Lett. 123~(13) (2019) 132301.
+\newblock \href {http://arxiv.org/abs/1905.11917} {\path{arXiv:1905.11917}}, \href {https://doi.org/10.1103/PhysRevLett.123.132301} {\path{doi:10.1103/PhysRevLett.123.132301}}.
+
+\bibitem{ALICE:2021pzu}
+S.~Acharya, et~al., {Polarization of $\Lambda$ and $\bar \Lambda$ Hyperons along the Beam Direction in Pb-Pb Collisions at $\sqrt {s_{NN}}$=5.02\,\,TeV}, Phys. Rev. Lett. 128~(17) (2022) 172005.
+\newblock \href {http://arxiv.org/abs/2107.11183} {\path{arXiv:2107.11183}}, \href {https://doi.org/10.1103/PhysRevLett.128.172005} {\path{doi:10.1103/PhysRevLett.128.172005}}.
+
+\bibitem{STAR:2023eck}
+M.~Abdulhamid, et~al., {Hyperon Polarization along the Beam Direction Relative to the Second and Third Harmonic Event Planes in Isobar Collisions at sNN=200\,\,GeV}, Phys. Rev. Lett. 131~(20) (2023) 202301.
+\newblock \href {http://arxiv.org/abs/2303.09074} {\path{arXiv:2303.09074}}, \href {https://doi.org/10.1103/PhysRevLett.131.202301} {\path{doi:10.1103/PhysRevLett.131.202301}}.
+
+\bibitem{Becattini:2020ngo}
+F.~Becattini, M.~A. Lisa, {Polarization and Vorticity in the Quark\textendash{}Gluon Plasma}, Ann. Rev. Nucl. Part. Sci. 70 (2020) 395--423.
+\newblock \href {http://arxiv.org/abs/2003.03640} {\path{arXiv:2003.03640}}, \href {https://doi.org/10.1146/annurev-nucl-021920-095245} {\path{doi:10.1146/annurev-nucl-021920-095245}}.
+
+\bibitem{Becattini:2024uha}
+F.~Becattini, M.~Buzzegoli, T.~Niida, S.~Pu, A.-H. Tang, Q.~Wang, {Spin polarization in relativistic heavy-ion collisions}, Int. J. Mod. Phys. E 33~(06) (2024) 2430006.
+\newblock \href {http://arxiv.org/abs/2402.04540} {\path{arXiv:2402.04540}}, \href {https://doi.org/10.1142/S0218301324300066} {\path{doi:10.1142/S0218301324300066}}.
+
+\bibitem{Niida:2024ntm}
+T.~Niida, S.~A. Voloshin, {Polarization phenomenon in heavy-ion collisions}, Int. J. Mod. Phys. E 33~(09) (2024) 2430010.
+\newblock \href {http://arxiv.org/abs/2404.11042} {\path{arXiv:2404.11042}}, \href {https://doi.org/10.1142/S0218301324300108} {\path{doi:10.1142/S0218301324300108}}.
+
+\bibitem{Chen:2024aom}
+J.~Chen, et~al., {Properties of the QCD matter: review of selected results from the relativistic heavy ion collider beam energy scan (RHIC BES) program}, Nucl. Sci. Tech. 35~(12) (2024) 214.
+\newblock \href {http://arxiv.org/abs/2407.02935} {\path{arXiv:2407.02935}}, \href {https://doi.org/10.1007/s41365-024-01591-2} {\path{doi:10.1007/s41365-024-01591-2}}.
+
+\bibitem{STAR:2021mii}
+M.~Abdallah, et~al., {Search for the chiral magnetic effect with isobar collisions at $\sqrt {s_{NN}}$=200 GeV by the STAR Collaboration at the BNL Relativistic Heavy Ion Collider}, Phys. Rev. C 105~(1) (2022) 014901.
+\newblock \href {http://arxiv.org/abs/2109.00131} {\path{arXiv:2109.00131}}, \href {https://doi.org/10.1103/PhysRevC.105.014901} {\path{doi:10.1103/PhysRevC.105.014901}}.
+
+\bibitem{Voloshin:2010ut}
+S.~A. Voloshin, {Testing the Chiral Magnetic Effect with Central U+U collisions}, Phys. Rev. Lett. 105 (2010) 172301.
+\newblock \href {http://arxiv.org/abs/1006.1020} {\path{arXiv:1006.1020}}, \href {https://doi.org/10.1103/PhysRevLett.105.172301} {\path{doi:10.1103/PhysRevLett.105.172301}}.
+
+\bibitem{Deng:2016knn}
+W.-T. Deng, X.-G. Huang, G.-L. Ma, G.~Wang, {Test the chiral magnetic effect with isobaric collisions}, Phys. Rev. C 94 (2016) 041901.
+\newblock \href {http://arxiv.org/abs/1607.04697} {\path{arXiv:1607.04697}}, \href {https://doi.org/10.1103/PhysRevC.94.041901} {\path{doi:10.1103/PhysRevC.94.041901}}.
+
+\bibitem{Anderson:2003ur}
+M.~Anderson, et~al., {The Star time projection chamber: A Unique tool for studying high multiplicity events at RHIC}, Nucl. Instrum. Meth. A 499 (2003) 659--678.
+\newblock \href {http://arxiv.org/abs/nucl-ex/0301015} {\path{arXiv:nucl-ex/0301015}}, \href {https://doi.org/10.1016/S0168-9002(02)01964-2} {\path{doi:10.1016/S0168-9002(02)01964-2}}.
+
+\bibitem{Llope:2012zz}
+W.~J. Llope, {Multigap RPCs in the STAR experiment at RHIC}, Nucl. Instrum. Meth. A 661 (2012) S110--S113.
+\newblock \href {https://doi.org/10.1016/j.nima.2010.07.086} {\path{doi:10.1016/j.nima.2010.07.086}}.
+
+\bibitem{Adler:2001fq}
+C.~Adler, H.~Strobele, A.~Denisov, E.~Garcia, M.~Murray, S.~White, {The RHIC zero-degree calorimeters}, Nucl. Instrum. Meth. A 461 (2001) 337--340.
+\newblock \href {https://doi.org/10.1016/S0168-9002(00)01238-9} {\path{doi:10.1016/S0168-9002(00)01238-9}}.
+
+\bibitem{Llope:2014nva}
+W.~J. Llope, et~al., {The STAR Vertex Position Detector}, Nucl. Instrum. Meth. A 759 (2014) 23--28.
+\newblock \href {http://arxiv.org/abs/1403.6855} {\path{arXiv:1403.6855}}, \href {https://doi.org/10.1016/j.nima.2014.04.080} {\path{doi:10.1016/j.nima.2014.04.080}}.
+
+\bibitem{SMD}
+{STAR Techincal Note SN0448 (2003), Proposed Addition of a Shower Max Detector to the STAR Zero Degree Calorimeters}, \href{https://drupal.star.bnl.gov/STAR/starnotes/public/sn0448}{https://drupal.star.bnl.gov/STAR/starnotes/public/sn0448}.
+
+\bibitem{Miller:2007ri}
+M.~L. Miller, K.~Reygers, S.~J. Sanders, P.~Steinberg, {Glauber modeling in high energy nuclear collisions}, Ann. Rev. Nucl. Part. Sci. 57 (2007) 205--243.
+\newblock \href {http://arxiv.org/abs/nucl-ex/0701025} {\path{arXiv:nucl-ex/0701025}}, \href {https://doi.org/10.1146/annurev.nucl.57.090506.123020} {\path{doi:10.1146/annurev.nucl.57.090506.123020}}.
+
+\bibitem{Gorbunov:2013yvt}
+S.~Gorbunov, {On-line reconstruction algorithms for the CBM and ALICE experiments}, Ph.D. thesis, Goethe U., Frankfurt (main), Frankfurt U. (2013).
+
+\bibitem{Zyzak:2016exl}
+M.~Zyzak, {Online selection of short-lived particles on many-core computer architectures in the CBM experiment at FAIR}, Ph.D. thesis, Goethe U., Frankfurt (main), Frankfurt U. (2016).
+
+\bibitem{Kisel:2018nvd}
+I.~Kisel, {Event Topology Reconstruction in the CBM Experiment}, J. Phys. Conf. Ser. 1070~(1) (2018) 012015.
+\newblock \href {https://doi.org/10.1088/1742-6596/1070/1/012015} {\path{doi:10.1088/1742-6596/1070/1/012015}}.
+
+\bibitem{Voloshin:2016ppr}
+S.~A. Voloshin, T.~Niida, {Ultra-relativistic nuclear collisions: Direction of spectator flow}, Phys. Rev. C 94 (2016) 021901(R).
+\newblock \href {http://arxiv.org/abs/1604.04597} {\path{arXiv:1604.04597}}, \href {https://doi.org/10.1103/PhysRevC.94.021901} {\path{doi:10.1103/PhysRevC.94.021901}}.
+
+\bibitem{Poskanzer:1998yz}
+A.~M. Poskanzer, S.~A. Voloshin, {Methods for analyzing anisotropic flow in relativistic nuclear collisions}, Phys. Rev. C 58 (1998) 1671--1678.
+\newblock \href {http://arxiv.org/abs/nucl-ex/9805001} {\path{arXiv:nucl-ex/9805001}}, \href {https://doi.org/10.1103/PhysRevC.58.1671} {\path{doi:10.1103/PhysRevC.58.1671}}.
+
+\bibitem{ParticleDataGroup:2022pth}
+R.~L. Workman, et~al., {Review of Particle Physics}, PTEP 2022 (2022) 083C01.
+\newblock \href {https://doi.org/10.1093/ptep/ptac097} {\path{doi:10.1093/ptep/ptac097}}.
+
+\bibitem{STAR:2013ayu}
+L.~Adamczyk, et~al., {Elliptic flow of identified hadrons in Au+Au collisions at $\sqrt{s_{NN}}=$ 7.7-62.4 GeV}, Phys. Rev. C 88 (2013) 014902.
+\newblock \href {http://arxiv.org/abs/1301.2348} {\path{arXiv:1301.2348}}, \href {https://doi.org/10.1103/PhysRevC.88.014902} {\path{doi:10.1103/PhysRevC.88.014902}}.
+
+\bibitem{Borghini:2004ra}
+N.~Borghini, J.~Y. Ollitrault, {Azimuthally sensitive correlations in nucleus-nucleus collisions}, Phys. Rev. C 70 (2004) 064905.
+\newblock \href {http://arxiv.org/abs/nucl-th/0407041} {\path{arXiv:nucl-th/0407041}}, \href {https://doi.org/10.1103/PhysRevC.70.064905} {\path{doi:10.1103/PhysRevC.70.064905}}.
+
+\bibitem{Karpenko:2016jyx}
+I.~Karpenko, F.~Becattini, {Study of $\Lambda $ polarization in relativistic nuclear collisions at $\sqrt{s_\mathrm {NN}}=7.7$ \textendash{}200 GeV}, Eur. Phys. J. C 77~(4) (2017) 213.
+\newblock \href {http://arxiv.org/abs/1610.04717} {\path{arXiv:1610.04717}}, \href {https://doi.org/10.1140/epjc/s10052-017-4765-1} {\path{doi:10.1140/epjc/s10052-017-4765-1}}.
+
+\bibitem{Xia:2019fjf}
+X.-L. Xia, H.~Li, X.-G. Huang, H.~Z. Huang, {Feed-down effect on \ensuremath{\Lambda} spin polarization}, Phys. Rev. C 100~(1) (2019) 014913.
+\newblock \href {http://arxiv.org/abs/1905.03120} {\path{arXiv:1905.03120}}, \href {https://doi.org/10.1103/PhysRevC.100.014913} {\path{doi:10.1103/PhysRevC.100.014913}}.
+
+\bibitem{Becattini:2019ntv}
+F.~Becattini, G.~Cao, E.~Speranza, {Polarization transfer in hyperon decays and its effect in relativistic nuclear collisions}, Eur. Phys. J. C 79~(9) (2019) 741.
+\newblock \href {http://arxiv.org/abs/1905.03123} {\path{arXiv:1905.03123}}, \href {https://doi.org/10.1140/epjc/s10052-019-7213-6} {\path{doi:10.1140/epjc/s10052-019-7213-6}}.
+
+\bibitem{Li:2021zwq}
+H.~Li, X.-L. Xia, X.-G. Huang, H.~Z. Huang, {Global spin polarization of multistrange hyperons and feed-down effect in heavy-ion collisions}, Phys. Lett. B 827 (2022) 136971.
+\newblock \href {http://arxiv.org/abs/2106.09443} {\path{arXiv:2106.09443}}, \href {https://doi.org/10.1016/j.physletb.2022.136971} {\path{doi:10.1016/j.physletb.2022.136971}}.
+
+\bibitem{Fang:2016vpj}
+R.-H. Fang, L.-G. Pang, Q.~Wang, X.-N. Wang, {Polarization of massive fermions in a vortical fluid}, Phys. Rev. C 94~(2) (2016) 024904.
+\newblock \href {http://arxiv.org/abs/1604.04036} {\path{arXiv:1604.04036}}, \href {https://doi.org/10.1103/PhysRevC.94.024904} {\path{doi:10.1103/PhysRevC.94.024904}}.
+
+\bibitem{Csernai:2018yok}
+L.~P. Csernai, J.~I. Kapusta, T.~Welle, {$\Lambda$ and $\bar{\Lambda}$ spin interaction with meson fields generated by the baryon current in high energy nuclear collisions}, Phys. Rev. C 99~(2) (2019) 021901.
+\newblock \href {http://arxiv.org/abs/1807.11521} {\path{arXiv:1807.11521}}, \href {https://doi.org/10.1103/PhysRevC.99.021901} {\path{doi:10.1103/PhysRevC.99.021901}}.
+
+\bibitem{Vitiuk:2019rfv}
+O.~Vitiuk, L.~V. Bravina, E.~E. Zabrodin, {Is different $\Lambda$ and $\bar \Lambda$ polarization caused by different spatio-temporal freeze-out picture?}, Phys. Lett. B 803 (2020) 135298.
+\newblock \href {http://arxiv.org/abs/1910.06292} {\path{arXiv:1910.06292}}, \href {https://doi.org/10.1016/j.physletb.2020.135298} {\path{doi:10.1016/j.physletb.2020.135298}}.
+
+\bibitem{Fu:2021pok}
+B.~Fu, S.~Y.~F. Liu, L.~Pang, H.~Song, Y.~Yin, {Shear-Induced Spin Polarization in Heavy-Ion Collisions}, Phys. Rev. Lett. 127~(14) (2021) 142301, private communication.
+\newblock \href {http://arxiv.org/abs/2103.10403} {\path{arXiv:2103.10403}}, \href {https://doi.org/10.1103/PhysRevLett.127.142301} {\path{doi:10.1103/PhysRevLett.127.142301}}.
+
+\bibitem{Becattini:2021iol}
+F.~Becattini, M.~Buzzegoli, G.~Inghirami, I.~Karpenko, A.~Palermo, {Local Polarization and Isothermal Local Equilibrium in Relativistic Heavy Ion Collisions}, Phys. Rev. Lett. 127~(27) (2021) 272302.
+\newblock \href {http://arxiv.org/abs/2103.14621} {\path{arXiv:2103.14621}}, \href {https://doi.org/10.1103/PhysRevLett.127.272302} {\path{doi:10.1103/PhysRevLett.127.272302}}.
+
+\bibitem{Becattini:2015ska}
+F.~Becattini, G.~Inghirami, V.~Rolando, A.~Beraudo, L.~Del~Zanna, A.~De~Pace, M.~Nardi, G.~Pagliara, V.~Chandra, {A study of vorticity formation in high energy nuclear collisions}, Eur. Phys. J. C 75~(9) (2015) 406, [Erratum: Eur.Phys.J.C 78, 354 (2018)].
+\newblock \href {http://arxiv.org/abs/1501.04468} {\path{arXiv:1501.04468}}, \href {https://doi.org/10.1140/epjc/s10052-015-3624-1} {\path{doi:10.1140/epjc/s10052-015-3624-1}}.
+
+\bibitem{Russo:2016ueu}
+J.~G. Russo, M.~Tierz, {Quantum phase transition in many-flavor supersymmetric QED$_{3}$}, Phys. Rev. D 95~(3) (2017) 031901.
+\newblock \href {http://arxiv.org/abs/1610.08527} {\path{arXiv:1610.08527}}, \href {https://doi.org/10.1103/PhysRevD.95.031901} {\path{doi:10.1103/PhysRevD.95.031901}}.
+
+\bibitem{Fu:2020oxj}
+B.~Fu, K.~Xu, X.-G. Huang, H.~Song, {Hydrodynamic study of hyperon spin polarization in relativistic heavy ion collisions}, Phys. Rev. C 103~(2) (2021) 024903.
+\newblock \href {http://arxiv.org/abs/2011.03740} {\path{arXiv:2011.03740}}, \href {https://doi.org/10.1103/PhysRevC.103.024903} {\path{doi:10.1103/PhysRevC.103.024903}}.
+
+\bibitem{Yi:2021ryh}
+C.~Yi, S.~Pu, D.-L. Yang, {Reexamination of local spin polarization beyond global equilibrium in relativistic heavy ion collisions}, Phys. Rev. C 104~(6) (2021) 064901.
+\newblock \href {http://arxiv.org/abs/2106.00238} {\path{arXiv:2106.00238}}, \href {https://doi.org/10.1103/PhysRevC.104.064901} {\path{doi:10.1103/PhysRevC.104.064901}}.
+
+\bibitem{strangev2}
+STAR, Elliptic flow of strange and multi-strange hadrons in isobar collisions at $\sqrt{s_{NN}}$ = 200 GeV at RHIC, to be submitted.
+
+\bibitem{Palermo:2024tza}
+A.~Palermo, E.~Grossi, I.~Karpenko, F.~Becattini, {$\Lambda $ polarization in very high energy heavy ion collisions as a probe of the quark\textendash{}gluon plasma formation and properties}, Eur. Phys. J. C 84~(9) (2024) 920.
+\newblock \href {http://arxiv.org/abs/2404.14295} {\path{arXiv:2404.14295}}, \href {https://doi.org/10.1140/epjc/s10052-024-13229-z} {\path{doi:10.1140/epjc/s10052-024-13229-z}}.
+
+\end{thebibliography}

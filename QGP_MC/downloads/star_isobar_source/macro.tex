@@ -1,0 +1,82 @@
+\usepackage{graphicx}   % Include figure filed
+\usepackage{float} 
+\usepackage{xspace}     % Include xspace
+\usepackage{url}
+\usepackage[mathlines]{lineno}% Enable numbering of text and display math
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{xcolor}
+%\usepackage[dvipdfmx]{hyperref}
+\usepackage[driverfallback=dvipdfm]{hyperref}
+%\usepackage{hyperref}
+\usepackage{ulem}
+\usepackage{subfigure}
+\hypersetup{
+	colorlinks = true,
+	citecolor= blue,
+	linkbordercolor = cyan
+}
+%
+\newcommand{\pt}{\mbox{$p_T$}\xspace}
+\newcommand{\mt}{\mbox{$m_T$}\xspace}
+\newcommand{\Et}{\mbox{${\rm E}_T$}\xspace}
+\newcommand{\sqsn}{\mbox{$\sqrt{s_{_{NN}}}$}\xspace}
+\newcommand{\apt}{\mbox{$\langle p_T \rangle$}\xspace}
+\newcommand{\lam}{\mbox{$\Lambda$}\xspace}
+\newcommand{\alam}{\mbox{$\bar{\Lambda}$}\xspace}
+\newcommand{\xin}{\mbox{$\Xi^{-}$}\xspace}
+\newcommand{\xibar}{\mbox{$\bar{\Xi}^{+}$}\xspace}
+\newcommand{\om}{\mbox{$\Omega^{-}$}\xspace}
+\newcommand{\ombar}{\mbox{$\bar{\Omega}^{+}$}\xspace}
+\newcommand{\costhe}{\mbox{$\langle\cos\theta_p^{\ast}\rangle$}\xspace}
+\newcommand{\mean}[1]{\langle #1 \rangle}
+\newcommand{\di}{{\rm d}}
+\newcommand{\smath}[1]{\texorpdfstring{#1}{bbb}}
+
+
+\def \be {\begin{equation}}
+\def \ee {\end{equation}} 
+\def \bea {\begin{eqnarray}}
+\def \eea {\end{eqnarray}} 
+\def \bP {{\bf P}}
+\def \bs {{\bf s}}
+\def \bv {{\bf v}}
+\def \bomega {{\bm \omega}}
+\def \bLambda {{\bm \Lambda}}
+\def \curl {{\bm \nabla \times}}
+\def \xim {\Xi^-}
+\def \xip {\bar{\Xi}^+}
+\def \snn {$\sqrt{s_{_{\rm NN}}}$\xspace} 
+%\def \snn {$\sqrt{s_{_{NN}}}$\xspace} 
+%
+\usepackage{color}
+\definecolor{orange}{cmyk}{0.,0.353,1.,0.}    % orange
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\blue}[1]{{\color{blue}{#1}}}
+\newcommand{\green}[1]{{\color{dgreen}{#1}}}
+\newcommand{\red}[1]{{\color{red}{#1}}}
+
+\newcommand{\note}[1]{\textbf{\textcolor{magenta}{[#1]}}}
+\def \new {\blue}
+\newcommand{\old}[1]{\red{\sout{#1}}}
+\newcommand{\ask}[1]{\textbf{\textcolor{magenta}{[#1]}}}
+
+% line numbers
+\usepackage{lineno}
+\newcommand*\patchAmsMathEnvironmentForLineno[1]{
+  \expandafter\let\csname old#1\expandafter\endcsname\csname #1\endcsname
+  \expandafter\let\csname oldend#1\expandafter\endcsname\csname end#1\endcsname
+  \renewenvironment{#1}
+     {\linenomath\csname old#1\endcsname}
+     {\csname oldend#1\endcsname\endlinenomath}}
+\newcommand*\patchBothAmsMathEnvironmentsForLineno[1]{
+  \patchAmsMathEnvironmentForLineno{#1}
+  \patchAmsMathEnvironmentForLineno{#1*}}
+\AtBeginDocument{
+\patchBothAmsMathEnvironmentsForLineno{equation}
+\patchBothAmsMathEnvironmentsForLineno{align}
+\patchBothAmsMathEnvironmentsForLineno{flalign}
+\patchBothAmsMathEnvironmentsForLineno{alignat}
+\patchBothAmsMathEnvironmentsForLineno{gather}
+\patchBothAmsMathEnvironmentsForLineno{multline}
+}

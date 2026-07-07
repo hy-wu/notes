@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    
+    <meta name="generator" content="Invenio"/>
+
+    
+    
+    
+      
+      
+      <title>CERN Open Data Portal</title>
+      <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico"/>
+          <link rel="apple-touch-icon" sizes="120x120" href="/static/apple-touch-icon-120.png"/>
+          <link rel="apple-touch-icon" sizes="152x152" href="/static/apple-touch-icon-152.png"/>
+          <link rel="apple-touch-icon" sizes="167x167" href="/static/apple-touch-icon-167.png"/>
+          <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon-180.png"/>
+    
+    
+      <!-- theme.css -->
+<link rel="stylesheet" href="/static/dist/css/3526.e272291abdb9b0c7c84e.css" />
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    <!-- cernopendata_css.css -->
+<link rel="stylesheet" href="/static/dist/css/cernopendata_css.b77b5a7e6dbe73f95a8e.css" />
+    <!-- glossary_css.css -->
+<link rel="stylesheet" href="/static/dist/css/glossary_css.a62774f2dcbbcb0e07dc.css" />
+    <!-- cernopendata_search_css.css -->
+<link rel="stylesheet" href="/static/dist/css/cernopendata_search_css.3414887a14f8a2ddc058.css" />
+  </head>
+
+  <body data-invenio-config='{"isMathJaxEnabled": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"}'  itemscope itemtype="http://schema.org/WebPage" data-spy="scroll" data-target=".scrollspy-target">
+      <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]-->
+  <!--Wrapper for page content to push down footer-->
+  <div class="footer-wrap background" role="main">
+    <!-- Begin page content -->
+    <div>
+
+
+
+
+<header class="theme header">
+  <div class="outer-navbar">
+<nav class="navbar-custom">
+  <a class="navbar-brand" href="/">
+    <img src="/static/assets/img/logo_blue.png" width="115" height="37" alt="Open Data CERN">
+  </a>
+
+  <ul class="link-menu">
+      <li class="item"><a href="/login">Login</a></li>
+    <li class="ui dropdown">
+      <span class="navbar-item">
+        <span>Help<i class="dropdown icon"></i></span>
+      </span>
+      <div class="menu dropdown-items">
+        <div class="item"><a href="https://opendata-forum.cern.ch/">Discussion forum</a></div>
+        <div class="item"><a href="/docs/cod-search-tips">Search tips</a></div>
+      </div>
+    </li>
+    <li class="ui dropdown">
+      <span class="navbar-item">
+        <span>About<i class="dropdown icon"></i></span>
+      </span>
+      <div class="menu dropdown-items">
+        <div class="item"><a href="/docs/about">CERN Open Data</a></div>
+        
+          <div class="item"><a href="/docs/about-alice">ALICE</a></div>
+        
+          <div class="item"><a href="/docs/about-atlas">ATLAS</a></div>
+        
+          <div class="item"><a href="/docs/about-cms">CMS</a></div>
+        
+          <div class="item"><a href="/docs/about-delphi">DELPHI</a></div>
+        
+          <div class="item"><a href="/docs/about-jade">JADE</a></div>
+        
+          <div class="item"><a href="/docs/about-lhcb">LHCb</a></div>
+        
+          <div class="item"><a href="/docs/about-opera">OPERA</a></div>
+        
+          <div class="item"><a href="/docs/about-totem">TOTEM</a></div>
+        
+        <div class="item"><a href="/search?type=Glossary&sort=title">Glossary</a></div>
+      </div>
+    </li>
+    <span class="menu-icon"/>
+  </ul>
+</nav>
+</header>
+      
+    </div>
+<div id="main_search_div" class="ui container">
+<div data-invenio-search-config='{
+  "aggs": [
+    {
+      "agg": {
+        "aggName": "type",
+        "childAgg": {
+          "aggName": "subtype",
+          "field": "type.secondary"
+        },
+        "field": "type.primary"
+      },
+      "title": "Type"
+    },
+    {
+      "agg": {
+        "aggName": "experiment",
+        "field": "experiment"
+      },
+      "title": "Experiment"
+    },
+    {
+      "agg": {
+        "aggName": "availability",
+        "field": "availability"
+      },
+      "title": "Availability"
+    },
+    {
+      "agg": {
+        "aggName": "year",
+        "field": "date_created"
+      },
+      "title": "Year"
+    },
+    {
+      "agg": {
+        "aggName": "file_type",
+        "field": "distribution.formats"
+      },
+      "title": "File type"
+    },
+    {
+      "agg": {
+        "aggName": "collision_type",
+        "field": "collision_information.type"
+      },
+      "title": "Collision type"
+    },
+    {
+      "agg": {
+        "aggName": "collision_energy",
+        "field": "collision_information.energy"
+      },
+      "title": "Collision energy"
+    },
+    {
+      "agg": {
+        "aggName": "category",
+        "childAgg": {
+          "aggName": "subcategory",
+          "field": "categories.secondary"
+        },
+        "field": "categories.primary"
+      },
+      "title": "Category"
+    },
+    {
+      "agg": {
+        "aggName": "magnet_polarity",
+        "field": "magnet_polarity"
+      },
+      "title": "Magnet polarity"
+    },
+    {
+      "agg": {
+        "aggName": "stripping_stream",
+        "field": "stripping.stream"
+      },
+      "title": "Stripping stream"
+    },
+    {
+      "agg": {
+        "aggName": "stripping_version",
+        "field": "stripping.version"
+      },
+      "title": "Stripping version"
+    },
+    {
+      "agg": {
+        "aggName": "number_events",
+        "field": "distribution.number_events"
+      },
+      "title": "Number events"
+    },
+    {
+      "agg": {
+        "aggName": "signature",
+        "field": "signature"
+      },
+      "title": "Signature"
+    },
+    {
+      "agg": {
+        "aggName": "keywords",
+        "field": "keywords"
+      },
+      "title": "Keywords"
+    }
+  ],
+  "appId": "search",
+  "defaultSortingOnEmptyQueryString": {
+    "sortBy": "mostrecent",
+    "sortOrder": "desc"
+  },
+  "initialQueryState": {
+    "hiddenParams": [
+      [
+        "skip_files",
+        "1"
+      ]
+    ],
+    "layout": "list",
+    "page": 1,
+    "size": 10,
+    "sortBy": "bestmatch",
+    "sortOrder": "asc"
+  },
+  "layoutOptions": {
+    "gridView": true,
+    "listView": true
+  },
+  "paginationOptions": {
+    "resultsPerPage": [
+      {
+        "text": "10",
+        "value": 10
+      },
+      {
+        "text": "20",
+        "value": 20
+      },
+      {
+        "text": "50",
+        "value": 50
+      }
+    ]
+  },
+  "searchApi": {
+    "axios": {
+      "headers": {
+        "Accept": "application/json"
+      },
+      "url": "/api/records/",
+      "withCredentials": true
+    }
+  },
+  "sortOptions": [
+    {
+      "sortBy": "bestmatch",
+      "sortOrder": "asc",
+      "text": "Best match"
+    },
+    {
+      "sortBy": "mostrecent",
+      "sortOrder": "desc",
+      "text": "Most recent"
+    },
+    {
+      "sortBy": "title",
+      "sortOrder": "asc",
+      "text": "Title A-Z"
+    },
+    {
+      "sortBy": "title_desc",
+      "sortOrder": "desc",
+      "text": "Title Z-A"
+    }
+  ]
+}'></div>
+</div>
+
+    <!-- End page content -->
+    <div class="footer-push"></div> <!-- Make room for footer -->
+
+  </div>
+  <section class="footer">
+  <div class="ui grid padded">
+    <div class="row">
+      <div class="eight wide column">
+        <div class="ui list horizontal logos">
+          
+          <div class="item">
+            <a href="https://alice.cern">
+              <img
+                src="/static/img/experiments/alice.gif"
+                alt="ALICE experiment"
+                width="50"
+                height="55"
+              />
+            </a>
+          </div>
+          
+          <div class="item">
+            <a href="https://atlas.cern">
+              <img
+                src="/static/img/experiments/atlas.gif"
+                alt="ATLAS experiment"
+                width="55"
+                height="55"
+              />
+            </a>
+          </div>
+          
+          <div class="item">
+            <a href="https://cms.cern">
+              <img
+                src="/static/img/experiments/cms.gif"
+                alt="CMS experiment"
+                width="55"
+                height="55"
+              />
+            </a>
+          </div>
+          
+          <div class="item">
+            <a href="https://delphi-www.web.cern.ch">
+              <img
+                src="/static/img/experiments/delphi.gif"
+                alt="DELPHI experiment"
+                width="51"
+                height="55"
+              />
+            </a>
+          </div>
+          
+          <div class="item">
+            <a href="https://wwwjade.mpp.mpg.de">
+              <img
+                src="/static/img/experiments/jade.gif"
+                alt="JADE experiment"
+                width="86"
+                height="55"
+              />
+            </a>
+          </div>
+          
+          <div class="item">
+            <a href="https://lhcb.web.cern.ch">
+              <img
+                src="/static/img/experiments/lhcb.gif"
+                alt="LHCb experiment"
+                width="80"
+                height="55"
+              />
+            </a>
+          </div>
+          
+          <div class="item">
+            <a href="https://en.wikipedia.org/wiki/OPERA_experiment">
+              <img
+                src="/static/img/experiments/opera.gif"
+                alt="OPERA experiment"
+                width="73"
+                height="55"
+              />
+            </a>
+          </div>
+          
+          <div class="item">
+            <a href="https://www.phenix.bnl.gov">
+              <img
+                src="/static/img/experiments/phenix.gif"
+                alt="PHENIX experiment"
+                width="109"
+                height="35"
+              />
+            </a>
+          </div>
+          
+          <div class="item">
+            <a href="https://totem-experiment.web.cern.ch">
+              <img
+                src="/static/img/experiments/totem.gif"
+                alt="TOTEM experiment"
+                width="37"
+                height="55"
+              />
+            </a>
+          </div>
+          
+        </div>
+      </div>
+      <div class="four wide column centered stretched middle aligned">
+        
+        <div class="ui list horizontal copyright ">
+          <div class="item">
+            © CERN, 2014–2026 &middot;
+          </div>
+          <div class="item">
+            <a href="/terms-of-use">Terms of Use</a> &middot;
+          </div>
+          <div class="item">
+            <a href="/privacy-policy">Privacy Policy</a> &middot;
+          </div>
+          <div class="item">
+            <a href="https://opendata-forum.cern.ch/">Help</a> &middot;
+          </div>
+          <div class="item">
+            <a href="https://github.com/cernopendata/opendata.cern.ch/issues"
+              >GitHub</a
+            >
+            &middot;
+          </div>
+          <div class="item">
+            <a href="https://twitter.com/cernopendata">Twitter</a> &middot;
+          </div>
+          <div class="item">
+            <a href="mailto:opendata-support@cern.ch">Email</a>
+          </div>
+        </div>
+      </div>
+      <div class="four wide column stretched align-items-end">
+        <div class="auto-column-grid">
+          <div >
+            <a href="https://inveniosoftware.org/">Powered by Invenio</a><br>
+            Open Data Portal v1.0.2
+          </div>
+          <div>
+            <a href="https://www.cern.ch">
+              <img
+                src="/static/assets/img/cern.svg"
+                width="80"
+                height="88"
+                alt="CERN"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+    
+  
+  
+
+        
+          <script type="text/javascript">
+            window.MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                processEscapes: true // Allows escaping $ signs if needed
+              }
+            };
+          </script>
+          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+        
+
+        
+
+<!-- base.js -->
+<script src="/static/dist/js/manifest.21530a23419667d1ca9a.js"></script>
+<script src="/static/dist/js/73.f5c17ac16e072a613578.js"></script>
+<script src="/static/dist/js/base.5f6dcc5f3b61b8884dcc.js"></script>
+<!-- theme.js -->
+<script src="/static/dist/js/3526.df17f02e03ead779dd83.js"></script>
+<script src="/static/dist/js/theme.4a2b163b20b8e6ef1a6e.js"></script>
+<!-- i18n_app.js -->
+<script src="/static/dist/js/i18n_app.2761e9ae1ec76eb1273b.js"></script>
+  <!-- cernopendata_js.js -->
+<script src="/static/dist/js/cernopendata_js.73d420250821af755f4c.js"></script>
+  <!-- glossary_js.js -->
+<script src="/static/dist/js/glossary_js.59ae7054252cfa9d26d9.js"></script>
+  
+
+    <script>
+        jquery(document).ready(function () {
+          jquery('body').glossary('/glossary/json');
+        });
+    </script>
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+        },
+        "HTML-CSS": { availableFonts: ["TeX"], matchFontHeight: false }
+      });
+    </script>
+  
+
+
+  <!-- invenio_search_ui_app.js -->
+<script src="/static/dist/js/7600.7b8f1d32f769635a5301.js"></script>
+<script src="/static/dist/js/9377.99196f111cba8508e116.js"></script>
+<script src="/static/dist/js/6671.71ba116575785b9e650c.js"></script>
+<script src="/static/dist/js/9923.12f12b30f262d8a26c3b.js"></script>
+<script src="/static/dist/js/9461.c5b12cc919703046dffa.js"></script>
+<script src="/static/dist/js/2373.70e011b421aa7e615f15.js"></script>
+<script src="/static/dist/js/2752.be4aeb44b4dd4e18404c.js"></script>
+<script src="/static/dist/js/8118.23c1f1d5ae725dc17dad.js"></script>
+<script src="/static/dist/js/811.d3fb75598e957f96d265.js"></script>
+<script src="/static/dist/js/invenio_search_ui_app.beb1320120f5b31cb31f.js"></script>
+    <!-- cernopendata_search_app.js -->
+<script src="/static/dist/js/cernopendata_search_app.1b9803d6e18d79027753.js"></script>
+  
+  </body>
+</html>
