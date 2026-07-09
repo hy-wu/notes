@@ -151,3 +151,15 @@ CMPS297GPU/experiment_results
 .deepseek
 
 log.lammps
+
+*.exp
+*.lib
+
+QAI/*
+!QAI/*.md
+!QAI/*.py
+
+
+
+
+
